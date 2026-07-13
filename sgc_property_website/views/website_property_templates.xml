@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ======================== LISTING PAGE ======================== -->
+    <template id="property_listing_page" name="Properties" page="True">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_we_sale_table">
+
+                <!-- Hero / Search Bar -->
+                <section class="s_cover_image"
+                         style="background-image: url('/web/image/website.company/1/image_1920'); background-size: cover; min-height: 320px;">
+                    <div class="container h-100 d-flex align-items-center justify-content-center"
+                         style="background: rgba(0,0,0,0.45);">
+                        <div class="text-center text-white py-5">
+                            <h1 class="display-5 fw-bold mb-3">Find Your Dream Property</h1>
+                            <p class="lead mb-4">Explore premium properties across Dubai, Abu Dhabi &amp; Sharjah</p>
+
+                            <form action="/properties/search" method="GET" class="row g-2 justify-content-center"
+                                  style="max-width: 800px; margin: 0 auto;">
+                                <div class="col-md-3">
+                                    <input type="text" name="q" class="form-control form-control-lg"
+                                           placeholder="Search location or name..."
+                                           t-att-value="search_query or ''"/>
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="type" class="form-select form-select-lg">
+                                        <option value="">All Types</option>
+                                        <t t-foreach="property_types" t-as="pt">
+                                            <option t-att-value="pt[0]"
+                                                    t-att-selected="search_type == pt[0]">
+                                                <t t-out="pt[1]"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="city" class="form-select form-select-lg">
+                                        <option value="">All Cities</option>
+                                        <t t-foreach="cities" t-as="c">
+                                            <option t-att-value="c[0]"
+                                                    t-att-selected="search_city == c[0]">
+                                                <t t-out="c[1]"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">
+                                        Search
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Featured Carousel -->
+                <t t-if="featured_properties">
+                    <section class="s_website_carousel o_colored_level o_cc o_cc1 py-5"
+                             style="background-color: #f8f9fa;">
+                        <div class="container">
+                            <h2 class="text-center mb-4 fw-bold" style="color: #1B3A57;">
+                                Featured Properties
+                            </h2>
+                            <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel"
+                                 data-bs-interval="5000">
+                                <div class="carousel-indicators mb-0">
+                                    <t t-foreach="featured_properties" t-as="prop" t-as-counter="idx">
+                                        <button type="button"
+                                                t-attf-data-bs-target="#featuredCarousel"
+                                                t-att-data-bs-slide-to="idx"
+                                                t-attf-class="#{'active' if idx == 0 else ''}"
+                                                t-att-aria-label="'Slide %d' % (idx + 1)"/>
+                                    </t>
+                                </div>
+                                <div class="carousel-inner rounded-4 shadow">
+                                    <t t-foreach="featured_properties" t-as="prop" t-as-counter="idx">
+                                        <div t-attf-class="carousel-item #{'active' if idx == 0 else ''}">
+                                            <div class="row align-items-center p-4"
+                                                 style="min-height: 420px; background: linear-gradient(135deg, #1B3A57 0%, #2a5298 100%);">
+                                                <div class="col-md-6 text-white">
+                                                    <span class="badge bg-warning text-dark mb-2">Featured</span>
+                                                    <h3 class="fw-bold mb-2" style="color: #C9A961;">
+                                                        <t t-out="prop.name"/>
+                                                    </h3>
+                                                    <p class="mb-1" style="color: #e0e0e0;">
+                                                        <i class="fa fa-map-marker"/> <t t-out="prop.community or prop.city or ''"/>
+                                                    </p>
+                                                    <p class="mb-3" style="color: #ccc; font-size: 0.95rem;">
+                                                        <t t-if="prop.bedrooms"><t t-out="prop.bedrooms"/> Bed</t>
+                                                        <t t-if="prop.bathrooms"> | <t t-out="prop.bathrooms"/> Bath</t>
+                                                        <t t-if="prop.area_sqft"> | <t t-out="prop.area_sqft"/> sqft</t>
+                                                    </p>
+                                                    <div class="h4 fw-bold mb-3" style="color: #C9A961;">
+                                                        <t t-if="prop.currency_id" t-out="prop.currency_id.symbol"/>
+                                                        <t t-out="int(prop.price)"/>
+                                                        <small t-if="prop.price_type == 'rent'" class="fw-normal">/year</small>
+                                                    </div>
+                                                    <a t-attf-href="/properties/#{prop.slug}"
+                                                       class="btn btn-warning btn-lg px-4 fw-bold">
+                                                        View Details
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-6 text-center">
+                                                    <t t-if="prop.photo_ids">
+                                                        <img t-att-src="'/web/image/website.property.photo/%s/image_1920' % prop.photo_ids[0].id"
+                                                             class="img-fluid rounded-3 shadow"
+                                                             style="max-height: 320px; object-fit: cover; width: 100%;"
+                                                             t-att-alt="prop.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                                             style="height: 320px; background: rgba(255,255,255,0.1);">
+                                                            <i class="fa fa-home fa-4x" style="color: #C9A961; opacity: 0.5;"/>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#featuredCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"/>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                        data-bs-target="#featuredCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"/>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </t>
+
+                <!-- All Properties Grid -->
+                <section class="py-5">
+                    <div class="container">
+                        <h2 class="text-center mb-4 fw-bold" style="color: #1B3A57;">
+                            <t t-if="search_query">
+                                Search Results for "<t t-out="search_query"/>"
+                            </t>
+                            <t t-else="">
+                                All Properties
+                            </t>
+                            <small class="text-muted d-block" style="font-size: 0.5em;">
+                                <t t-out="len(all_properties)"/> properties found
+                            </small>
+                        </h2>
+
+                        <t t-if="not all_properties">
+                            <div class="text-center py-5">
+                                <i class="fa fa-search fa-3x text-muted mb-3"/><br/>
+                                <h4 class="text-muted">No properties found</h4>
+                                <p class="text-muted">Try adjusting your search criteria</p>
+                                <a href="/properties" class="btn btn-warning">Clear Search</a>
+                            </div>
+                        </t>
+
+                        <div class="row">
+                            <t t-foreach="all_properties" t-as="prop">
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card h-100 shadow-sm border-0 property-card"
+                                         style="transition: transform 0.2s, box-shadow 0.2s;">
+                                        <!-- Photo -->
+                                        <div class="position-relative overflow-hidden"
+                                             style="height: 220px;">
+                                            <t t-if="prop.photo_ids">
+                                                <img t-att-src="'/web/image/website.property.photo/%s/image_1920' % prop.photo_ids[0].id"
+                                                     class="w-100 h-100"
+                                                     style="object-fit: cover;"
+                                                     t-att-alt="prop.name"/>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center"
+                                                     style="background: #e9ecef;">
+                                                    <i class="fa fa-home fa-3x text-muted"/>
+                                                </div>
+                                            </t>
+
+                                            <!-- Badges -->
+                                            <div class="position-absolute top-0 start-0 p-2">
+                                                <span t-if="prop.is_featured"
+                                                      class="badge bg-warning text-dark me-1">Featured</span>
+                                                <span t-if="prop.price_type == 'sale'"
+                                                      class="badge bg-success">For Sale</span>
+                                                <span t-else=""
+                                                      class="badge bg-info">For Rent</span>
+                                            </div>
+
+                                            <!-- Photo count -->
+                                            <t t-if="len(prop.photo_ids) > 1">
+                                                <span class="position-absolute bottom-0 end-0 m-2 badge bg-dark">
+                                                    <i class="fa fa-camera"/> <t t-out="len(prop.photo_ids)"/>
+                                                </span>
+                                            </t>
+                                        </div>
+
+                                        <!-- Content -->
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title fw-bold mb-1" style="color: #1B3A57;">
+                                                <a t-attf-href="/properties/#{prop.slug}"
+                                                   class="text-decoration-none"
+                                                   style="color: #1B3A57;">
+                                                    <t t-out="prop.name"/>
+                                                </a>
+                                            </h5>
+                                            <p class="text-muted small mb-2">
+                                                <i class="fa fa-map-marker"/> <t t-out="prop.community or prop.address or ''"/>
+                                                <t t-if="prop.city">, <t t-out="dict(prop._fields['city'].selection).get(prop.city, prop.city)"/></t>
+                                            </p>
+
+                                            <t t-if="prop.short_description">
+                                                <p class="card-text text-muted small flex-grow-1">
+                                                    <t t-out="prop.short_description"/>
+                                                </p>
+                                            </t>
+
+                                            <!-- Specs -->
+                                            <div class="d-flex gap-3 text-muted small mb-3">
+                                                <t t-if="prop.bedrooms">
+                                                    <span><i class="fa fa-bed"/> <t t-out="prop.bedrooms"/> Bed</span>
+                                                </t>
+                                                <t t-if="prop.bathrooms">
+                                                    <span><i class="fa fa-bath"/> <t t-out="prop.bathrooms"/> Bath</span>
+                                                </t>
+                                                <t t-if="prop.area_sqft">
+                                                    <span><i class="fa fa-ruler-combined"/> <t t-out="prop.area_sqft"/> sqft</span>
+                                                </t>
+                                            </div>
+
+                                            <!-- Price + CTA -->
+                                            <div class="d-flex align-items-center justify-content-between mt-auto pt-2"
+                                                 style="border-top: 1px solid #eee;">
+                                                <div class="fw-bold h5 mb-0" style="color: #C9A961;">
+                                                    <t t-if="prop.currency_id" t-out="prop.currency_id.symbol"/>
+                                                    <t t-out="int(prop.price)"/>
+                                                    <small t-if="prop.price_type == 'rent'" class="fw-normal text-muted">/yr</small>
+                                                </div>
+                                                <a t-attf-href="/properties/#{prop.slug}"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    View
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- ======================== DETAIL PAGE ======================== -->
+    <template id="property_detail_page" name="Property Detail" page="True">
+        <t t-call="website.layout">
+            <div id="wrap">
+
+                <!-- Photo Gallery Carousel -->
+                <section class="o_we_sale_table">
+                    <t t-if="property.photo_ids">
+                        <div id="propertyGallery" class="carousel slide" data-bs-ride="false"
+                             style="max-height: 500px; overflow: hidden;">
+                            <div class="carousel-indicators mb-2">
+                                <t t-foreach="property.photo_ids" t-as="photo" t-as-counter="idx">
+                                    <button type="button"
+                                            t-attf-data-bs-target="#propertyGallery"
+                                            t-att-data-bs-slide-to="idx"
+                                            t-attf-class="#{'active' if idx == 0 else ''}"
+                                            data-bs-theme="dark"/>
+                                </t>
+                            </div>
+                            <div class="carousel-inner">
+                                <t t-foreach="property.photo_ids" t-as="photo" t-as-counter="idx">
+                                    <div t-attf-class="carousel-item #{'active' if idx == 0 else ''}"
+                                         style="height: 500px;">
+                                        <img t-att-src="'/web/image/website.property.photo/%s/image_1920' % photo.id"
+                                             class="d-block w-100 h-100"
+                                             style="object-fit: cover;"
+                                             t-att-alt="photo.name or property.name"/>
+                                        <t t-if="photo.name">
+                                            <div class="carousel-caption d-none d-md-block"
+                                                 style="background: rgba(0,0,0,0.5);">
+                                                <p><t t-out="photo.name"/></p>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                            <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#propertyGallery" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"/>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                    data-bs-target="#propertyGallery" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"/>
+                            </button>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="text-center py-5" style="background: #e9ecef;">
+                            <i class="fa fa-home fa-5x text-muted"/>
+                        </div>
+                    </t>
+                </section>
+
+                <!-- Property Info -->
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Main Content -->
+                            <div class="col-lg-8">
+                                <!-- Title + Badges -->
+                                <div class="mb-4">
+                                    <div class="d-flex gap-2 mb-2">
+                                        <span t-if="property.price_type == 'sale'"
+                                              class="badge bg-success">For Sale</span>
+                                        <span t-else="" class="badge bg-info">For Rent</span>
+                                        <span t-if="property.completion_status"
+                                              class="badge bg-secondary">
+                                            <t t-out="dict(property._fields['completion_status'].selection).get(property.completion_status, property.completion_status)"/>
+                                        </span>
+                                    </div>
+                                    <h1 class="fw-bold mb-1" style="color: #1B3A57;">
+                                        <t t-out="property.name"/>
+                                    </h1>
+                                    <p class="text-muted mb-0">
+                                        <i class="fa fa-map-marker"/> <t t-out="property.community or ''"/>
+                                        <t t-if="property.address">, <t t-out="property.address"/></t>
+                                        <t t-if="property.city">, <t t-out="dict(property._fields['city'].selection).get(property.city, property.city)"/></t>
+                                    </p>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="card border-0 shadow-sm mb-4" style="border-left: 4px solid #C9A961 !important;">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <div class="h3 fw-bold mb-0" style="color: #C9A961;">
+                                                    <t t-if="property.currency_id" t-out="property.currency_id.symbol"/>
+                                                    <t t-out="int(property.price)"/>
+                                                    <small t-if="property.price_type == 'rent'" class="fw-normal text-muted">/year</small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <a t-if="property.agent_phone"
+                                                   t-attf-href="tel:#{property.agent_phone}"
+                                                   class="btn btn-outline-primary">
+                                                    <i class="fa fa-phone"/> Call
+                                                </a>
+                                                <a t-if="property.agent_email"
+                                                   t-attf-href="mailto:#{property.agent_email}"
+                                                   class="btn btn-outline-secondary">
+                                                    <i class="fa fa-envelope"/> Email
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Key Specs -->
+                                <div class="card border-0 shadow-sm mb-4">
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <t t-if="property.bedrooms">
+                                                <div class="col">
+                                                    <div class="h4 fw-bold mb-0" style="color: #1B3A57;">
+                                                        <t t-out="property.bedrooms"/>
+                                                    </div>
+                                                    <small class="text-muted">Bedrooms</small>
+                                                </div>
+                                            </t>
+                                            <t t-if="property.bathrooms">
+                                                <div class="col">
+                                                    <div class="h4 fw-bold mb-0" style="color: #1B3A57;">
+                                                        <t t-out="property.bathrooms"/>
+                                                    </div>
+                                                    <small class="text-muted">Bathrooms</small>
+                                                </div>
+                                            </t>
+                                            <t t-if="property.area_sqft">
+                                                <div class="col">
+                                                    <div class="h4 fw-bold mb-0" style="color: #1B3A57;">
+                                                        <t t-out="property.area_sqft"/>
+                                                    </div>
+                                                    <small class="text-muted">sqft</small>
+                                                </div>
+                                            </t>
+                                            <div class="col">
+                                                <div class="h6 fw-bold mb-0" style="color: #1B3A57;">
+                                                    <t t-out="dict(property._fields['furnishing'].selection).get(property.furnishing, property.furnishing)"/>
+                                                </div>
+                                                <small class="text-muted">Furnishing</small>
+                                            </div>
+                                            <t t-if="property.handover_date">
+                                                <div class="col">
+                                                    <div class="h6 fw-bold mb-0" style="color: #1B3A57;">
+                                                        <t t-out="property.handover_date"/>
+                                                    </div>
+                                                    <small class="text-muted">Handover</small>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <t t-if="property.description">
+                                    <div class="mb-4">
+                                        <h4 class="fw-bold mb-3" style="color: #1B3A57;">Description</h4>
+                                        <div class="text-muted" style="line-height: 1.8;">
+                                            <t t-out="property.description"/>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <!-- Amenities -->
+                                <t t-if="property.amenity_ids">
+                                    <div class="mb-4">
+                                        <h4 class="fw-bold mb-3" style="color: #1B3A57;">Amenities</h4>
+                                        <div class="row">
+                                            <t t-foreach="property.amenity_ids" t-as="amenity">
+                                                <div class="col-md-4 col-6 mb-2">
+                                                    <span class="badge bg-light text-dark p-2 w-100 text-start"
+                                                          style="border: 1px solid #dee2e6;">
+                                                        <i class="fa fa-check text-success me-1"/>
+                                                        <t t-out="amenity.name"/>
+                                                    </span>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <!-- Map -->
+                                <t t-if="property.latitude and property.longitude">
+                                    <div class="mb-4">
+                                        <h4 class="fw-bold mb-3" style="color: #1B3A57;">Location</h4>
+                                        <div class="rounded overflow-hidden shadow-sm"
+                                             style="height: 300px;">
+                                            <iframe t-att-src="'https://maps.google.com/maps?q=%s,%s&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=&amp;output=embed' % (property.latitude, property.longitude)"
+                                                    width="100%" height="300" style="border:0;"
+                                                    loading="lazy" allowfullscreen=""/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <!-- Sidebar: Agent -->
+                            <div class="col-lg-4">
+                                <div class="card border-0 shadow-sm mb-4" style="border-top: 3px solid #C9A961 !important;">
+                                    <div class="card-body text-center">
+                                        <t t-if="property.agent_photo_url">
+                                            <img t-att-src="property.agent_photo_url"
+                                                 class="rounded-circle mb-3"
+                                                 style="width: 80px; height: 80px; object-fit: cover;"
+                                                 t-att-alt="property.agent_name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                                 style="width: 80px; height: 80px; background: #1B3A57;">
+                                                <i class="fa fa-user fa-2x text-white"/>
+                                            </div>
+                                        </t>
+                                        <h5 class="fw-bold mb-1" style="color: #1B3A57;">
+                                            <t t-out="property.agent_name or 'SGC Agent'"/>
+                                        </h5>
+                                        <p class="text-muted small mb-3">Property Agent</p>
+
+                                        <t t-if="property.agent_phone">
+                                            <a t-attf-href="tel:#{property.agent_phone}"
+                                               class="btn btn-warning w-100 mb-2 fw-bold">
+                                                <i class="fa fa-phone me-1"/> <t t-out="property.agent_phone"/>
+                                            </a>
+                                        </t>
+                                        <t t-if="property.agent_email">
+                                            <a t-attf-href="mailto:#{property.agent_email}"
+                                               class="btn btn-outline-primary w-100 mb-2">
+                                                <i class="fa fa-envelope me-1"/> Send Email
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Related Properties -->
+                                <t t-if="related_properties">
+                                    <h5 class="fw-bold mb-3" style="color: #1B3A57;">Similar Properties</h5>
+                                    <t t-foreach="related_properties" t-as="rp">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="row g-0">
+                                                <div class="col-4">
+                                                    <t t-if="rp.photo_ids">
+                                                        <img t-att-src="'/web/image/website.property.photo/%s/image_128' % rp.photo_ids[0].id"
+                                                             class="img-fluid rounded-start h-100"
+                                                             style="object-fit: cover;"/>
+                                                    </t>
+                                                </div>
+                                                <div class="col-8">
+                                                    <div class="card-body py-2 px-3">
+                                                        <h6 class="card-title mb-1 fw-bold" style="color: #1B3A57; font-size: 0.85rem;">
+                                                            <a t-attf-href="/properties/#{rp.slug}"
+                                                               class="text-decoration-none" style="color: #1B3A57;">
+                                                                <t t-out="rp.name"/>
+                                                            </a>
+                                                        </h6>
+                                                        <small class="text-muted">
+                                                            <t t-if="rp.currency_id" t-out="rp.currency_id.symbol"/>
+                                                            <t t-out="int(rp.price)"/>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Construction Project Link -->
+                <t t-if="property.project_id">
+                    <section class="py-4" style="background: #f8f9fa;">
+                        <div class="container text-center">
+                            <p class="mb-2 text-muted">This property is part of construction project</p>
+                            <a t-attf-href="/my/construction-projects/#{property.project_id.id}"
+                               class="btn btn-outline-primary">
+                                <i class="fa fa-building me-1"/>
+                                <t t-out="property.project_id.name"/>
+                            </a>
+                        </div>
+                    </section>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

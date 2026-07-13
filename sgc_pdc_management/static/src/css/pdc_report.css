@@ -1,0 +1,122 @@
+/* ═══════════════════════════════════════════
+   SGC PDC & BG Report Styles  (A4 print)
+═══════════════════════════════════════════ */
+
+/* ── PDC Slip ── */
+.pdc-slip { font-family: 'Segoe UI', Arial, sans-serif; font-size: 9pt; color: #1a1a2e; }
+
+.pdc-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 3px solid #0f3460; padding-bottom: 8px; margin-bottom: 12px;
+}
+.pdc-doc-type { font-size: 14pt; font-weight: 700; color: #0f3460; letter-spacing: .5px; }
+.pdc-ref      { font-size: 10pt; color: #555; margin-top: 3px; }
+
+.pdc-status-pill {
+    padding: 4px 14px; border-radius: 20px; font-size: 8.5pt;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+}
+.pdc-status-draft      { background:#e9ecef; color:#555; }
+.pdc-status-received   { background:#d8eaf8; color:#1a6b8a; }
+.pdc-status-deposited  { background:#ffecd0; color:#e07b00; }
+.pdc-status-cleared    { background:#d4f5e9; color:#1a9b6a; }
+.pdc-status-bounced    { background:#fde8e8; color:#c0392b; }
+
+.pdc-parties { display: flex; gap: 24px; margin-bottom: 14px; flex-wrap: wrap; }
+.pdc-party   { min-width: 160px; }
+.pdc-label   { font-size: 7.5pt; color: #888; text-transform: uppercase; letter-spacing: .3px; display: block; }
+.pdc-value   { font-size: 9.5pt; font-weight: 600; color: #1a1a2e; }
+
+.pdc-amount-box {
+    background: #0f3460; color: #fff; border-radius: 6px;
+    padding: 10px 16px; margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.pdc-amount-label { font-size: 8pt; opacity: .8; text-transform: uppercase; }
+.pdc-amount-value { font-size: 18pt; font-weight: 700; letter-spacing: .5px; }
+
+.pdc-detail-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+.pdc-detail-table th {
+    background: #f4f6fb; color: #555; font-size: 7.8pt;
+    padding: 5px 8px; text-align: left; border: 1px solid #dde3ef;
+    text-transform: uppercase; letter-spacing: .2px; width: 18%;
+}
+.pdc-detail-table td {
+    padding: 5px 8px; border: 1px solid #dde3ef; font-size: 9pt; color: #1a1a2e;
+}
+
+/* ── Timeline ── */
+.pdc-timeline-title { font-size: 8pt; color: #888; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px; }
+.pdc-timeline { display: flex; align-items: flex-start; margin-bottom: 16px; }
+.pdc-step { text-align: center; flex: 1; }
+.pdc-step-dot {
+    width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 4px;
+    background: #dde3ef; border: 2px solid #aab;
+}
+.pdc-step-label { font-size: 7.5pt; color: #777; }
+.pdc-step-done .pdc-step-dot    { background: #0f3460; border-color: #0f3460; }
+.pdc-step-done .pdc-step-label  { color: #0f3460; font-weight: 600; }
+.pdc-step-cleared .pdc-step-dot  { background: #1a9b6a; border-color: #1a9b6a; }
+.pdc-step-cleared .pdc-step-label{ color: #1a9b6a; font-weight: 700; }
+.pdc-step-bounced .pdc-step-dot  { background: #c0392b; border-color: #c0392b; }
+.pdc-step-bounced .pdc-step-label{ color: #c0392b; font-weight: 700; }
+.pdc-step-line { flex: 0 0 30px; height: 2px; background: #dde3ef; margin-top: 7px; }
+
+.pdc-notes-title { font-size: 8pt; color: #888; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 4px; }
+.pdc-notes {
+    background: #fffaf0; border-left: 3px solid #e07b00;
+    padding: 6px 10px; font-size: 8.5pt; color: #444; margin-bottom: 16px;
+    border-radius: 0 4px 4px 0;
+}
+
+/* ── Signatures ── */
+.pdc-signatures { display: flex; gap: 30px; margin-top: 24px; margin-bottom: 10px; }
+.pdc-sig-box    { flex: 1; text-align: center; }
+.pdc-sig-line   { border-bottom: 1.5px solid #333; height: 32px; margin-bottom: 4px; }
+.pdc-sig-label  { font-size: 7.5pt; color: #666; text-transform: uppercase; letter-spacing: .3px; }
+
+.pdc-footer {
+    font-size: 7pt; color: #aaa; text-align: center;
+    border-top: 1px solid #eee; padding-top: 6px; margin-top: 8px;
+}
+
+/* ══════════════════════════════════════════
+   PDC Register (landscape)
+══════════════════════════════════════════ */
+.pdc-register { font-family: 'Segoe UI', Arial, sans-serif; font-size: 8pt; }
+.pdc-reg-title { font-size: 13pt; font-weight: 700; color: #0f3460; margin-bottom: 2px; }
+.pdc-reg-sub   { font-size: 7.5pt; color: #777; margin-bottom: 10px; }
+
+.pdc-reg-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+.pdc-reg-table thead th {
+    background: #16213e; color: #fff; padding: 5px 6px;
+    font-size: 7.5pt; text-align: left; font-weight: 600;
+}
+.pdc-reg-table tbody td {
+    padding: 4px 6px; border-bottom: 1px solid #e8edf7;
+    font-size: 7.8pt; vertical-align: top;
+}
+.pdc-reg-table tfoot td {
+    background: #0f3460; color: #fff; font-weight: 700;
+    padding: 5px 6px; font-size: 8pt;
+}
+.pdc-reg-table tbody tr:nth-child(even) { background: #f4f6fb; }
+.row-bounced { background: #fff0f0 !important; }
+.row-cleared { background: #f0fff8 !important; }
+.row-overdue { background: #fff8e8 !important; }
+
+/* status badge inside table */
+.pdc-badge { padding: 2px 7px; border-radius: 10px; font-size: 6.8pt; font-weight: 700; }
+.pdc-badge-draft     { background:#e9ecef; color:#555; }
+.pdc-badge-received  { background:#d8eaf8; color:#1a6b8a; }
+.pdc-badge-deposited { background:#ffecd0; color:#e07b00; }
+.pdc-badge-cleared   { background:#d4f5e9; color:#1a9b6a; }
+.pdc-badge-bounced   { background:#fde8e8; color:#c0392b; }
+
+/* Summary sub-table */
+.pdc-reg-summary { margin-top: 10px; }
+.pdc-reg-summary-title { font-size: 8pt; font-weight: 700; color: #0f3460; margin-bottom: 5px; text-transform: uppercase; }
+.pdc-summary-table { width: 260px; border-collapse: collapse; }
+.pdc-summary-table th { background:#f4f6fb; padding:4px 8px; font-size:7.5pt; border:1px solid #dde3ef; }
+.pdc-summary-table td { padding:4px 8px; font-size:8pt; border:1px solid #dde3ef; }
+.text-end { text-align: right !important; }

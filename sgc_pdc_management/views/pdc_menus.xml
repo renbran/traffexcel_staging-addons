@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PDC root menu under Construction -->
+    <menuitem id="menu_pdc_root"
+        name="PDC &amp; Guarantees"
+        parent="sgc_construction_management.menu_construction_root"
+        sequence="90"/>
+
+    <menuitem id="menu_pdc_all"
+        name="PDC Register"
+        parent="menu_pdc_root"
+        action="action_pdc_all"
+        sequence="10"/>
+
+    <menuitem id="menu_pdc_customer"
+        name="Customer PDC"
+        parent="menu_pdc_root"
+        action="action_pdc_customer"
+        sequence="20"/>
+
+    <menuitem id="menu_pdc_vendor"
+        name="Vendor PDC"
+        parent="menu_pdc_root"
+        action="action_pdc_vendor"
+        sequence="30"/>
+
+    <menuitem id="menu_pdc_bg"
+        name="Bank Guarantees"
+        parent="menu_pdc_root"
+        action="action_pdc_bank_guarantees"
+        sequence="40"/>
+
+    <menuitem id="menu_pdc_bond"
+        name="Performance Bonds"
+        parent="menu_pdc_root"
+        action="action_pdc_performance_bonds"
+        sequence="50"/>
+</odoo>

@@ -1,0 +1,65 @@
+/* SGC Property Website - Frontend Styles */
+
+/* Property Card Hover Effects */
+.property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Carousel Controls Override */
+#featuredCarousel .carousel-control-prev,
+#featuredCarousel .carousel-control-next {
+    width: 48px;
+    height: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+#featuredCarousel .carousel-control-prev:hover,
+#featuredCarousel .carousel-control-next:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Gallery Carousel */
+#propertyGallery .carousel-control-prev,
+#propertyGallery .carousel-control-next {
+    width: 48px;
+    height: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+}
+
+/* Search Form in Hero */
+.s_cover_image .form-control:focus,
+.s_cover_image .form-select:focus {
+    border-color: #C9A961;
+    box-shadow: 0 0 0 0.2rem rgba(201, 169, 97, 0.25);
+}
+
+/* Badge Overrides for Property Listings */
+.property-card .badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #featuredCarousel .carousel-inner .row {
+        flex-direction: column;
+    }
+
+    #featuredCarousel .carousel-inner .col-md-6 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    #featuredCarousel .carousel-inner img {
+        max-height: 250px !important;
+    }
+}

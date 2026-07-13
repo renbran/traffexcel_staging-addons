@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "Powered by Odoo" badge (portal frontend footer via web.brand_promotion) -->
+    <template id="brand_promotion_message_sgc" inherit_id="web.brand_promotion_message" name="SGC Brand Promotion Message">
+        <xpath expr="//t[@t-set='odoo_logo']" position="replace">
+            <t t-set="odoo_logo">
+                <a target="_blank" href="https://sgctech.ai" class="badge text-bg-light">SGC</a>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Login page footer -->
+    <template id="login_layout_sgc" inherit_id="web.login_layout" name="SGC Login Layout">
+        <xpath expr="//a[@href='https://www.odoo.com?utm_source=db&amp;utm_medium=auth']" position="replace">
+            <a href="https://sgctech.ai" target="_blank">Powered by <span>SGC</span></a>
+        </xpath>
+    </template>
+
+    <!-- Standard email notification footer -->
+    <template id="mail_notification_layout_sgc" inherit_id="mail.mail_notification_layout" name="SGC Mail Layout">
+        <xpath expr="//a[@href='https://www.odoo.com?utm_source=db&amp;utm_medium=email']" position="replace">
+            <a target="_blank" href="https://sgctech.ai" t-att-style="'color: ' + (company.email_secondary_color or '#875A7B') + ';'">SGC</a>
+        </xpath>
+    </template>
+
+    <!-- Light email notification footer -->
+    <template id="mail_notification_light_sgc" inherit_id="mail.mail_notification_light" name="SGC Mail Light Layout">
+        <xpath expr="//a[@href='https://www.odoo.com?utm_source=db&amp;utm_medium=email']" position="replace">
+            <a target="_blank" href="https://sgctech.ai" t-att-style="'color: ' + (company.email_secondary_color or '#875A7B') + ';'">SGC</a>
+        </xpath>
+    </template>
+
+    <!-- Password reset email footer -->
+    <template id="reset_password_email_sgc" inherit_id="auth_signup.reset_password_email" name="SGC Reset Password Email">
+        <xpath expr="//a[@href='https://www.odoo.com?utm_source=db&amp;utm_medium=auth']" position="replace">
+            <a target="_blank" href="https://sgctech.ai" t-attf-style="color: {{object.company_id.email_secondary_color or '#875A7B'}};">SGC</a>
+        </xpath>
+    </template>
+
+    <!-- Digest email "Sent by Odoo" + "Powered by Odoo" -->
+    <template id="digest_mail_main_sgc" inherit_id="digest.digest_mail_main" name="SGC Digest Mail">
+        <xpath expr="//div[hasclass('by_odoo')]//a" position="replace">
+            <a href="https://sgctech.ai" target="_blank"><span class="odoo_link_text">SGC</span></a>
+        </xpath>
+        <xpath expr="//p[@id='powered']//a" position="replace">
+            <a href="https://sgctech.ai" target="_blank" class="odoo_link"><span class="odoo_link_text">SGC</span></a>
+        </xpath>
+    </template>
+
+    <!-- Portal sidebar "Powered by Odoo" logo -->
+    <template id="portal_record_sidebar_sgc" inherit_id="portal.portal_record_sidebar" name="SGC Portal Sidebar">
+        <xpath expr="//a[@href='http://www.odoo.com?utm_source=db&amp;utm_medium=portal']" position="replace">
+            <a target="_blank" href="https://sgctech.ai" title="SGC">SGC</a>
+        </xpath>
+    </template>
+</odoo>

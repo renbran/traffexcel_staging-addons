@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"for f in /tmp/all_sgc_modules.tar.gz /tmp/sgc_modules.tar.gz /tmp/sgc_module_latest.tar.gz /tmp/sgc_module.tgz \\\\\\n         /opt/odoo/archive/remaining_modules.tar.gz /tmp/cmf_clone/extra-...",
+  "error": "Exit code 1\n=== /tmp/all_sgc_modules.tar.gz ===\n=== /tmp/sgc_modules.tar.gz ===\n=== /tmp/sgc_module_latest.tar.gz ===\n=== /tmp/sgc_module.tgz ===\n=== /opt/odoo/archive/remaining_modules.tar.gz ===\n=== /tmp/cmf_clone/extra-addons.tar.gz ===\n=== /tmp/cmf_clone/extra-addons-deref.tar.gz ===",
+  "timestamp": "2026-07-10T07:44:51.085Z",
+  "retry_count": 1
+}

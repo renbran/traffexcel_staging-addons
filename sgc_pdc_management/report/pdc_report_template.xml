@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PDC / BG SLIP  (A4 Portrait — one record per page)
+══════════════════════════════════════════════════════════════════════ -->
+<template id="report_pdc_slip_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="pdc">
+            <t t-call="web.external_layout">
+                <div class="page pdc-slip">
+
+                    <!-- ── Header band ── -->
+                    <div class="pdc-header">
+                        <div class="pdc-header-left">
+                            <div class="pdc-doc-type">
+                                <t t-if="pdc.pdc_type == 'bank_guarantee'">BANK GUARANTEE</t>
+                                <t t-elif="pdc.pdc_type == 'performance_bond'">PERFORMANCE BOND</t>
+                                <t t-elif="pdc.pdc_type == 'vendor_cheque'">POST-DATED CHEQUE — ISSUED</t>
+                                <t t-else="">POST-DATED CHEQUE — RECEIVED</t>
+                            </div>
+                            <div class="pdc-ref"><t t-esc="pdc.pdc_reference or pdc.name"/></div>
+                        </div>
+                        <div class="pdc-header-right">
+                            <div class="pdc-status-pill" t-attf-class="pdc-status-#{pdc.pdc_status}">
+                                <t t-esc="dict(pdc.fields_get(['pdc_status'])['pdc_status']['selection'])[pdc.pdc_status]"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Party block ── -->
+                    <div class="pdc-parties">
+                        <div class="pdc-party">
+                            <span class="pdc-label">Company</span>
+                            <span class="pdc-value"><t t-esc="pdc.company_id.name"/></span>
+                        </div>
+                        <div class="pdc-party">
+                            <span class="pdc-label">
+                                <t t-if="pdc.pdc_type == 'customer_cheque'">Received From</t>
+                                <t t-elif="pdc.pdc_type == 'vendor_cheque'">Issued To</t>
+                                <t t-else="">Counterparty</t>
+                            </span>
+                            <span class="pdc-value"><t t-esc="pdc.partner_id.name"/></span>
+                        </div>
+                        <t t-if="pdc.pdc_project_id">
+                            <div class="pdc-party">
+                                <span class="pdc-label">Project</span>
+                                <span class="pdc-value"><t t-esc="pdc.pdc_project_id.name"/></span>
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- ── Amount cheque box ── -->
+                    <div class="pdc-amount-box">
+                        <div class="pdc-amount-label">Amount (AED)</div>
+                        <div class="pdc-amount-value">
+                            <t t-esc="'{:,.2f}'.format(pdc.amount)"/>
+                        </div>
+                    </div>
+
+                    <!-- ── Instrument details table ── -->
+                    <table class="pdc-detail-table">
+                        <tr>
+                            <th>Cheque / Instrument No.</th>
+                            <td><t t-esc="pdc.pdc_cheque_no or '—'"/></td>
+                            <th>Due / Maturity Date</th>
+                            <td><t t-esc="pdc.pdc_due_date and pdc.pdc_due_date.strftime('%d %b %Y') or '—'"/></td>
+                        </tr>
+                        <tr>
+                            <th>Issuing Bank</th>
+                            <td><t t-esc="pdc.pdc_bank_name or '—'"/></td>
+                            <th>Branch</th>
+                            <td><t t-esc="pdc.pdc_bank_branch or '—'"/></td>
+                        </tr>
+                        <tr>
+                            <th>Drawer Name</th>
+                            <td><t t-esc="pdc.pdc_drawer_name or pdc.partner_id.name"/></td>
+                            <th>Beneficiary</th>
+                            <td><t t-esc="pdc.pdc_beneficiary or pdc.company_id.name"/></td>
+                        </tr>
+                        <t t-if="pdc.pdc_type in ('bank_guarantee','performance_bond')">
+                            <tr>
+                                <th>BG / Bond Number</th>
+                                <td><t t-esc="pdc.pdc_bg_number or '—'"/></td>
+                                <th>Expiry Date</th>
+                                <td><t t-esc="pdc.pdc_bg_expiry_date and pdc.pdc_bg_expiry_date.strftime('%d %b %Y') or '—'"/></td>
+                            </tr>
+                            <tr>
+                                <th>BG Issuing Bank</th>
+                                <td colspan="3"><t t-esc="pdc.pdc_bg_issuing_bank or '—'"/></td>
+                            </tr>
+                        </t>
+                    </table>
+
+                    <!-- ── Timeline ── -->
+                    <div class="pdc-timeline-title">Workflow Timeline</div>
+                    <div class="pdc-timeline">
+                        <div t-attf-class="pdc-step #{pdc.pdc_status in ('received','deposited','cleared','bounced') and 'pdc-step-done' or ''}">
+                            <div class="pdc-step-dot"/>
+                            <div class="pdc-step-label">Received / Issued</div>
+                        </div>
+                        <div class="pdc-step-line"/>
+                        <div t-attf-class="pdc-step #{pdc.pdc_status in ('deposited','cleared','bounced') and 'pdc-step-done' or ''}">
+                            <div class="pdc-step-dot"/>
+                            <div class="pdc-step-label">
+                                Deposited<t t-if="pdc.pdc_deposit_date">
+                                    <br/><small><t t-esc="pdc.pdc_deposit_date.strftime('%d %b %Y')"/></small>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="pdc-step-line"/>
+                        <div t-attf-class="pdc-step #{pdc.pdc_status == 'cleared' and 'pdc-step-cleared' or (pdc.pdc_status == 'bounced' and 'pdc-step-bounced' or '')}">
+                            <div class="pdc-step-dot"/>
+                            <div class="pdc-step-label">
+                                <t t-if="pdc.pdc_status == 'cleared'">
+                                    Cleared<t t-if="pdc.pdc_clearing_date">
+                                        <br/><small><t t-esc="pdc.pdc_clearing_date.strftime('%d %b %Y')"/></small>
+                                    </t>
+                                </t>
+                                <t t-elif="pdc.pdc_status == 'bounced'">
+                                    Bounced<t t-if="pdc.pdc_bounce_date">
+                                        <br/><small><t t-esc="pdc.pdc_bounce_date.strftime('%d %b %Y')"/></small>
+                                    </t>
+                                    <t t-if="pdc.pdc_bounce_reason">
+                                        <br/><small class="text-danger"><t t-esc="pdc.pdc_bounce_reason"/></small>
+                                    </t>
+                                </t>
+                                <t t-else="">Cleared / Bounced</t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Notes ── -->
+                    <t t-if="pdc.pdc_notes">
+                        <div class="pdc-notes-title">Notes / Remarks</div>
+                        <div class="pdc-notes"><t t-esc="pdc.pdc_notes"/></div>
+                    </t>
+
+                    <!-- ── Signature block ── -->
+                    <div class="pdc-signatures">
+                        <div class="pdc-sig-box">
+                            <div class="pdc-sig-line"/>
+                            <div class="pdc-sig-label">Prepared By</div>
+                        </div>
+                        <div class="pdc-sig-box">
+                            <div class="pdc-sig-line"/>
+                            <div class="pdc-sig-label">Verified By (Finance)</div>
+                        </div>
+                        <div class="pdc-sig-box">
+                            <div class="pdc-sig-line"/>
+                            <div class="pdc-sig-label">Authorised By</div>
+                        </div>
+                    </div>
+
+                    <!-- ── Footer ── -->
+                    <div class="pdc-footer">
+                        <t t-esc="pdc.company_id.name"/> &amp;nbsp;|&amp;nbsp;
+                        Printed: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y %H:%M')"/>
+                        &amp;nbsp;|&amp;nbsp; This document is system-generated and is valid without a wet signature.
+                    </div>
+
+                </div><!-- /page -->
+            </t><!-- /external_layout -->
+        </t>
+    </t>
+</template>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     PDC REGISTER REPORT  (A4 Landscape — all selected PDCs)
+══════════════════════════════════════════════════════════════════════ -->
+<template id="report_pdc_register_template">
+    <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+            <div class="page pdc-register">
+
+                <div class="pdc-reg-title">PDC &amp; Bank Guarantee Register</div>
+                <div class="pdc-reg-sub">
+                    <t t-esc="docs[0].company_id.name"/> &amp;nbsp;|&amp;nbsp;
+                    Printed: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/>
+                    &amp;nbsp;|&amp;nbsp; Records: <t t-esc="len(docs)"/>
+                </div>
+
+                <table class="pdc-reg-table">
+                    <thead>
+                        <tr>
+                            <th>PDC Ref</th>
+                            <th>Type</th>
+                            <th>Partner</th>
+                            <th>Project</th>
+                            <th>Cheque / Instr. No.</th>
+                            <th>Bank</th>
+                            <th>Due Date</th>
+                            <th class="text-end">Amount (AED)</th>
+                            <th>Status</th>
+                            <th>Cleared / Bounce Date</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="docs" t-as="pdc">
+                            <tr t-attf-class="#{pdc.pdc_status == 'bounced' and 'row-bounced' or (pdc.pdc_status == 'cleared' and 'row-cleared' or (pdc.pdc_is_overdue and 'row-overdue' or ''))}">
+                                <td><t t-esc="pdc.pdc_reference or pdc.name"/></td>
+                                <td><t t-esc="dict(pdc.fields_get(['pdc_type'])['pdc_type']['selection']).get(pdc.pdc_type,'')"/></td>
+                                <td><t t-esc="pdc.partner_id.name"/></td>
+                                <td><t t-esc="pdc.pdc_project_id.name or '—'"/></td>
+                                <td><t t-esc="pdc.pdc_cheque_no or '—'"/></td>
+                                <td><t t-esc="pdc.pdc_bank_name or '—'"/></td>
+                                <td><t t-esc="pdc.pdc_due_date and pdc.pdc_due_date.strftime('%d %b %Y') or '—'"/></td>
+                                <td class="text-end"><t t-esc="'{:,.2f}'.format(pdc.amount)"/></td>
+                                <td>
+                                    <span t-attf-class="pdc-badge pdc-badge-#{pdc.pdc_status}">
+                                        <t t-esc="dict(pdc.fields_get(['pdc_status'])['pdc_status']['selection'])[pdc.pdc_status]"/>
+                                    </span>
+                                </td>
+                                <td>
+                                    <t t-if="pdc.pdc_status == 'cleared'">
+                                        <t t-esc="pdc.pdc_clearing_date and pdc.pdc_clearing_date.strftime('%d %b %Y') or '—'"/>
+                                    </t>
+                                    <t t-elif="pdc.pdc_status == 'bounced'">
+                                        <t t-esc="pdc.pdc_bounce_date and pdc.pdc_bounce_date.strftime('%d %b %Y') or '—'"/>
+                                        <t t-if="pdc.pdc_bounce_reason">
+                                            <br/><small class="text-danger"><t t-esc="pdc.pdc_bounce_reason"/></small>
+                                        </t>
+                                    </t>
+                                    <t t-else="">—</t>
+                                </td>
+                                <td><t t-esc="(pdc.pdc_notes or '')[:60]"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7"><strong>TOTAL (<t t-esc="len(docs)"/> records)</strong></td>
+                            <td class="text-end"><strong>
+                                <t t-esc="'{:,.2f}'.format(sum(p.amount for p in docs))"/>
+                            </strong></td>
+                            <td colspan="3"/>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- Summary by status -->
+                <div class="pdc-reg-summary">
+                    <div class="pdc-reg-summary-title">Summary by Status</div>
+                    <table class="pdc-summary-table">
+                        <tr>
+                            <th>Status</th>
+                            <th class="text-end">Count</th>
+                            <th class="text-end">Total (AED)</th>
+                        </tr>
+                        <t t-set="statuses" t-value="[('draft','Draft'),('received','Received / Issued'),('deposited','Deposited'),('cleared','Cleared'),('bounced','Bounced')]"/>
+                        <t t-foreach="statuses" t-as="st">
+                            <t t-set="group" t-value="[p for p in docs if p.pdc_status == st[0]]"/>
+                            <t t-if="group">
+                                <tr>
+                                    <td><t t-esc="st[1]"/></td>
+                                    <td class="text-end"><t t-esc="len(group)"/></td>
+                                    <td class="text-end"><t t-esc="'{:,.2f}'.format(sum(p.amount for p in group))"/></td>
+                                </tr>
+                            </t>
+                        </t>
+                    </table>
+                </div>
+
+            </div><!-- /page -->
+        </t>
+    </t>
+</template>
+
+</odoo>

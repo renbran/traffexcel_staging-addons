@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Amenities -->
+    <record id="amenity_swimming_pool" model="website.property.amenity">
+        <field name="name">Swimming Pool</field>
+    </record>
+    <record id="amenity_gym" model="website.property.amenity">
+        <field name="name">Gym / Fitness Center</field>
+    </record>
+    <record id="amenity_covered_parking" model="website.property.amenity">
+        <field name="name">Covered Parking</field>
+    </record>
+    <record id="amenity_security" model="website.property.amenity">
+        <field name="name">24/7 Security</field>
+    </record>
+    <record id="amenity_maid_room" model="website.property.amenity">
+        <field name="name">Maid's Room</field>
+    </record>
+    <record id="amenity_balcony" model="website.property.amenity">
+        <field name="name">Balcony</field>
+    </record>
+    <record id="amenity_central_ac" model="website.property.amenity">
+        <field name="name">Central AC</field>
+    </record>
+    <record id="amenity_built_in_wardrobes" model="website.property.amenity">
+        <field name="name">Built-in Wardrobes</field>
+    </record>
+    <record id="amenity_private_garden" model="website.property.amenity">
+        <field name="name">Private Garden</field>
+    </record>
+    <record id="amenity_children_play" model="website.property.amenity">
+        <field name="name">Children's Play Area</field>
+    </record>
+    <record id="amenity_concierge" model="website.property.amenity">
+        <field name="name">Concierge Service</field>
+    </record>
+    <record id="amenity_smart_home" model="website.property.amenity">
+        <field name="name">Smart Home System</field>
+    </record>
+
+    <!-- Sample Properties -->
+    <record id="property_marina_1" model="website.property">
+        <field name="name">Stunning Marina View Apartment</field>
+        <field name="short_description">Premium finishes with panoramic marina views</field>
+        <field name="description">This exceptional apartment offers breathtaking views of Dubai Marina. Floor-to-ceiling windows flood the space with natural light, while premium Italian marble flooring and designer fixtures create an atmosphere of refined luxury. The open-plan living area flows seamlessly to a spacious balcony overlooking the marina. Located in the heart of Dubai Marina with easy access to The Walk, JBR Beach, and world-class dining.</field>
+        <field name="property_type">apartment</field>
+        <field name="community">Dubai Marina</field>
+        <field name="city">dubai</field>
+        <field name="bedrooms">2</field>
+        <field name="bathrooms">3</field>
+        <field name="area_sqft">1450</field>
+        <field name="furnishing">fully_furnished</field>
+        <field name="price">2100000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.0805</field>
+        <field name="longitude">55.1403</field>
+        <field name="is_featured">True</field>
+        <field name="sequence">10</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Sarah Ahmed</field>
+        <field name="agent_phone">+971501234567</field>
+        <field name="agent_email">sarah@gulf-sir.com</field>
+        <field name="agent_photo_url">https://randomuser.me/api/portraits/women/44.jpg</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_covered_parking'), ref('amenity_security'), ref('amenity_balcony'), ref('amenity_central_ac'), ref('amenity_concierge')])]"/>
+    </record>
+
+    <record id="property_palm_1" model="website.property">
+        <field name="name">Luxury Palm Jumeirah Villa</field>
+        <field name="short_description">Private beach access with stunning sea views</field>
+        <field name="description">A magnificent villa on the iconic Palm Jumeirah with direct private beach access. This six-bedroom residence features a grand double-height entrance, expansive living spaces with floor-to-ceiling windows, a private infinity pool, and lush landscaped gardens. The master suite occupies the entire upper floor with panoramic Arabian Gulf views. Smart home technology throughout, private elevator, and separate staff quarters.</field>
+        <field name="property_type">villa</field>
+        <field name="community">Palm Jumeirah</field>
+        <field name="city">dubai</field>
+        <field name="bedrooms">6</field>
+        <field name="bathrooms">7</field>
+        <field name="area_sqft">8500</field>
+        <field name="furnishing">fully_furnished</field>
+        <field name="price">45000000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.1124</field>
+        <field name="longitude">55.1390</field>
+        <field name="is_featured">True</field>
+        <field name="sequence">20</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Mohammed Al Hashimi</field>
+        <field name="agent_phone">+971502345678</field>
+        <field name="agent_email">m.alhashimi@betterhomes.ae</field>
+        <field name="agent_photo_url">https://randomuser.me/api/portraits/men/32.jpg</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_security'), ref('amenity_maid_room'), ref('amenity_private_garden'), ref('amenity_central_ac'), ref('amenity_smart_home'), ref('amenity_built_in_wardrobes')])]"/>
+    </record>
+
+    <record id="property_downtown_1" model="website.property">
+        <field name="name">Downtown Dubai Penthouse</field>
+        <field name="short_description">Burj Khalifa views from a modern masterpiece</field>
+        <field name="description">An extraordinary penthouse in the heart of Downtown Dubai, offering unobstructed views of the Burj Khalifa and Dubai Fountain. This three-bedroom residence features a wraparound terrace, private rooftop pool, and floor-to-ceiling glass walls. The gourmet kitchen includes Gaggenau appliances and a wine cooler. A private cinema room and entertainment lounge complete this exceptional home.</field>
+        <field name="property_type">penthouse</field>
+        <field name="community">Downtown Dubai</field>
+        <field name="city">dubai</field>
+        <field name="bedrooms">3</field>
+        <field name="bathrooms">4</field>
+        <field name="area_sqft">4200</field>
+        <field name="furnishing">fully_furnished</field>
+        <field name="price">18500000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.1962</field>
+        <field name="longitude">55.2744</field>
+        <field name="is_featured">True</field>
+        <field name="sequence">30</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">James Wilson</field>
+        <field name="agent_phone">+971503456789</field>
+        <field name="agent_email">jwilson@emaar.ae</field>
+        <field name="agent_photo_url">https://randomuser.me/api/portraits/men/62.jpg</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_covered_parking'), ref('amenity_security'), ref('amenity_concierge'), ref('amenity_smart_home')])]"/>
+    </record>
+
+    <record id="property_dubai_hills_1" model="website.property">
+        <field name="name">Contemporary Townhouse</field>
+        <field name="short_description">Modern family living in Dubai Hills Estate</field>
+        <field name="description">A beautifully designed four-bedroom townhouse in the prestigious Dubai Hills Estate. Features an open-plan living area, private garden, and community park access. Modern kitchen with integrated appliances, spacious bedrooms with en-suite bathrooms, and a maid's room. Located minutes from Dubai Hills Mall and major highways.</field>
+        <field name="property_type">townhouse</field>
+        <field name="community">Dubai Hills Estate</field>
+        <field name="city">dubai</field>
+        <field name="bedrooms">4</field>
+        <field name="bathrooms">5</field>
+        <field name="area_sqft">3200</field>
+        <field name="furnishing">semi_furnished</field>
+        <field name="price">4200000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.1200</field>
+        <field name="longitude">55.2300</field>
+        <field name="is_featured">True</field>
+        <field name="sequence">40</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Fatima Rashed</field>
+        <field name="agent_phone">+971504567890</field>
+        <field name="agent_email">fatima@kw-uae.com</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_covered_parking'), ref('amenity_children_play'), ref('amenity_private_garden'), ref('amenity_built_in_wardrobes')])]"/>
+    </record>
+
+    <record id="property_business_bay_1" model="website.property">
+        <field name="name">Executive Office Space</field>
+        <field name="short_description">Premium office with panoramic skyline views</field>
+        <field name="description">A prestigious Grade A office space in Business Bay with stunning views of the Dubai skyline and Business Bay Canal. Open-plan layout with private cabins, meeting rooms, and a reception area. Fully fitted with IT infrastructure, CCTV, and access control. Ideal for corporate headquarters or regional offices.</field>
+        <field name="property_type">office</field>
+        <field name="community">Business Bay</field>
+        <field name="city">dubai</field>
+        <field name="bathrooms">4</field>
+        <field name="area_sqft">5500</field>
+        <field name="furnishing">fully_furnished</field>
+        <field name="price">850000</field>
+        <field name="price_type">rent</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.1850</field>
+        <field name="longitude">55.2600</field>
+        <field name="is_featured">True</field>
+        <field name="sequence">50</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Karim Nasser</field>
+        <field name="agent_phone">+971505678901</field>
+        <field name="agent_email">karim@provident.ae</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_covered_parking'), ref('amenity_security'), ref('amenity_central_ac'), ref('amenity_concierge')])]"/>
+    </record>
+
+    <record id="property_jbr_1" model="website.property">
+        <field name="name">Beachfront Apartment - JBR</field>
+        <field name="short_description">Wake up to the sound of waves on The Walk</field>
+        <field name="description">A stunning one-bedroom beachfront apartment on Jumeirah Beach Residence. Wake up to panoramic sea views and step onto The Walk for world-class dining and entertainment. The apartment features a modern open-plan kitchen, spacious living area with floor-to-ceiling windows, and a balcony overlooking the Arabian Gulf. Beach access is just steps away.</field>
+        <field name="property_type">apartment</field>
+        <field name="community">Jumeirah Beach Residence (JBR)</field>
+        <field name="city">dubai</field>
+        <field name="bedrooms">1</field>
+        <field name="bathrooms">2</field>
+        <field name="area_sqft">920</field>
+        <field name="furnishing">fully_furnished</field>
+        <field name="price">1800000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.0800</field>
+        <field name="longitude">55.1360</field>
+        <field name="sequence">60</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Layla Hassan</field>
+        <field name="agent_phone">+971506789012</field>
+        <field name="agent_email">lhassan@allsopp.ae</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_covered_parking'), ref('amenity_security'), ref('amenity_balcony'), ref('amenity_concierge')])]"/>
+    </record>
+
+    <record id="property_abu_dhabi_1" model="website.property">
+        <field name="name">Saadiyat Island Cultural Villa</field>
+        <field name="short_description">Premium villa near Saadiyat museums and beach</field>
+        <field name="description">An elegant five-bedroom villa on Saadiyat Island, adjacent to the Louvre Abu Dhabi and Saadiyat Beach Golf Club. This Mediterranean-inspired residence offers spacious living areas, a private pool, landscaped gardens, and direct beach access. Features include a home office, cinema room, and separate guest quarters.</field>
+        <field name="property_type">villa</field>
+        <field name="community">Saadiyat Island</field>
+        <field name="city">abu_dhabi</field>
+        <field name="bedrooms">5</field>
+        <field name="bathrooms">6</field>
+        <field name="area_sqft">6800</field>
+        <field name="furnishing">unfurnished</field>
+        <field name="price">32000000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">24.5347</field>
+        <field name="longitude">54.4400</field>
+        <field name="is_featured">True</field>
+        <field name="sequence">70</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Ahmed El Sayed</field>
+        <field name="agent_phone">+971507890123</field>
+        <field name="agent_email">ahmed@espace.ae</field>
+        <field name="agent_photo_url">https://randomuser.me/api/portraits/men/55.jpg</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_security'), ref('amenity_maid_room'), ref('amenity_private_garden'), ref('amenity_central_ac'), ref('amenity_built_in_wardrobes'), ref('amenity_children_play')])]"/>
+    </record>
+
+    <record id="property_jvc_studio" model="website.property">
+        <field name="name">Chic JVC Studio</field>
+        <field name="short_description">Ideal starter home or investment property</field>
+        <field name="description">A modern studio apartment in Jumeirah Village Circle with an efficient open-plan layout. Features a fully equipped kitchen, built-in wardrobes, and a private balcony. Community amenities include a swimming pool, gym, and landscaped gardens. Excellent connectivity to Al Khail Road and Sheikh Zayed Road. High rental yield potential.</field>
+        <field name="property_type">studio</field>
+        <field name="community">Jumeirah Village Circle (JVC)</field>
+        <field name="city">dubai</field>
+        <field name="bathrooms">1</field>
+        <field name="area_sqft">420</field>
+        <field name="furnishing">semi_furnished</field>
+        <field name="price">650000</field>
+        <field name="price_type">sale</field>
+        <field name="completion_status">ready</field>
+        <field name="latitude">25.0800</field>
+        <field name="longitude">55.2100</field>
+        <field name="sequence">80</field>
+        <field name="website_published">True</field>
+        <field name="agent_name">Noora Al Maktoum</field>
+        <field name="agent_phone">+971508901234</field>
+        <field name="agent_email">noora@dubai-properties.ae</field>
+        <field name="amenity_ids" eval="[(6,0,[ref('amenity_swimming_pool'), ref('amenity_gym'), ref('amenity_covered_parking'), ref('amenity_security')])]"/>
+    </record>
+
+</odoo>

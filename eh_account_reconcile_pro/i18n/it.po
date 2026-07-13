@@ -1,0 +1,925 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* eh_account_reconcile_pro
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ERP Heritage Accounting Suite 19.0\n"
+"Report-Msgid-Bugs-To: info@erpheritage.com.au\n"
+"POT-Creation-Date: 2026-05-03 12:00+0000\n"
+"PO-Revision-Date: 2026-05-03 12:00+0000\n"
+"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Language-Team: it_IT\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_rule.py:0
+msgid "%(label)s is not a valid Python regex: %(err)s"
+msgstr "%(label)s is not a valid Python regex: %(err)s"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid ""
+". With Auto Confirm on, the workspace can apply the match without a user "
+"click."
+msgstr ". With Auto Confirm on, the workspace can apply the match without a user click."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "<strong>Company:</strong>"
+msgstr "<strong>Company:</strong>"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "<strong>Journals:</strong>"
+msgstr "<strong>Journals:</strong>"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "<strong>Period:</strong>"
+msgstr "<strong>Period:</strong>"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.actions.act_window,help:eh_account_reconcile_pro.action_eh_reconciliation_session
+msgid ""
+"A session is opened when you enter the bank reconciliation workspace. Each "
+"match, write off, or skip is recorded as an audit decision linked to the "
+"session."
+msgstr "A session is opened when you enter the bank reconciliation workspace. Each match, write off, or skip is recorded as an audit decision linked to the session."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Accept match"
+msgstr "Accept match"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__source__suggestion
+msgid "Accepted Suggestion"
+msgstr "Accepted Suggestion"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__active
+msgid "Active"
+msgstr "Active"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_rule.py:0
+msgid "Active write-off rules require a writeoff_account_id."
+msgstr "Active write-off rules require a writeoff_account_id."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_exception_wizard_form
+msgid "All accessible bank/cash journals"
+msgstr "All accessible bank/cash journals"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "All clear"
+msgstr "All clear"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid ""
+"All non-empty fields must match for this rule to fire. Empty fields are "
+"ignored. Regexes use Python <code>re</code> syntax."
+msgstr "All non-empty fields must match for this rule to fire. Empty fields are ignored. Regexes use Python <code>re</code> syntax."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__aml_id
+msgid "Aml"
+msgstr "Aml"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__amount_max
+msgid "Amount Max"
+msgstr "Amount Max"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__amount_min
+msgid "Amount Min"
+msgstr "Amount Min"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_rule__direction__any
+msgid "Any"
+msgstr "Any"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__audit_ids
+msgid "Audit"
+msgstr "Revisione"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__audit_count
+msgid "Audit Count"
+msgstr "Audit Count"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__auto_confirm
+msgid "Auto Confirm"
+msgstr "Auto Confirm"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_rule__rule_type__write_off
+msgid "Auto write-off to a fixed account"
+msgstr "Auto write-off to a fixed account"
+#. module: eh_account_reconcile_pro
+#: model:ir.actions.client,name:eh_account_reconcile_pro.action_eh_reconcile_workspace
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconcile_root
+msgid "Bank Reconciliation"
+msgstr "Bank Reconciliation"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Bank fee writeoff"
+msgstr "Bank fee writeoff"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__journal_ids
+msgid "Bank journals"
+msgstr "Bank journals"
+#. module: eh_account_reconcile_pro
+#: model:ir.model,name:eh_account_reconcile_pro.model_eh_reconciliation_rule
+msgid "Bank reconciliation rule"
+msgstr "Bank reconciliation rule"
+#. module: eh_account_reconcile_pro
+#: model:ir.model,name:eh_account_reconcile_pro.model_eh_reconciliation_session
+msgid "Bank reconciliation session"
+msgstr "Bank reconciliation session"
+#. module: eh_account_reconcile_pro
+#: model:ir.model,name:eh_account_reconcile_pro.model_eh_reconciliation_suggestion_engine
+msgid "Bank reconciliation suggestion engine"
+msgstr "Bank reconciliation suggestion engine"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__source__bulk
+msgid "Bulk Operation"
+msgstr "Bulk Operation"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_exception_wizard_form
+msgid "Cancel"
+msgstr "Annulla"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "Cannot apply matches on a closed session."
+msgstr "Cannot apply matches on a closed session."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "Cannot skip on a closed session."
+msgstr "Cannot skip on a closed session."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "Cannot write off on a closed session."
+msgstr "Cannot write off on a closed session."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid ""
+"Cannot write off statement line %s: it has no reconcilable suspense line on "
+"its journal move. Verify the bank journal's suspense account is set and the "
+"statement line was processed normally."
+msgstr "Cannot write off statement line %s: it has no reconcilable suspense line on its journal move. Verify the bank journal's suspense account is set and the statement line was processed normally."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "Cannot write off statement line %s: residual is already zero."
+msgstr "Cannot write off statement line %s: residual is already zero."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_form
+msgid "Close Session"
+msgstr "Close Session"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Close session"
+msgstr "Close session"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_session__state__closed
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_search
+msgid "Closed"
+msgstr "Closed"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__closed_at
+msgid "Closed At"
+msgstr "Closed At"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__code
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Code"
+msgstr "Code"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_audit__rules_fired
+msgid ""
+"Comma separated names of heuristics that scored above zero for this match. "
+"For example: amount,date,partner."
+msgstr "Comma separated names of heuristics that scored above zero for this match. For example: amount,date,partner."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__company_id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__company_id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__company_id
+msgid "Company"
+msgstr "Company"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__confidence
+msgid "Confidence"
+msgstr "Confidence"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__score_boost
+msgid ""
+"Confidence boost added to the suggestion score when this rule fires (range "
+"0.0 to 1.0)."
+msgstr "Confidence boost added to the suggestion score when this rule fires (range 0.0 to 1.0)."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__create_uid
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__create_uid
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__create_uid
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__create_uid
+msgid "Created by"
+msgstr "Created by"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__create_date
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__create_date
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__create_date
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__create_date
+msgid "Created on"
+msgstr "Created on"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_rule__direction__credit
+msgid "Credit only (money in)"
+msgstr "Credit only (money in)"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Currency"
+msgstr "Valuta"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__date_from
+msgid "Date From"
+msgstr "Date From"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__date_to
+msgid "Date To"
+msgstr "Date To"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/wizards/exception_report_wizard.py:0
+msgid "Date from must be earlier than or equal to date to."
+msgstr "Date from must be earlier than or equal to date to."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Days Old"
+msgstr "Days Old"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_rule__direction__debit
+msgid "Debit only (money out)"
+msgstr "Debit only (money out)"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__decided_at
+msgid "Decided At"
+msgstr "Decided At"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__decision
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+msgid "Decision"
+msgstr "Decision"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_form
+msgid "Decisions"
+msgstr "Decisions"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.actions.act_window,help:eh_account_reconcile_pro.action_eh_reconciliation_rule
+msgid ""
+"Define a rule once, and the suggestion engine boosts (or auto-confirms) "
+"every matching statement line from then on. Common starting rules: bank fee "
+"write-off, payroll deposit auto-match, supplier reference pattern."
+msgstr "Define a rule once, and the suggestion engine boosts (or auto-confirms) every matching statement line from then on. Common starting rules: bank fee write-off, payroll deposit auto-match, supplier reference pattern."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__direction
+msgid "Direction"
+msgstr "Direction"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__display_name
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__display_name
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__display_name
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__display_name
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_suggestion_engine__display_name
+msgid "Display Name"
+msgstr "Display Name"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__duration_seconds
+msgid "Duration Seconds"
+msgstr "Duration Seconds"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "ERP Heritage"
+msgstr "ERP Heritage"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Error."
+msgstr "Error."
+#. module: eh_account_reconcile_pro
+#: model:ir.actions.act_window,name:eh_account_reconcile_pro.action_eh_reconciliation_exception_wizard
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconciliation_exception
+msgid "Exception Report"
+msgstr "Exception Report"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__fire_count
+msgid "Fire Count"
+msgstr "Fire Count"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+msgid "From Suggestions"
+msgstr "From Suggestions"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_tree
+msgid "From suggestions"
+msgstr "From suggestions"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Health"
+msgstr "Health"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_suggestion_engine__id
+msgid "ID"
+msgstr "ID"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__show_zero_journals
+msgid ""
+"Include journals with no statement lines in the period. Default off so the "
+"report stays focused on journals that actually saw activity."
+msgstr "Include journals with no statement lines in the period. Default off so the report stays focused on journals that actually saw activity."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__journal_ids
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__journal_id
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_search
+msgid "Journal"
+msgstr "Registro"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__writeoff_label
+msgid "Label written on the write-off journal item."
+msgstr "Label written on the write-off journal item."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__last_fired_at
+msgid "Last Fired At"
+msgstr "Last Fired At"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__write_uid
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__write_uid
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__write_uid
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__write_date
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__write_date
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__write_date
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__journal_ids
+msgid ""
+"Limit this rule to specific bank or cash journals. Empty means all bank/cash"
+" journals in the company."
+msgstr "Limit this rule to specific bank or cash journals. Empty means all bank/cash journals in the company."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid ""
+"Limit which bank or cash journals this rule applies to. Leave empty to match"
+" every bank or cash journal in the company."
+msgstr "Limit which bank or cash journals this rule applies to. Leave empty to match every bank or cash journal in the company."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Loading workspace..."
+msgstr "Loading workspace..."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__source__manual
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_tree
+msgid "Manual"
+msgstr "Manual"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Match action"
+msgstr "Match action"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__decision__match
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+msgid "Matched"
+msgstr "Matched"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Matches"
+msgstr "Matches"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__matches_made
+msgid "Matches Made"
+msgstr "Matches Made"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__matches_manual
+msgid "Matches Manual"
+msgstr "Matches Manual"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__matches_via_suggestion
+msgid "Matches Via Suggestion"
+msgstr "Matches Via Suggestion"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_search
+msgid "My Sessions"
+msgstr "My Sessions"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__name
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__name
+msgid "Name"
+msgstr "Name"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__narration_regex
+msgid "Narration regex"
+msgstr "Narration regex"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "No matches above threshold"
+msgstr "No matches above threshold"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.actions.act_window,help:eh_account_reconcile_pro.action_eh_reconciliation_rule
+msgid "No reconciliation rules yet."
+msgstr "No reconciliation rules yet."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.actions.act_window,help:eh_account_reconcile_pro.action_eh_reconciliation_session
+msgid "No reconciliation sessions yet."
+msgstr "No reconciliation sessions yet."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "No statement lines in the selected period."
+msgstr "No statement lines in the selected period."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "No unreconciled statement lines on this journal."
+msgstr "No unreconciled statement lines on this journal."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "No valid AMLs in: %s"
+msgstr "No valid AMLs in: %s"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__notes
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Notes"
+msgstr "Notes"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Oldest Unmatched"
+msgstr "Oldest Unmatched"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_session__state__open
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_search
+msgid "Open"
+msgstr "Open"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__opened_at
+msgid "Opened At"
+msgstr "Opened At"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__amount_max
+msgid ""
+"Optional. Statement line absolute amount must be <= this. Leave 0 for no "
+"upper bound."
+msgstr "Optional. Statement line absolute amount must be <= this. Leave 0 for no upper bound."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__amount_min
+msgid ""
+"Optional. Statement line absolute amount must be >= this. Leave 0 for no "
+"lower bound."
+msgstr "Optional. Statement line absolute amount must be >= this. Leave 0 for no lower bound."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__narration_regex
+msgid "Optional. Statement line narration must match this regex."
+msgstr "Optional. Statement line narration must match this regex."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__payment_ref_regex
+msgid ""
+"Optional. Statement line payment_ref must match this regex (Python re "
+"syntax). Anchored with ^ and $ if you want full match."
+msgstr "Optional. Statement line payment_ref must match this regex (Python re syntax). Anchored with ^ and $ if you want full match."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__partner_id
+msgid "Optional. When set, the rule only suggests AMLs for this partner."
+msgstr "Optional. When set, the rule only suggests AMLs for this partner."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__partner_id
+msgid "Partner"
+msgstr "Partner"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Pattern"
+msgstr "Pattern"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__payment_ref_regex
+msgid "Payment ref regex"
+msgstr "Payment ref regex"
+#. module: eh_account_reconcile_pro
+#: model:ir.model,name:eh_account_reconcile_pro.model_eh_reconciliation_audit
+msgid "Per line reconciliation decision audit"
+msgstr "Per line reconciliation decision audit"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_exception_wizard_form
+msgid ""
+"Per-journal snapshot of bank reconciliation health for the selected period: "
+"total statement lines, reconciled count, unmatched count and amount, the "
+"oldest unmatched line, and write-off / skip counts."
+msgstr "Per-journal snapshot of bank reconciliation health for the selected period: total statement lines, reconciled count, unmatched count and amount, the oldest unmatched line, and write-off / skip counts."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Pick a journal"
+msgstr "Pick a journal"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid ""
+"Pick a statement line on the left to see scored suggestions and decide."
+msgstr "Pick a statement line on the left to see scored suggestions and decide."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_exception_wizard_form
+msgid "Print PDF"
+msgstr "Print PDF"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Reconciled"
+msgstr "Reconciled"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Reconciled %"
+msgstr "Reconciled %"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_form
+msgid "Reconciliation Decision"
+msgstr "Reconciliation Decision"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+#: model:ir.actions.act_window,name:eh_account_reconcile_pro.action_eh_reconciliation_audit
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconciliation_audit
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_tree
+msgid "Reconciliation Decisions"
+msgstr "Reconciliation Decisions"
+#. module: eh_account_reconcile_pro
+#: model:ir.actions.report,name:eh_account_reconcile_pro.action_report_reconciliation_exception
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_exception_wizard_form
+msgid "Reconciliation Exception Report"
+msgstr "Reconciliation Exception Report"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__source__rule
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Reconciliation Rule"
+msgstr "Reconciliation Rule"
+#. module: eh_account_reconcile_pro
+#: model:ir.actions.act_window,name:eh_account_reconcile_pro.action_eh_reconciliation_rule
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconciliation_rule
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconciliation_rules
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_list
+msgid "Reconciliation Rules"
+msgstr "Reconciliation Rules"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_form
+msgid "Reconciliation Session"
+msgstr "Reconciliation Session"
+#. module: eh_account_reconcile_pro
+#: model:ir.actions.act_window,name:eh_account_reconcile_pro.action_eh_reconciliation_session
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_tree
+msgid "Reconciliation Sessions"
+msgstr "Reconciliation Sessions"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Reconciliation Workspace"
+msgstr "Reconciliation Workspace"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_audit.py:0
+msgid "Reconciliation audit rows are append-only."
+msgstr "Reconciliation audit rows are append-only."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_audit.py:0
+msgid "Reconciliation audit rows cannot be deleted."
+msgstr "Reconciliation audit rows cannot be deleted."
+#. module: eh_account_reconcile_pro
+#: model:ir.model,name:eh_account_reconcile_pro.model_eh_reconciliation_exception_wizard
+msgid "Reconciliation exception report wizard"
+msgstr "Reconciliation exception report wizard"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__writeoff_account_id
+msgid ""
+"Required for write-off rules. The account the residual is written off to."
+msgstr "Required for write-off rules. The account the residual is written off to."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__rule_type
+msgid "Rule Type"
+msgstr "Rule Type"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.constraint,message:eh_account_reconcile_pro.constraint_eh_reconciliation_rule_unique_code_company
+msgid "Rule code must be unique per company."
+msgstr "Rule code must be unique per company."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_rule.py:0
+msgid "Rule code must match [a-z][a-z0-9_]* (got %r)."
+msgstr "Rule code must match [a-z][a-z0-9_]* (got %r)."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Rules"
+msgstr "Rules"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__rules_fired
+msgid "Rules Fired"
+msgstr "Rules Fired"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Scope"
+msgstr "Scope"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__score_boost
+msgid "Score Boost"
+msgstr "Score Boost"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.constraint,message:eh_account_reconcile_pro.constraint_eh_reconciliation_rule_check_score_boost
+msgid "Score boost must be between 0.0 and 1.0."
+msgstr "Score boost must be between 0.0 and 1.0."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Scoring candidates..."
+msgstr "Scoring candidates..."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid ""
+"Select a bank or cash journal above to load its\n"
+"                        unreconciled statement lines."
+msgstr "Select a bank or cash journal above to load its\\n                        unreconciled statement lines."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Select a journal..."
+msgstr "Select a journal..."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Select a line"
+msgstr "Select a line"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Selected statement line"
+msgstr "Selected statement line"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__sequence
+msgid "Sequence"
+msgstr "Sequence"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__session_id
+msgid "Session"
+msgstr "Session"
+#. module: eh_account_reconcile_pro
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconciliation_session
+msgid "Sessions"
+msgstr "Sessions"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__show_zero_journals
+msgid "Show Zero Journals"
+msgstr "Show Zero Journals"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Skip for now"
+msgstr "Skip for now"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__decision__skip
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_tree
+msgid "Skipped"
+msgstr "Skipped"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__skips
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Skips"
+msgstr "Skips"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__source
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+msgid "Source"
+msgstr "Source"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__code
+msgid "Stable identifier surfaced in the audit log when the rule fires."
+msgstr "Stable identifier surfaced in the audit log when the rule fires."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__state
+msgid "State"
+msgstr "State"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__statement_line_id
+msgid "Statement Line"
+msgstr "Statement Line"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Statement Lines"
+msgstr "Statement Lines"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid ""
+"Statement line %s is already reconciled and cannot be written off again."
+msgstr "Statement line %s is already reconciled and cannot be written off again."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid ""
+"Statement line %s is already reconciled. Unreconcile it from the bank "
+"statement before matching it again."
+msgstr "Statement line %s is already reconciled. Unreconcile it from the bank statement before matching it again."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__statements_processed
+msgid "Statements Processed"
+msgstr "Statements Processed"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_search
+msgid "Status"
+msgstr "Stato"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_exception_wizard__journal_ids
+msgid ""
+"Subset of bank/cash journals to report on. Leave empty to include every "
+"accessible bank/cash journal in the company."
+msgstr "Subset of bank/cash journals to report on. Leave empty to include every accessible bank/cash journal in the company."
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_rule__rule_type__match
+msgid "Suggest a match against a journal item"
+msgstr "Suggest a match against a journal item"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_audit__confidence
+msgid ""
+"Suggestion engine total score at decision time (0 to 1). 0 indicates a "
+"manual match without engine guidance."
+msgstr "Suggestion engine total score at decision time (0 to 1). 0 indicates a manual match without engine guidance."
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "Suggestions"
+msgstr "Suggestions"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid ""
+"The suggestion engine could not find a candidate scoring above 0.30. Use "
+"Skip if you want to come back to this line later."
+msgstr "The suggestion engine could not find a candidate scoring above 0.30. Use Skip if you want to come back to this line later."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid ""
+"These journal items are already reconciled and cannot be matched again: %s"
+msgstr "These journal items are already reconciled and cannot be matched again: %s"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Total"
+msgstr "Totale"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Total lines"
+msgstr "Total lines"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_tree
+msgid "Total matches"
+msgstr "Total matches"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__fire_count
+msgid "Total number of times this rule has fired across all sessions."
+msgstr "Total number of times this rule has fired across all sessions."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "Unknown statement line or account."
+msgstr "Unknown statement line or account."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "Unknown statement line: %s"
+msgstr "Unknown statement line: %s"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Unmatched"
+msgstr "Unmatched"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Unmatched Amt"
+msgstr "Unmatched Amt"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_audit__user_id
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__user_id
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_search
+msgid "User"
+msgstr "Utente"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,help:eh_account_reconcile_pro.field_eh_reconciliation_rule__auto_confirm
+msgid ""
+"When enabled, a suggestion produced by this rule is auto-confirmed instead "
+"of waiting for a user click. Use sparingly: requires high pattern "
+"specificity."
+msgstr "When enabled, a suggestion produced by this rule is auto-confirmed instead of waiting for a user click. Use sparingly: requires high pattern specificity."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid ""
+"When the rule fires on a statement line that has no AML candidate, the "
+"residual is written off to the configured account with the configured label."
+msgstr "When the rule fires on a statement line that has no AML candidate, the residual is written off to the configured account with the configured label."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid ""
+"When this rule fires on a candidate journal item, its score is boosted by"
+msgstr "When this rule fires on a candidate journal item, its score is boosted by"
+#. module: eh_account_reconcile_pro
+#: model:ir.ui.menu,name:eh_account_reconcile_pro.menu_eh_reconcile_workspace
+msgid "Workspace"
+msgstr "Workspace"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_session__write_offs
+msgid "Write Offs"
+msgstr "Write Offs"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_session_tree
+msgid "Write offs"
+msgstr "Write offs"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "Write-off"
+msgstr "Write-off"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "Write-offs"
+msgstr "Write-offs"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__writeoff_account_id
+msgid "Writeoff Account"
+msgstr "Writeoff Account"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields,field_description:eh_account_reconcile_pro.field_eh_reconciliation_rule__writeoff_label
+msgid "Writeoff Label"
+msgstr "Writeoff Label"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_audit_search
+msgid "Written Off"
+msgstr "Written Off"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.fields.selection,name:eh_account_reconcile_pro.selection__eh_reconciliation_audit__decision__write_off
+msgid "Written off"
+msgstr "Written off"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "^INV-\\d{6}$"
+msgstr "^INV-\\\\d{6}$"
+#. module: eh_account_reconcile_pro
+#: model:ir.model.constraint,message:eh_account_reconcile_pro.constraint_eh_reconciliation_rule_check_amounts
+msgid ""
+"amount_max must be greater than or equal to amount_min when both are set."
+msgstr "amount_max must be greater than or equal to amount_min when both are set."
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "apply_match requires at least one aml id."
+msgstr "apply_match requires at least one aml id."
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.view_eh_reconciliation_rule_form
+msgid "bank_fee_writeoff"
+msgstr "bank_fee_writeoff"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "candidate(s)"
+msgstr "candidate(s)"
+#. module: eh_account_reconcile_pro
+#. odoo-javascript
+#: code:addons/eh_account_reconcile_pro/static/src/components/reconcile_workspace/reconcile_workspace.xml:0
+msgid "open"
+msgstr "open"
+#. module: eh_account_reconcile_pro
+#. odoo-python
+#: code:addons/eh_account_reconcile_pro/models/reconciliation_session.py:0
+msgid "session_id"
+msgstr "session_id"
+#. module: eh_account_reconcile_pro
+#: model_terms:ir.ui.view,arch_db:eh_account_reconcile_pro.report_reconciliation_exception
+msgid "to"
+msgstr "to"

@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         ENTERPRISE PAYSLIP DETAILS REPORT — Complete Visual Redesign
+         Matching the Payslip Report design language
+         Odoo 19 — wkhtmltopdf Compatible
+         =================================================================== -->
+    <template id="report_payslipdetails">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+
+                    <!-- ── Data Aliases ── -->
+                    <t t-set="company" t-value="o.company_id"/>
+                    <t t-set="currency" t-value="company.currency_id"/>
+
+                    <style>
+                        /* ================================================================
+                           ENTERPRISE PAYSLIP DETAILS — wkhtmltopdf Compatible Styles
+                           Brand: Corporate Navy #1C2E5A + Blue #2B6DAE + Gold #C9A84C
+                           ================================================================ */
+
+                        /* ── Base ── */
+                        body {
+                            font-family: 'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif;
+                            font-size: 10.5pt;
+                            color: #2D3748;
+                            line-height: 1.55;
+                        }
+
+                        .page {
+                            padding: 0;
+                            background: #FFFFFF;
+                        }
+
+                        .payslip-wrapper {
+                            width: 100%;
+                            min-height: 1280px;
+                        }
+
+                        /* ── Utility ── */
+                        .text-right { text-align: right !important; }
+                        .text-center { text-align: center !important; }
+                        .text-bold { font-weight: 700 !important; }
+                        .text-uppercase { text-transform: uppercase; }
+                        .text-muted { color: #718096; }
+                        .text-white { color: #FFFFFF; }
+                        .text-navy { color: #1C2E5A; }
+                        .tabular-nums { font-variant-numeric: tabular-nums; }
+                        .w-100 { width: 100%; }
+                        .no-wrap { white-space: nowrap; }
+
+                        /* ================================================================
+                           HEADER
+                           ================================================================ */
+
+                        .header-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border-bottom: 3px solid #1C2E5A;
+                            margin-bottom: 16px;
+                        }
+
+                        .header-table td {
+                            vertical-align: top;
+                            padding: 10px 0 8px 0;
+                        }
+
+                        .header-logo-cell {
+                            width: 20%;
+                            padding-right: 12px !important;
+                        }
+
+                        .header-logo {
+                            max-height: 62px;
+                            max-width: 170px;
+                            margin-bottom: 4px;
+                        }
+
+                        .header-company-cell {
+                            width: 35%;
+                            padding-left: 0 !important;
+                            padding-right: 8px !important;
+                            vertical-align: middle !important;
+                        }
+
+                        .header-company-name {
+                            font-size: 13pt;
+                            font-weight: 700;
+                            color: #1C2E5A;
+                            line-height: 1.25;
+                            margin-bottom: 2px;
+                        }
+
+                        .header-company-detail {
+                            font-size: 8pt;
+                            color: #4A5568;
+                            line-height: 1.45;
+                        }
+
+                        .header-title-cell {
+                            width: 45%;
+                            text-align: right;
+                            vertical-align: middle !important;
+                        }
+
+                        .header-title {
+                            font-size: 18pt;
+                            font-weight: 800;
+                            letter-spacing: 2px;
+                            color: #1C2E5A;
+                            text-transform: uppercase;
+                            line-height: 1.15;
+                            margin-bottom: 4px;
+                        }
+
+                        .header-meta {
+                            font-size: 8.5pt;
+                            color: #4A5568;
+                            line-height: 1.55;
+                        }
+
+                        .header-meta strong {
+                            color: #1C2E5A;
+                            font-weight: 600;
+                        }
+
+                        .header-status-badge {
+                            display: inline-block;
+                            padding: 2px 11px;
+                            font-size: 7.5pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.3px;
+                            color: #fff;
+                            background-color: #27ae60;
+                            line-height: 1.3;
+                        }
+                        .status-draft  { background-color: #E67E22; }
+                        .status-done   { background-color: #27AE60; }
+                        .status-cancel { background-color: #C0392B; }
+
+                        /* ================================================================
+                           SECTION TITLE
+                           ================================================================ */
+
+                        .section-bar {
+                            background-color: #1C2E5A;
+                            color: #FFFFFF;
+                            padding: 7px 16px;
+                            font-size: 10.5pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            line-height: 1.3;
+                            margin-top: 14px;
+                            margin-bottom: 0;
+                            border-left: 4px solid #C9A84C;
+                        }
+
+                        /* ================================================================
+                           EMPLOYEE INFO PANEL
+                           ================================================================ */
+
+                        .emp-panel {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                        }
+
+                        .emp-panel td {
+                            padding: 7px 14px;
+                            border: 1px solid #D1D5DB;
+                            vertical-align: middle;
+                            font-size: 10pt;
+                        }
+
+                        .emp-panel .emp-label {
+                            font-weight: 600;
+                            color: #1C2E5A;
+                            background-color: #F4F6F9;
+                            width: 16%;
+                            letter-spacing: 0.2px;
+                            white-space: nowrap;
+                        }
+
+                        .emp-panel .emp-value {
+                            width: 34%;
+                            color: #2D3748;
+                            font-weight: 500;
+                        }
+
+                        /* ================================================================
+                           DETAILS TABLE — Salary Rule Category Hierarchy
+                           ================================================================ */
+
+                        .details-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                            margin-bottom: 0;
+                        }
+
+                        .details-table thead th {
+                            background-color: #1C2E5A;
+                            color: #FFFFFF;
+                            padding: 8px 12px;
+                            font-size: 9pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.4px;
+                            text-align: left;
+                            border: none;
+                        }
+
+                        .details-table thead th.amt {
+                            text-align: right;
+                        }
+
+                        .details-table tbody td {
+                            padding: 7px 12px;
+                            font-size: 10pt;
+                            vertical-align: middle;
+                            border-bottom: 1px solid #E5E7EB;
+                            color: #2D3748;
+                        }
+
+                        .details-table tbody td.amt {
+                            text-align: right;
+                            font-variant-numeric: tabular-nums;
+                        }
+
+                        .details-table tbody tr:nth-child(even) {
+                            background-color: #F8FAFC;
+                        }
+
+                        .details-table tbody tr:last-child td {
+                            border-bottom: 1px solid #D1D5DB;
+                        }
+
+                        /* Category hierarchy levels */
+                        .details-table .cat-level-0 td {
+                            font-weight: 700;
+                            color: #1C2E5A;
+                            background-color: #EBF0F7;
+                            border-bottom: 1px solid #CBD5E1;
+                        }
+
+                        .details-table .cat-level-1 td {
+                            font-weight: 600;
+                            color: #2D3748;
+                            background-color: #F4F6F9;
+                        }
+
+                        .details-table .cat-level-2 td {
+                            color: #4A5568;
+                            padding-left: 24px !important;
+                        }
+
+                        .details-table .cat-level-3 td {
+                            color: #555;
+                            padding-left: 36px !important;
+                        }
+
+                        .details-table .cat-item td {
+                            padding: 6px 12px;
+                        }
+
+                        .details-table .cat-total td {
+                            font-weight: 700;
+                            color: #1C2E5A;
+                            background-color: #E2E8F0;
+                            border-top: 2px solid #C9A84C;
+                            border-bottom: 2px solid #C9A84C;
+                            padding: 7px 12px;
+                        }
+
+                        .details-table .cat-total td.amt {
+                            text-align: right;
+                            color: #1C2E5A;
+                        }
+
+                        .details-table .indent-dots {
+                            color: #A0AEC0;
+                            font-size: 9pt;
+                        }
+
+                        /* ================================================================
+                           REGISTER TABLE — Contribution Register Lines
+                           ================================================================ */
+
+                        .register-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                            margin-bottom: 0;
+                        }
+
+                        .register-table thead th {
+                            background-color: #1C2E5A;
+                            color: #FFFFFF;
+                            padding: 8px 12px;
+                            font-size: 9pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.4px;
+                            text-align: left;
+                            border: none;
+                        }
+
+                        .register-table thead th.amt {
+                            text-align: right;
+                        }
+
+                        .register-table tbody td {
+                            padding: 7px 12px;
+                            font-size: 10pt;
+                            vertical-align: middle;
+                            border-bottom: 1px solid #E5E7EB;
+                            color: #2D3748;
+                        }
+
+                        .register-table tbody td.amt {
+                            text-align: right;
+                            font-variant-numeric: tabular-nums;
+                        }
+
+                        .register-table tbody tr:nth-child(even) {
+                            background-color: #F8FAFC;
+                        }
+
+                        .register-table .register-header td {
+                            font-weight: 700;
+                            color: #1C2E5A;
+                            background-color: #EBF0F7;
+                            border-bottom: 1px solid #CBD5E1;
+                            padding: 7px 12px;
+                        }
+
+                        .register-table .register-total td {
+                            font-weight: 700;
+                            color: #1C2E5A;
+                            background-color: #E2E8F0;
+                            border-top: 2px solid #C9A84C;
+                            border-bottom: 2px solid #C9A84C;
+                            padding: 7px 12px;
+                        }
+
+                        .register-table .register-total td.amt {
+                            text-align: right;
+                            color: #1C2E5A;
+                        }
+
+                        /* ================================================================
+                           SIGNATURE AREA
+                           ================================================================ */
+
+                        .sig-area {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 22px;
+                        }
+
+                        .sig-area .sig-divider td {
+                            border-top: 2px solid #1C2E5A;
+                            padding: 0;
+                            height: 0;
+                            font-size: 1px;
+                        }
+
+                        .sig-area .sig-cell {
+                            width: 50%;
+                            padding-top: 52px;
+                            text-align: center;
+                            vertical-align: top;
+                        }
+
+                        .sig-area .sig-line {
+                            border-top: 1px solid #C9A84C;
+                            width: 60%;
+                            margin: 0 auto;
+                        }
+
+                        .sig-area .sig-label {
+                            font-size: 9pt;
+                            color: #1C2E5A;
+                            font-weight: 600;
+                            margin-top: 5px;
+                            letter-spacing: 0.3px;
+                        }
+
+                        /* ================================================================
+                           FOOTER
+                           ================================================================ */
+
+                        .confidential-notice {
+                            margin-top: 12px;
+                            padding: 7px 16px;
+                            border-left: 3px solid #C9A84C;
+                            background-color: #F7FAFC;
+                            font-size: 7.5pt;
+                            color: #718096;
+                            line-height: 1.5;
+                        }
+
+                        .confidential-notice strong {
+                            color: #1C2E5A;
+                        }
+                    </style>
+
+                    <!-- ================================================================
+                         PAGE WRAPPER
+                         ================================================================ -->
+                    <div class="page payslip-wrapper">
+
+                        <!-- ============================================================
+                             SECTION 1: HEADER
+                             ============================================================ -->
+                        <table class="header-table" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="header-logo-cell">
+                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                         class="header-logo"/>
+                                </td>
+                                <td class="header-company-cell">
+                                    <div class="header-company-name">
+                                        <t t-esc="company.name"/>
+                                    </div>
+                                    <div class="header-company-detail">
+                                        <t t-esc="company.street or ''"/>
+                                        <t t-if="company.street2">, <t t-esc="company.street2"/></t>
+                                        <br/>
+                                        <t t-if="company.city or company.state_id or company.zip">
+                                            <t t-esc="company.city or ''"/>
+                                            <t t-if="company.state_id">, <t t-esc="company.state_id.name"/></t>
+                                            <t t-if="company.zip"> <t t-esc="company.zip"/></t>
+                                        </t>
+                                        <t t-if="company.country_id">, <t t-esc="company.country_id.name"/></t>
+                                        <t t-if="company.vat">
+                                            <br/>TRN: <t t-esc="company.vat"/>
+                                        </t>
+                                    </div>
+                                </td>
+                                <td class="header-title-cell">
+                                    <div class="header-title">Payslip Details</div>
+                                    <div class="header-meta">
+                                        <strong>Period:</strong>
+                                        <span t-field="o.date_from"/> — <span t-field="o.date_to"/>
+                                        <br/>
+                                        <strong>Ref:</strong> <span t-field="o.number"/>
+                                        <strong t-if="o.name"> | <span t-field="o.name"/></strong>
+                                        <br/>
+                                        <t t-if="o.state">
+                                            <span t-attf-class="header-status-badge status-{{ o.state }}">
+                                                <span t-field="o.state"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 2: EMPLOYEE INFORMATION
+                             ============================================================ -->
+                        <div class="section-bar">Employee Information</div>
+                        <table class="emp-panel" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="emp-label">Employee</td>
+                                <td class="emp-value"><span t-field="o.employee_id"/></td>
+                                <td class="emp-label">Designation</td>
+                                <td class="emp-value"><span t-field="o.employee_id.job_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Email</td>
+                                <td class="emp-value"><span t-field="o.employee_id.work_email"/></td>
+                                <td class="emp-label">ID Number</td>
+                                <td class="emp-value"><span t-field="o.employee_id.identification_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Date From</td>
+                                <td class="emp-value"><span t-field="o.date_from"/></td>
+                                <td class="emp-label">Date To</td>
+                                <td class="emp-value"><span t-field="o.date_to"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Bank Account</td>
+                                <td class="emp-value"><span t-field="o.employee_id.primary_bank_account_id"/></td>
+                                <td class="emp-label">Pay Structure</td>
+                                <td class="emp-value"><span t-field="o.struct_id"/></td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 3: DETAILS BY SALARY RULE CATEGORY
+                             ============================================================ -->
+                        <div class="section-bar">Details by Salary Rule Category</div>
+                        <table class="details-table" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%;">Code</th>
+                                    <th style="width:55%;">Salary Rule Category</th>
+                                    <th style="width:25%;" class="amt">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="get_details_by_rule_category.get(o.id, [])" t-as="h">
+                                    <tr t-attf-class="cat-level-{{ min(h['level'], 3) }} cat-item">
+                                        <td>
+                                            <t t-if="h['level'] > 0">
+                                                <span class="indent-dots" t-esc="'..' * h['level']"/>
+                                            </t>
+                                            <span t-esc="h['code']"/>
+                                        </td>
+                                        <td><span t-esc="h['rule_category']"/></td>
+                                        <td class="amt">
+                                            <span t-esc="h['total']"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": currency}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="not get_details_by_rule_category.get(o.id, [])">
+                                    <tr>
+                                        <td colspan="3" style="text-align:center; color:#A0AEC0; padding:14px; font-style:italic;">
+                                            No category details available
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 4: PAYSLIP LINES BY CONTRIBUTION REGISTER
+                             ============================================================ -->
+                        <div class="section-bar">Payslip Lines by Contribution Register</div>
+                        <table class="register-table" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:15%;">Code</th>
+                                    <th style="width:45%;">Name</th>
+                                    <th style="width:10%;" class="amt">Qty</th>
+                                    <th style="width:12%;" class="amt">Rate</th>
+                                    <th style="width:18%;" class="amt">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="get_lines_by_contribution_register.get(o.id, [])" t-as="p">
+                                    <tr t-if="!p.get('code', '')" class="register-header">
+                                        <td colspan="5">
+                                            <strong><span t-esc="p.get('register_name', '')"/></strong>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="p.get('code', '')">
+                                        <td><span t-esc="p.get('code', '')"/></td>
+                                        <td><span t-esc="p.get('name', '')"/></td>
+                                        <td class="amt"><span t-esc="p.get('quantity', '')"/></td>
+                                        <td class="amt"><span t-esc="p.get('amount', 0)"/></td>
+                                        <td class="amt">
+                                            <span t-esc="p.get('total', 0)"
+                                                  t-esc-options='{"widget": "monetary", "display_currency": currency}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="not get_lines_by_contribution_register.get(o.id, [])">
+                                    <tr>
+                                        <td colspan="5" style="text-align:center; color:#A0AEC0; padding:14px; font-style:italic;">
+                                            No contribution register lines
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 5: SIGNATURES
+                             ============================================================ -->
+                        <table class="sig-area" cellpadding="0" cellspacing="0">
+                            <tr class="sig-divider"><td colspan="2"></td></tr>
+                            <tr>
+                                <td class="sig-cell">
+                                    <div class="sig-line"></div>
+                                    <div class="sig-label">Employee Signature</div>
+                                </td>
+                                <td class="sig-cell">
+                                    <div class="sig-line"></div>
+                                    <div class="sig-label">Authorized Signatory</div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 6: CONFIDENTIAL FOOTER
+                             ============================================================ -->
+                        <div class="confidential-notice">
+                            <strong>CONFIDENTIAL</strong> — This document contains
+                            confidential information intended solely for the named employee.
+                            If you have received this document in error, please notify
+                            Human Resources immediately. Generated electronically.
+                        </div>
+
+                    </div><!-- /.page.payslip-wrapper -->
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

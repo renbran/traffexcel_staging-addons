@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Backend Form View -->
+    <record id="website_property_view_form" model="ir.ui.view">
+        <field name="name">website.property.form</field>
+        <field name="model">website.property</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_publish" type="object"
+                            class="btn btn-primary"
+                            invisible="is_published">
+                        Publish
+                    </button>
+                    <button name="action_publish" type="object"
+                            class="btn btn-secondary"
+                            invisible="not is_published">
+                        Unpublish
+                    </button>
+                    <field name="website_published" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                   options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <field name="image_128" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Property Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Location">
+                            <field name="community"/>
+                            <field name="city"/>
+                            <field name="address"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                        <group string="Details">
+                            <field name="property_type"/>
+                            <field name="price_type"/>
+                            <field name="price"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="completion_status"/>
+                            <field name="handover_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Specifications">
+                            <field name="bedrooms"/>
+                            <field name="bathrooms"/>
+                            <field name="area_sqft"/>
+                            <field name="furnishing"/>
+                        </group>
+                        <group string="Linking">
+                            <field name="project_id"/>
+                            <field name="is_featured"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="short_description" placeholder="Short tagline..."/>
+                            <field name="description" placeholder="Full description..."/>
+                        </page>
+                        <page string="Photos" name="photos">
+                            <field name="photo_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="image_1920" widget="image"/>
+                                    <field name="is_cover"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Amenities" name="amenities">
+                            <field name="amenity_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Agent" name="agent">
+                            <group>
+                                <field name="agent_name"/>
+                                <field name="agent_phone"/>
+                                <field name="agent_email"/>
+                                <field name="agent_photo_url"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Backend List View -->
+    <record id="website_property_view_list" model="ir.ui.view">
+        <field name="name">website.property.list</field>
+        <field name="model">website.property</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="property_type"/>
+                <field name="community"/>
+                <field name="city"/>
+                <field name="bedrooms"/>
+                <field name="area_sqft"/>
+                <field name="price"/>
+                <field name="price_type"/>
+                <field name="is_featured" widget="boolean_toggle"/>
+                <field name="website_published" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Backend Action -->
+    <record id="action_website_property" model="ir.actions.act_window">
+        <field name="name">Website Properties</field>
+        <field name="res_model">website.property</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="website_property_view_search"/>
+        <field name="context">{'search_default_filter_published': 1}</field>
+    </record>
+
+    <!-- Search View -->
+    <record id="website_property_view_search" model="ir.ui.view">
+        <field name="name">website.property.search</field>
+        <field name="model">website.property</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="community"/>
+                <field name="city"/>
+                <separator/>
+                <filter string="Published" name="filter_published"
+                        domain="[('website_published', '=', True)]"/>
+                <filter string="Featured" name="filter_featured"
+                        domain="[('is_featured', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="City" name="group_city"
+                            context="{'group_by': 'city'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'property_type'}"/>
+                    <filter string="Price Type" name="group_price_type"
+                            context="{'group_by': 'price_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_website_property_root"
+              name="Properties"
+              parent="website.menu_website_configuration"
+              sequence="40"/>
+
+    <menuitem id="menu_website_property_list"
+              name="Website Properties"
+              parent="menu_website_property_root"
+              action="action_website_property"
+              sequence="10"/>
+
+</odoo>

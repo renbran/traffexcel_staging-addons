@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "entries": {
+    "79a93d4a2f8f50b95f852280616242fee1855dc99a3c75211917f55e72e95fae": {
+      "last_emitted_at_ms": 1783669805575,
+      "message": "Use parallel execution for independent tasks. Use run_in_background for long operations (npm install, builds, tests)."
+    },
+    "445ed27a3872b681d98190bae61ccb84954e1bc4e140df5370be958dee776b3a": {
+      "last_emitted_at_ms": 1783668850601,
+      "message": "Verify changes work after editing. Test functionality before marking complete."
+    },
+    "466399dafa2d20f60587180bad0a07358eb7f2bce724df0ff682f038ad33f5ad": {
+      "last_emitted_at_ms": 1783668064612,
+      "message": "Read multiple files in parallel when possible for faster analysis."
+    },
+    "112a0afa663448f68e7ccf5679df458bb71732cb9ecc53b63da2569992519043": {
+      "last_emitted_at_ms": 1783667901388,
+      "message": "Spawning agent: Explore (inherit) | Task: Check merged-addons for build/deploy tooling"
+    },
+    "b0458dbd3e4a3959427f37a2ee042f62d9075002ea549a44bd164b3c0f679bcb": {
+      "last_emitted_at_ms": 1783667891071,
+      "message": "Spawning agent: Explore (inherit) | Task: Investigate merged-addons directory structure"
+    }
+  },
+  "updated_at": "2026-07-10T07:50:05.575Z"
+}

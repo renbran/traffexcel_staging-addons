@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PDC Slip (single record) -->
+    <record id="action_report_pdc_slip" model="ir.actions.report">
+        <field name="name">PDC / BG Slip</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sgc_pdc_management.report_pdc_slip_template</field>
+        <field name="report_file">sgc_pdc_management.report_pdc_slip_template</field>
+        <field name="binding_model_id" ref="account.model_account_payment"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- PDC Register (multi-record list) -->
+    <record id="action_report_pdc_register" model="ir.actions.report">
+        <field name="name">PDC Register Report</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sgc_pdc_management.report_pdc_register_template</field>
+        <field name="report_file">sgc_pdc_management.report_pdc_register_template</field>
+        <field name="paperformat_id" ref="sgc_construction_management.paperformat_construction_landscape"/>
+    </record>
+</odoo>

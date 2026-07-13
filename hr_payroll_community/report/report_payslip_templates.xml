@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         ENTERPRISE PAYSLIP REPORT — Complete Visual Redesign
+         SAP / Oracle / Workday / ADP / SuccessFactors Standard
+         Odoo 19 — wkhtmltopdf Compatible
+         =================================================================== -->
+    <template id="report_payslip">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+
+                    <!-- ── Data Aliases ── -->
+                    <t t-set="company" t-value="o.company_id"/>
+                    <t t-set="currency" t-value="company.currency_id"/>
+                    <t t-set="fmt_cur" t-value="lambda v: '{:,.2f} {}'.format(v, currency.symbol or currency.name or '')"/>
+
+                    <style>
+                        /* ================================================================
+                           ENTERPRISE PAYSLIP — wkhtmltopdf Compatible Styles
+                           Brand: Corporate Navy #1C2E5A + Blue #2B6DAE + Gold #C9A84C
+                           ================================================================ */
+
+                        /* ── Base ── */
+                        body {
+                            font-family: 'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif;
+                            font-size: 10.5pt;
+                            color: #2D3748;
+                            line-height: 1.55;
+                        }
+
+                        .page {
+                            padding: 0;
+                            background: #FFFFFF;
+                        }
+
+                        .payslip-wrapper {
+                            width: 100%;
+                            min-height: 1280px;
+                        }
+
+                        /* ── Utility ── */
+                        .text-right { text-align: right !important; }
+                        .text-center { text-align: center !important; }
+                        .text-bold { font-weight: 700 !important; }
+                        .text-uppercase { text-transform: uppercase; }
+                        .text-muted { color: #718096; }
+                        .text-white { color: #FFFFFF; }
+                        .text-navy { color: #1C2E5A; }
+                        .text-gold { color: #C9A84C; }
+                        .tabular-nums { font-variant-numeric: tabular-nums; }
+                        .w-100 { width: 100%; }
+                        .no-wrap { white-space: nowrap; }
+                        .pt-2 { padding-top: 6px; }
+                        .pb-2 { padding-bottom: 6px; }
+                        .mb-2 { margin-bottom: 6px; }
+                        .mb-3 { margin-bottom: 12px; }
+
+                        /* ================================================================
+                           HEADER — Three-section corporate header
+                           Left: Logo + Company / Center: Company Details / Right: PAYSLIP
+                           ================================================================ */
+
+                        .header-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border-bottom: 3px solid #1C2E5A;
+                            margin-bottom: 16px;
+                        }
+
+                        .header-table td {
+                            vertical-align: top;
+                            padding: 10px 0 8px 0;
+                        }
+
+                        .header-logo-cell {
+                            width: 20%;
+                            padding-right: 12px !important;
+                        }
+
+                        .header-logo {
+                            max-height: 62px;
+                            max-width: 170px;
+                            margin-bottom: 4px;
+                        }
+
+                        .header-company-cell {
+                            width: 35%;
+                            padding-left: 0 !important;
+                            padding-right: 8px !important;
+                            vertical-align: middle !important;
+                        }
+
+                        .header-company-name {
+                            font-size: 13pt;
+                            font-weight: 700;
+                            color: #1C2E5A;
+                            line-height: 1.25;
+                            margin-bottom: 2px;
+                        }
+
+                        .header-company-detail {
+                            font-size: 8pt;
+                            color: #4A5568;
+                            line-height: 1.45;
+                        }
+
+                        .header-title-cell {
+                            width: 45%;
+                            text-align: right;
+                            vertical-align: middle !important;
+                        }
+
+                        .header-title {
+                            font-size: 20pt;
+                            font-weight: 800;
+                            letter-spacing: 2.5px;
+                            color: #1C2E5A;
+                            text-transform: uppercase;
+                            line-height: 1.1;
+                            margin-bottom: 4px;
+                        }
+
+                        .header-title.credit-note {
+                            color: #C53030;
+                        }
+
+                        .header-meta {
+                            font-size: 8.5pt;
+                            color: #4A5568;
+                            line-height: 1.55;
+                        }
+
+                        .header-meta strong {
+                            color: #1C2E5A;
+                            font-weight: 600;
+                        }
+
+                        .header-status-badge {
+                            display: inline-block;
+                            padding: 2px 11px;
+                            font-size: 7.5pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.3px;
+                            color: #fff;
+                            background-color: #27ae60;
+                            line-height: 1.3;
+                        }
+                        .status-draft  { background-color: #E67E22; }
+                        .status-done   { background-color: #27AE60; }
+                        .status-cancel { background-color: #C0392B; }
+
+                        /* ================================================================
+                           SECTION TITLE — Full-width dark bar with gold accent
+                           ================================================================ */
+
+                        .section-bar {
+                            background-color: #1C2E5A;
+                            color: #FFFFFF;
+                            padding: 7px 16px;
+                            font-size: 10.5pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            line-height: 1.3;
+                            margin-top: 14px;
+                            margin-bottom: 0;
+                            border-left: 4px solid #C9A84C;
+                        }
+
+                        .section-bar.credit-section {
+                            background-color: #C53030;
+                            border-left-color: #FBD38D;
+                        }
+
+                        /* ================================================================
+                           EMPLOYEE INFO — 5-row × 2-column panel
+                           ================================================================ */
+
+                        .emp-panel {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                        }
+
+                        .emp-panel td {
+                            padding: 7px 14px;
+                            border: 1px solid #D1D5DB;
+                            vertical-align: middle;
+                            font-size: 10pt;
+                        }
+
+                        .emp-panel .emp-label {
+                            font-weight: 600;
+                            color: #1C2E5A;
+                            background-color: #F4F6F9;
+                            width: 16%;
+                            letter-spacing: 0.2px;
+                            white-space: nowrap;
+                        }
+
+                        .emp-panel .emp-value {
+                            width: 34%;
+                            color: #2D3748;
+                            font-weight: 500;
+                        }
+
+                        /* ================================================================
+                           DATA TABLES — Earnings / Deductions
+                           ================================================================ */
+
+                        .data-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                            margin-bottom: 0;
+                        }
+
+                        .data-table thead th {
+                            background-color: #1C2E5A;
+                            color: #FFFFFF;
+                            padding: 8px 12px;
+                            font-size: 9pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.4px;
+                            text-align: left;
+                            border: none;
+                        }
+
+                        .data-table thead th.amt {
+                            text-align: right;
+                        }
+
+                        .data-table tbody td {
+                            padding: 7px 12px;
+                            font-size: 10pt;
+                            vertical-align: middle;
+                            border-bottom: 1px solid #E5E7EB;
+                            color: #2D3748;
+                        }
+
+                        .data-table tbody td.amt {
+                            text-align: right;
+                            font-variant-numeric: tabular-nums;
+                        }
+
+                        .data-table tbody tr:nth-child(even) {
+                            background-color: #F8FAFC;
+                        }
+
+                        .data-table tbody tr:last-child td {
+                            border-bottom: 1px solid #D1D5DB;
+                        }
+
+                        .data-table .group-header td {
+                            font-weight: 700;
+                            font-size: 10pt;
+                            color: #1C2E5A;
+                            background-color: #EBF0F7;
+                            border-bottom: 1px solid #CBD5E1;
+                            padding: 6px 12px;
+                        }
+
+                        .data-table .total-row td {
+                            font-weight: 700;
+                            font-size: 10.5pt;
+                            color: #1C2E5A;
+                            background-color: #E2E8F0;
+                            border-top: 2px solid #C9A84C;
+                            border-bottom: 2px solid #C9A84C;
+                            padding: 8px 12px;
+                        }
+
+                        .data-table .total-row td.amt {
+                            text-align: right;
+                            color: #1C2E5A;
+                        }
+
+                        .data-table .empty-msg td {
+                            padding: 14px;
+                            text-align: center;
+                            color: #A0AEC0;
+                            font-size: 10pt;
+                            font-style: italic;
+                        }
+
+                        /* ================================================================
+                           NET PAY — Premium Hero Banner
+                           ================================================================ */
+
+                        .netpay-banner {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 16px 0;
+                        }
+
+                        .netpay-banner .banner-body {
+                            background-color: #1C2E5A;
+                            padding: 18px 24px;
+                        }
+
+                        .netpay-banner .banner-label-cell {
+                            font-size: 11pt;
+                            font-weight: 700;
+                            letter-spacing: 1.2px;
+                            color: #FFFFFF;
+                            text-transform: uppercase;
+                            vertical-align: middle;
+                        }
+
+                        .netpay-banner .banner-amount-cell {
+                            font-size: 24pt;
+                            font-weight: 800;
+                            color: #C9A84C;
+                            text-align: right;
+                            letter-spacing: 0.5px;
+                            vertical-align: middle;
+                        }
+
+                        .netpay-banner .banner-amount-cell.negative {
+                            color: #FC8181;
+                        }
+
+                        .netpay-banner .banner-foot {
+                            background-color: #253E68;
+                            padding: 8px 24px;
+                            font-size: 8.5pt;
+                            color: #B0C4DE;
+                            border-top: 1px solid #3A5A8A;
+                        }
+
+                        .netpay-banner .banner-foot strong {
+                            color: #FFFFFF;
+                            font-weight: 600;
+                        }
+
+                        /* ================================================================
+                           GROSS / DEDUCTION SUMMARY ROWS (above net pay)
+                           ================================================================ */
+
+                        .summary-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 8px 0 4px 0;
+                        }
+
+                        .summary-table td {
+                            padding: 6px 14px;
+                            font-size: 10pt;
+                            border: none;
+                        }
+
+                        .summary-table .summary-label {
+                            font-weight: 600;
+                            color: #4A5568;
+                            text-align: right;
+                            width: 60%;
+                            letter-spacing: 0.2px;
+                        }
+
+                        .summary-table .summary-amount {
+                            font-weight: 600;
+                            color: #2D3748;
+                            text-align: right;
+                            width: 40%;
+                            font-variant-numeric: tabular-nums;
+                            padding-right: 4px;
+                        }
+
+                        .summary-table .summary-amount.deduction {
+                            color: #C53030;
+                        }
+
+                        .summary-table .summary-separator td {
+                            padding: 0;
+                            border-top: 1px solid #D1D5DB;
+                            height: 0;
+                            font-size: 1px;
+                        }
+
+                        /* ================================================================
+                           WORKED DAYS TABLE
+                           ================================================================ */
+
+                        .wd-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                        }
+
+                        .wd-table thead th {
+                            background-color: #1C2E5A;
+                            color: #FFFFFF;
+                            padding: 8px 14px;
+                            font-size: 9pt;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            letter-spacing: 0.4px;
+                            text-align: left;
+                            border: none;
+                        }
+
+                        .wd-table thead th.amt {
+                            text-align: right;
+                        }
+
+                        .wd-table tbody td {
+                            padding: 7px 14px;
+                            font-size: 10pt;
+                            border-bottom: 1px solid #E5E7EB;
+                            color: #2D3748;
+                        }
+
+                        .wd-table tbody td.amt {
+                            text-align: right;
+                        }
+
+                        .wd-table tbody tr:nth-child(even) {
+                            background-color: #F8FAFC;
+                        }
+
+                        .wd-table tfoot td {
+                            font-weight: 700;
+                            font-size: 10.5pt;
+                            color: #1C2E5A;
+                            background-color: #E2E8F0;
+                            border-top: 2px solid #C9A84C;
+                            padding: 8px 14px;
+                        }
+
+                        .wd-table tfoot td.amt {
+                            text-align: right;
+                        }
+
+                        /* ================================================================
+                           SIGNATURE AREA
+                           ================================================================ */
+
+                        .sig-area {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 18px;
+                        }
+
+                        .sig-area .sig-divider td {
+                            border-top: 2px solid #1C2E5A;
+                            padding: 0;
+                            height: 0;
+                            font-size: 1px;
+                        }
+
+                        .sig-area .sig-cell {
+                            width: 50%;
+                            padding-top: 52px;
+                            text-align: center;
+                            vertical-align: top;
+                        }
+
+                        .sig-area .sig-line {
+                            border-top: 1px solid #C9A84C;
+                            width: 60%;
+                            margin: 0 auto;
+                        }
+
+                        .sig-area .sig-label {
+                            font-size: 9pt;
+                            color: #1C2E5A;
+                            font-weight: 600;
+                            margin-top: 5px;
+                            letter-spacing: 0.3px;
+                        }
+
+                        /* ================================================================
+                           FOOTER — Confidential Notice
+                           ================================================================ */
+
+                        .confidential-notice {
+                            margin-top: 12px;
+                            padding: 7px 16px;
+                            border-left: 3px solid #C9A84C;
+                            background-color: #F7FAFC;
+                            font-size: 7.5pt;
+                            color: #718096;
+                            line-height: 1.5;
+                        }
+
+                        .confidential-notice strong {
+                            color: #1C2E5A;
+                        }
+
+                        /* ================================================================
+                           PAYMENT INFO SECTION (small helper)
+                           ================================================================ */
+
+                        .payment-info {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: 1px solid #D1D5DB;
+                            border-top: none;
+                            margin: 0;
+                        }
+
+                        .payment-info td {
+                            padding: 6px 14px;
+                            font-size: 9.5pt;
+                            border: 1px solid #D1D5DB;
+                            vertical-align: middle;
+                        }
+
+                        .payment-info .pi-label {
+                            font-weight: 600;
+                            color: #1C2E5A;
+                            background-color: #F4F6F9;
+                            width: 15%;
+                            white-space: nowrap;
+                        }
+
+                        .payment-info .pi-value {
+                            color: #2D3748;
+                            width: 35%;
+                        }
+                    </style>
+
+                    <!-- ================================================================
+                         PAGE WRAPPER
+                         ================================================================ -->
+                    <div class="page payslip-wrapper">
+
+                        <!-- ============================================================
+                             SECTION 1: CORPORATE HEADER
+                             ============================================================ -->
+                        <table class="header-table" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <!-- Left: Logo -->
+                                <td class="header-logo-cell">
+                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                         class="header-logo"/>
+                                </td>
+                                <!-- Center: Company Details -->
+                                <td class="header-company-cell">
+                                    <div class="header-company-name">
+                                        <t t-esc="company.name"/>
+                                    </div>
+                                    <div class="header-company-detail">
+                                        <t t-esc="company.street or ''"/>
+                                        <t t-if="company.street2">, <t t-esc="company.street2"/></t>
+                                        <br/>
+                                        <t t-if="company.city or company.state_id or company.zip">
+                                            <t t-esc="company.city or ''"/>
+                                            <t t-if="company.state_id">, <t t-esc="company.state_id.name"/></t>
+                                            <t t-if="company.zip"> <t t-esc="company.zip"/></t>
+                                        </t>
+                                        <t t-if="company.country_id">, <t t-esc="company.country_id.name"/></t>
+                                        <t t-if="company.vat">
+                                            <br/>TRN: <t t-esc="company.vat"/>
+                                        </t>
+                                    </div>
+                                </td>
+                                <!-- Right: PAYSLIP Title -->
+                                <td class="header-title-cell">
+                                    <div t-attf-class="header-title {{ 'credit-note' if o.credit_note else '' }}">
+                                        <t t-if="o.credit_note">Credit Note</t>
+                                        <t t-if="!o.credit_note">Payslip</t>
+                                    </div>
+                                    <div class="header-meta">
+                                        <strong>Period:</strong>
+                                        <span t-field="o.date_from"/> — <span t-field="o.date_to"/>
+                                        <br/>
+                                        <strong>Ref:</strong> <span t-field="o.number"/>
+                                        <br/>
+                                        <t t-if="o.state">
+                                            <span t-attf-class="header-status-badge status-{{ o.state }}">
+                                                <span t-field="o.state"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 2: EMPLOYEE INFORMATION
+                             ============================================================ -->
+                        <div class="section-bar">Employee Information</div>
+                        <table class="emp-panel" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="emp-label">Employee Name</td>
+                                <td class="emp-value"><span t-field="o.employee_id"/></td>
+                                <td class="emp-label">Designation</td>
+                                <td class="emp-value"><span t-field="o.employee_id.job_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Employee ID</td>
+                                <td class="emp-value"><span t-field="o.employee_id.identification_id"/></td>
+                                <td class="emp-label">Department</td>
+                                <td class="emp-value"><span t-field="o.employee_id.department_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Email</td>
+                                <td class="emp-value"><span t-field="o.employee_id.work_email"/></td>
+                                <td class="emp-label">Pay Structure</td>
+                                <td class="emp-value"><span t-field="o.struct_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Bank Account</td>
+                                <td class="emp-value"><span t-field="o.employee_id.primary_bank_account_id"/></td>
+                                <td class="emp-label">Contract</td>
+                                <td class="emp-value"><span t-field="o.contract_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="emp-label">Pay Period</td>
+                                <td class="emp-value">
+                                    <span t-field="o.date_from"/> — <span t-field="o.date_to"/>
+                                </td>
+                                <td class="emp-label">Reference</td>
+                                <td class="emp-value"><span t-field="o.number"/></td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 3: SALARY DETAILS
+                             ============================================================ -->
+                        <t t-set="all_lines" t-value="o.line_ids.filtered(lambda line: line.appears_on_payslip)"/>
+                        <t t-set="categories" t-value="all_lines.mapped('category_id').filtered(lambda c: c)"/>
+                        <t t-set="uncategorized_lines" t-value="all_lines.filtered(lambda l: not l.category_id)"/>
+
+                        <!-- ── 3a: EARNINGS ── -->
+                        <div class="section-bar">Earnings</div>
+                        <table class="data-table" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:12%;">Code</th>
+                                    <th style="width:40%;">Description</th>
+                                    <th style="width:10%;" class="amt">Qty</th>
+                                    <th style="width:18%;" class="amt">Rate</th>
+                                    <th style="width:20%;" class="amt">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="categories" t-as="cat">
+                                    <t t-set="cat_lines" t-value="all_lines.filtered(lambda l: l.category_id.id == cat.id and l.total >= 0)"/>
+                                    <t t-if="cat_lines">
+                                        <t t-set="cat_total" t-value="sum(cat_lines.mapped('total'))"/>
+                                        <tr class="group-header">
+                                            <td colspan="5"><span t-field="cat.name"/></td>
+                                        </tr>
+                                        <t t-foreach="cat_lines" t-as="line">
+                                            <tr>
+                                                <td><span t-field="line.code"/></td>
+                                                <td><span t-field="line.name"/></td>
+                                                <td class="amt"><span t-field="line.quantity"/></td>
+                                                <td class="amt">
+                                                    <span t-esc="line.amount"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                                <td class="amt">
+                                                    <span t-esc="line.total"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr class="total-row">
+                                            <td colspan="4" class="text-right">Total — <span t-field="cat.name"/></td>
+                                            <td class="amt">
+                                                <span t-esc="cat_total"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-if="not all_lines.filtered(lambda l: l.total >= 0)">
+                                    <tr class="empty-msg"><td colspan="5">No earnings for this pay period</td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- ── 3b: DEDUCTIONS ── -->
+                        <div class="section-bar">Deductions</div>
+                        <table class="data-table" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:12%;">Code</th>
+                                    <th style="width:40%;">Description</th>
+                                    <th style="width:10%;" class="amt">Qty</th>
+                                    <th style="width:18%;" class="amt">Rate</th>
+                                    <th style="width:20%;" class="amt">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="categories" t-as="cat">
+                                    <t t-set="cat_lines" t-value="all_lines.filtered(lambda l: l.category_id.id == cat.id and l.total &lt; 0)"/>
+                                    <t t-if="cat_lines">
+                                        <t t-set="cat_total" t-value="sum(cat_lines.mapped('total'))"/>
+                                        <tr class="group-header">
+                                            <td colspan="5"><span t-field="cat.name"/></td>
+                                        </tr>
+                                        <t t-foreach="cat_lines" t-as="line">
+                                            <tr>
+                                                <td><span t-field="line.code"/></td>
+                                                <td><span t-field="line.name"/></td>
+                                                <td class="amt"><span t-field="line.quantity"/></td>
+                                                <td class="amt">
+                                                    <span t-esc="line.amount"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                                <td class="amt">
+                                                    <span t-esc="line.total"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr class="total-row">
+                                            <td colspan="4" class="text-right">Total — <span t-field="cat.name"/></td>
+                                            <td class="amt">
+                                                <span t-esc="cat_total"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-if="not all_lines.filtered(lambda l: l.total &lt; 0)">
+                                    <tr class="empty-msg"><td colspan="5">No deductions for this pay period</td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- ── 3c: UNCATEGORIZED LINES ── -->
+                        <t t-if="uncategorized_lines">
+                            <t t-set="uncat_total" t-value="sum(uncategorized_lines.mapped('total'))"/>
+                            <t t-set="uncat_earnings" t-value="uncategorized_lines.filtered(lambda l: l.total >= 0)"/>
+                            <t t-set="uncat_deductions" t-value="uncategorized_lines.filtered(lambda l: l.total &lt; 0)"/>
+
+                            <t t-if="uncat_earnings">
+                                <div class="section-bar">Other Earnings</div>
+                                <table class="data-table" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:12%;">Code</th>
+                                            <th style="width:40%;">Description</th>
+                                            <th style="width:10%;" class="amt">Qty</th>
+                                            <th style="width:18%;" class="amt">Rate</th>
+                                            <th style="width:20%;" class="amt">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="uncat_earnings" t-as="line">
+                                            <tr>
+                                                <td><span t-field="line.code"/></td>
+                                                <td><span t-field="line.name"/></td>
+                                                <td class="amt"><span t-field="line.quantity"/></td>
+                                                <td class="amt">
+                                                    <span t-esc="line.amount"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                                <td class="amt">
+                                                    <span t-esc="line.total"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr class="total-row">
+                                            <td colspan="4" class="text-right">Total — Other Earnings</td>
+                                            <td class="amt">
+                                                <span t-esc="sum(uncat_earnings.mapped('total'))"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+
+                            <t t-if="uncat_deductions">
+                                <div class="section-bar">Other Deductions</div>
+                                <table class="data-table" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:12%;">Code</th>
+                                            <th style="width:40%;">Description</th>
+                                            <th style="width:10%;" class="amt">Qty</th>
+                                            <th style="width:18%;" class="amt">Rate</th>
+                                            <th style="width:20%;" class="amt">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="uncat_deductions" t-as="line">
+                                            <tr>
+                                                <td><span t-field="line.code"/></td>
+                                                <td><span t-field="line.name"/></td>
+                                                <td class="amt"><span t-field="line.quantity"/></td>
+                                                <td class="amt">
+                                                    <span t-esc="line.amount"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                                <td class="amt">
+                                                    <span t-esc="line.total"
+                                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr class="total-row">
+                                            <td colspan="4" class="text-right">Total — Other Deductions</td>
+                                            <td class="amt">
+                                                <span t-esc="sum(uncat_deductions.mapped('total'))"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
+
+                        <!-- ============================================================
+                             SECTION 4: NET PAY — Premium Banner
+                             ============================================================ -->
+                        <t t-set="gross_total" t-value="sum(all_lines.filtered(lambda l: l.total >= 0).mapped('total'))"/>
+                        <t t-set="deduction_total" t-value="sum(all_lines.filtered(lambda l: l.total &lt; 0).mapped('total'))"/>
+                        <t t-set="net_total" t-value="gross_total + deduction_total"/>
+
+                        <!-- Summary above banner -->
+                        <table class="summary-table" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="summary-label">Gross Earnings</td>
+                                <td class="summary-amount">
+                                    <span t-esc="gross_total"
+                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="summary-label">Total Deductions</td>
+                                <td class="summary-amount deduction">
+                                    <span t-esc="deduction_total"
+                                          t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                </td>
+                            </tr>
+                            <tr class="summary-separator"><td colspan="2"></td></tr>
+                        </table>
+
+                        <!-- Net Pay Banner -->
+                        <table class="netpay-banner" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="banner-body">
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td class="banner-label-cell">Net Pay</td>
+                                            <td t-attf-class="banner-amount-cell {{ 'negative' if net_total &lt; 0 else '' }}">
+                                                <span t-esc="net_total"
+                                                      t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr t-if="o.employee_id.primary_bank_account_id">
+                                <td class="banner-foot">
+                                    <strong>Transfer to:</strong>
+                                    <span t-field="o.employee_id.primary_bank_account_id"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 5: WORKED DAYS
+                             ============================================================ -->
+                        <t t-if="o.worked_days_line_ids">
+                            <div class="section-bar">Attendance Summary</div>
+                            <table class="wd-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:16%;">Code</th>
+                                        <th style="width:52%;">Description</th>
+                                        <th style="width:16%;" class="amt">Days</th>
+                                        <th style="width:16%;" class="amt">Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.worked_days_line_ids" t-as="wd">
+                                        <td><span t-field="wd.code"/></td>
+                                        <td><span t-field="wd.name"/></td>
+                                        <td class="amt"><span t-field="wd.number_of_days"/></td>
+                                        <td class="amt"><span t-field="wd.number_of_hours"/></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2">TOTAL</td>
+                                        <td class="amt">
+                                            <t t-esc="sum(wd.number_of_days for wd in o.worked_days_line_ids)"/>
+                                        </td>
+                                        <td class="amt">
+                                            <t t-esc="sum(wd.number_of_hours for wd in o.worked_days_line_ids)"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+
+                        <!-- ============================================================
+                             SECTION 6: SIGNATURES
+                             ============================================================ -->
+                        <table class="sig-area" cellpadding="0" cellspacing="0">
+                            <tr class="sig-divider"><td colspan="2"></td></tr>
+                            <tr>
+                                <td class="sig-cell">
+                                    <div class="sig-line"></div>
+                                    <div class="sig-label">Employee Signature</div>
+                                </td>
+                                <td class="sig-cell">
+                                    <div class="sig-line"></div>
+                                    <div class="sig-label">Authorized Signatory</div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ============================================================
+                             SECTION 7: CONFIDENTIAL FOOTER
+                             ============================================================ -->
+                        <div class="confidential-notice">
+                            <strong>CONFIDENTIAL</strong> — This document contains
+                            confidential information intended solely for the named employee.
+                            If you have received this document in error, please notify
+                            Human Resources immediately. Generated electronically.
+                        </div>
+
+                    </div><!-- /.page.payslip-wrapper -->
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
