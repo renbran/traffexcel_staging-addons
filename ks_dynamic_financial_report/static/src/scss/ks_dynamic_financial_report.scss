@@ -898,3 +898,28 @@ $ks_font_family: "Montserrat", sans-serif;
 tr.ks-collapsible[data-bs-selector] {
     cursor: pointer;
 }
+
+/* Custom date filter dropdowns (report date range / comparison range) */
+.ks_custom_date_filter {
+    min-width: 230px;
+    padding: 0.5rem 0.75rem;
+
+    .ks_date_field_group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .o_datetime_input,
+        input {
+            width: 100%;
+        }
+    }
+}
