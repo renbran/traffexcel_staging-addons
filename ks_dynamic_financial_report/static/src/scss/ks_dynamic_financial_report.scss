@@ -1014,6 +1014,7 @@ tr.ks-collapsible[data-bs-selector] {
     /* Only the visible toggler button of each top-level filter dropdown/pager -
        never the buttons/inputs inside its opened menu (Apply, MultiRecordSelector, etc.) */
     > .dropdown > .dropdown-toggle,
+    > .dropdown-toggle,
     > .ks_pager {
         display: inline-flex;
         align-items: center;
@@ -1059,6 +1060,7 @@ tr.ks-collapsible[data-bs-selector] {
         gap: 0.25rem;
 
         > .dropdown > .dropdown-toggle,
+        > .dropdown-toggle,
         > .ks_pager {
             height: 28px;
             font-size: 11px;
@@ -1073,6 +1075,7 @@ tr.ks-collapsible[data-bs-selector] {
         gap: 0.25rem;
 
         > .dropdown > .dropdown-toggle,
+        > .dropdown-toggle,
         > .ks_pager {
             flex: 1 1 auto;
             justify-content: center;
