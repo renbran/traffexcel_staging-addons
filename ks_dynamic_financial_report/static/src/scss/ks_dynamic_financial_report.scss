@@ -917,6 +917,28 @@ tr.ks-collapsible[data-bs-selector] {
     padding-bottom: 0;
 }
 
+/* Defensive baseline: a dropdown menu must stay closed/hidden unless it
+   carries Bootstrap's .show class. Without this, if the page's Bootstrap
+   dropdown CSS isn't active, every menu renders open and in normal flow,
+   dumping all options inline and exploding the toolbar's height/width. */
+.ks_report_actions .dropdown-menu:not(.show),
+.ks_report_filters_toolbar .dropdown-menu:not(.show) {
+    display: none !important;
+}
+
+.ks_report_actions .dropdown-menu.show,
+.ks_report_filters_toolbar .dropdown-menu.show {
+    position: absolute;
+    z-index: 1050;
+    inset-inline-start: 0;
+    top: 100%;
+}
+
+.ks_report_actions .dropdown,
+.ks_report_filters_toolbar .dropdown {
+    position: relative;
+}
+
 /* Report header action button (single Actions dropdown: Print PDF / Export XLSX / Send Email) */
 .ks_report_actions {
     margin-left: auto;
