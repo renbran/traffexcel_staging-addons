@@ -766,7 +766,9 @@ export class ksDynamicReportsWidget extends Component {
         }
     }
     async ksReportSendEmail(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         var self = this;
         this.orm.call("ks.dynamic.financial.reports", 'ks_get_dynamic_fin_info', [this.props.action.context.id, this.ks_df_report_opt], {
             context: this.props.action.context
@@ -1669,6 +1671,31 @@ async OnChangeComp(bsFilter) {
             },
 
         };
+    }
+
+    get accountsFilterCount() {
+        const info = this.ks_df_report_opt || {};
+        let count = 0;
+        if (Array.isArray(info.journals)) {
+            count += info.journals.filter((j) => j.selected && j.id !== 'divider' && j.id !== 'group').length;
+        }
+        if (Array.isArray(info.account_type)) {
+            count += info.account_type.filter((a) => a.selected).length;
+        }
+        if (Array.isArray(info.account)) {
+            count += info.account.filter((a) => a.selected).length;
+        }
+        count += (info.ks_partner_ids || []).length;
+        count += (info.analytic_accounts || []).length;
+        return count;
+    }
+
+    get printFilterSummary() {
+        const info = this.ks_df_report_opt || {};
+        const period = (info.date && info.date.ks_string) || '';
+        const compare = (info.ks_differ && info.ks_differ.string) || 'No Comparison';
+        const accounts = this.accountsFilterCount ? `${this.accountsFilterCount} selected` : 'All';
+        return `Period: ${period} | Compare: ${compare} | Accounts: ${accounts}`;
     }
 
     async ksPerformOnchange(ev){

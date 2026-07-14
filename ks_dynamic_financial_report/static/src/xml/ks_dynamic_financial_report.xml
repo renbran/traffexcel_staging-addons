@@ -3,25 +3,22 @@
     <t t-name="ks_tax_report_lines" owl="1">
         <ControlPanel display="display">
             <t t-set-slot="control-panel-create-button">
-                <Dropdown togglerClass="'btn btn-primary'" showCaret="true">
-                    <t t-set-slot="toggler">
-                        <span t-on-click="OnPrintPdf" type="button">Print
-                            (Pdf)
-                        </span>
-                    </t>
-                    <DropdownItem>
-                        <button t-on-click="ksPrintReportXlsx" type="button" class="btn btn-primary"
-                                style="position: relative;">
-                            Export (XLSX)
-                        </button>
-                    </DropdownItem>
-                    <DropdownItem>
-                        <button type="button" t-on-click="ksReportSendEmail" class="btn btn-primary"
-                                style="position: relative;">
-                            Send Email
-                        </button>
-                    </DropdownItem>
-                </Dropdown>
+                <div class="ks_report_actions">
+                    <Dropdown togglerClass="'btn btn-primary'" showCaret="true">
+                        <t t-set-slot="toggler">
+                            <i class="fa fa-cog me-1"/>Actions
+                        </t>
+                        <DropdownItem onSelected="() => this.OnPrintPdf()">
+                            <i class="fa fa-print me-1"/>Print (PDF)
+                        </DropdownItem>
+                        <DropdownItem onSelected="() => this.ksPrintReportXlsx()">
+                            <i class="fa fa-file-excel-o me-1"/>Export (XLSX)
+                        </DropdownItem>
+                        <DropdownItem onSelected="() => this.ksReportSendEmail()">
+                            <i class="fa fa-envelope me-1"/>Send Email
+                        </DropdownItem>
+                    </Dropdown>
+                </div>
             </t>
             <t t-set-slot="layout-actions">
                 <t t-set="ks_df_informations" t-value="props.ks_master_value.ks_df_informations"/>
@@ -995,7 +992,7 @@
     </t>
 
     <t t-name="ks_report_filters" owl="1">
-        <div class="gap-1 d-flex">
+        <div class="ks_report_filters_toolbar">
             <t t-if="ks_df_informations['ks_title']=='Partner Ledger' || ks_df_informations['ks_title']=='General Ledger' || new_ks_df_reports_ids=='Age Receivable' || new_ks_df_reports_ids=='Age Payable'">
                 <t t-call="pager_buttons"/>
             </t>
@@ -1005,22 +1002,13 @@
             <t t-if="ks_df_informations['ks_differentiation']">
                 <t t-call="ks_searchview_differentiate_filter"/>
             </t>
-            <t t-if="ks_df_informations['ks_journal_filter_visiblity']">
-                <t t-call="ks_searchview_journals_filter"/>
-            </t>
-            <t t-if="ks_df_informations['ks_partner_filter']">
-                <t t-call="ks_searchview_partner_filter"/>
-            </t>
-            <t t-if="ks_df_informations['ks_partner_account_type_filter']">
-                <t t-call="ks_searchview_account_filter"/>
-            </t>
-            <t t-if="ks_df_informations['ks_analytic_account_visibility']">
-                <t t-call="ks_searchview_analytic_filter"/>
-            </t>
-            <t t-if="ks_df_informations['ks_account_filter_visiblity']">
-                <t t-call="ks_searchview_extra_ks_account_information"/>
+            <t t-if="ks_df_informations['ks_journal_filter_visiblity'] || ks_df_informations['ks_partner_filter'] || ks_df_informations['ks_partner_account_type_filter'] || ks_df_informations['ks_analytic_account_visibility'] || ks_df_informations['ks_account_filter_visiblity']">
+                <t t-call="ks_searchview_accounts_filter"/>
             </t>
             <t t-call="ks_searchview_extra_ks_df_informations"/>
+        </div>
+        <div class="ks_filters_print_summary d-none">
+            <t t-esc="printFilterSummary"/>
         </div>
 
     </t>
@@ -1048,54 +1036,143 @@
         </div>
     </t>
 
-    <t t-name="ks_searchview_extra_ks_account_information">
+    <t t-name="ks_searchview_accounts_filter" owl="1">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <i class="fa fa-book"/>
-                Account
-                <t t-set="selected_account"
-                   t-value="ks_df_informations['account'].filter(account => account.selected).map(account => account.name).join(', ')"/>
-                <t t-if="selected_account">
-                    <t t-esc="selected_account"/>
+                <i class="fa fa-university me-1"/>
+                Accounts
+                <t t-if="accountsFilterCount">
+                    <span class="badge rounded-pill ks_count_badge" t-esc="'(' + accountsFilterCount + ')'"/>
                 </t>
             </t>
 
-            <t t-if="ks_df_informations.ks_account_enable">
-                <!--                <div class="dropdown-menu o_filter_menu p-3 ks_d_block" role="menu"-->
-                <!--                     style="height: auto;max-height: 300px; overflow-x: hidden;">-->
-                <input type="text" placeholder="Search.." name="ks_search_account" class="ks_input" autocomplete="off"/>
-                <t t-foreach="ks_df_informations['account']" t-as="a" t-key="a_index">
-                    <!--                        data-bs-id="a.id" data-bs-filter="account"-->
-                    <DropdownItem class="{'selected': a.selected,  'js_account_report_choice_filter': true}"
-                                  onSelected="()=>this.js_account_report_choice_filter(a.id,'account')">
-                        <t t-esc="a.name"/>
-                    </DropdownItem>
+            <div class="ks_accounts_filter_sections">
+                <t t-if="ks_df_informations['ks_journal_filter_visiblity']">
+                    <div class="dropdown-header">Journals</div>
+                    <t t-if="ks_df_informations['ks_journal_enable']">
+                        <t t-foreach="ks_df_informations['journals']" t-as="j" t-key="j_index">
+                            <t t-if="j['id'] == 'divider'">
+                                <div role="separator" class="dropdown-divider"/>
+                                <DropdownItem>
+                                    <b>
+                                        <t t-esc="j['name']"/>
+                                    </b>
+                                </DropdownItem>
+                                <div role="separator" class="dropdown-divider"/>
+                            </t>
+                            <t t-if="j['id'] != 'divider'">
+                                <t t-if="j['id'] == 'group'">
+                                    <DropdownItem class="{'selected': j.selected}"
+                                                  onSelected="()=>this.js_account_report_group_choice_filter('journals',j.ids)">
+                                        <t t-esc="j['name']"/>
+                                    </DropdownItem>
+                                </t>
+                                <t t-else="">
+                                    <DropdownItem class="{'selected': j.selected}"
+                                                  onSelected="()=>this.js_account_report_choice_filter(j.id,'journals')">
+                                        <t t-esc="j['name']"/>
+                                    </DropdownItem>
+                                </t>
+                            </t>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <t t-foreach="ks_df_informations['journals']" t-as="j" t-key="j_index">
+                            <t t-if="j['id'] == 'divider'">
+                                <div role="separator" class="dropdown-divider"/>
+                                <DropdownItem>
+                                    <b>
+                                        <t t-esc="j['name']"/>
+                                    </b>
+                                </DropdownItem>
+                                <div role="separator" class="dropdown-divider"/>
+                            </t>
+                            <t t-if="j['id'] != 'divider'">
+                                <t t-if="j['id'] == 'group'">
+                                    <DropdownItem class="{'selected': j.selected}"
+                                                  onSelected="()=>this.js_account_report_group_choice_filter('journals',j.ids)">
+                                        <t t-esc="j['name']"/>
+                                    </DropdownItem>
+                                </t>
+                                <t t-else="">
+                                    <DropdownItem class="{'selected': j.selected}"
+                                                  onSelected="()=>this.js_account_report_choice_filter(j.id,'journals')">
+                                        <t t-esc="j['name']"/>
+                                    </DropdownItem>
+                                </t>
+                            </t>
+                        </t>
+                    </t>
+                    <div role="separator" class="dropdown-divider"/>
                 </t>
-                <!--                </div>-->
-            </t>
 
-            <t t-else="">
-                <!--                <div class="dropdown-menu o_filter_menu p-3" role="menu"-->
-                <!--                     style="height: auto;max-height: 300px; overflow-x: hidden;">-->
-                    <input type="text" placeholder="Search.." name="ks_search_account_btn" class="ks_input" autocomplete="off" t-on-keyup="()=>this.onKsSearchFilter()"/>
-                <t t-foreach="ks_df_informations['account']" t-as="a" t-key="a_index">
-                    <!--                        data-bs-id="a.id" data-bs-filter="account"-->
-                    <DropdownItem class="{'selected': a.selected, 'js_account_report_choice_filter': true}"
-                                  onSelected="()=>this.js_account_report_choice_filter(a.id,'account')">
-                        <t t-esc="a.name"/>
-                    </DropdownItem>
+                <t t-if="ks_df_informations['ks_partner_account_type_filter']">
+                    <div class="dropdown-header">Account Type</div>
+                    <t t-if="ks_df_informations['ks_account_both_enable']">
+                        <t t-foreach="ks_df_informations['account_type']" t-as="a" t-key="a['name']">
+                            <DropdownItem class="{'selected': a.selected}"
+                                          onSelected="()=>this.js_account_report_choice_filter(a.id,'account_type')">
+                                <t t-esc="a['name']"/>
+                            </DropdownItem>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <t t-foreach="ks_df_informations['account_type']" t-as="a" t-key="a_index">
+                            <DropdownItem class="{'selected': a.selected}"
+                                          onSelected="()=>this.js_account_report_choice_filter(a.id,'account_type')">
+                                <t t-esc="a['name']"/>
+                            </DropdownItem>
+                        </t>
+                    </t>
+                    <div role="separator" class="dropdown-divider"/>
                 </t>
-                <!--                </div>-->
-            </t>
 
+                <t t-if="ks_df_informations['ks_partner_filter'] and ks_df_informations['ks_partner']">
+                    <div class="dropdown-header">Partners</div>
+                    <div class="dropdown-item">
+                        <MultiRecordSelector t-props="getMultiRecordSelectorProps('res.partner', 'partner_ids')"/>
+                    </div>
+                    <div role="separator" class="dropdown-divider"/>
+                </t>
+
+                <t t-if="ks_df_informations['ks_analytic_account_visibility']">
+                    <div class="dropdown-header">Analytic Accounts</div>
+                    <div class="dropdown-item">
+                        <MultiRecordSelector
+                                t-props="getMultiRecordSelectoraccount('account.analytic.account', 'analytic_accounts')"/>
+                    </div>
+                    <div role="separator" class="dropdown-divider"/>
+                </t>
+
+                <t t-if="ks_df_informations['ks_account_filter_visiblity']">
+                    <div class="dropdown-header">Account</div>
+                    <t t-if="ks_df_informations.ks_account_enable">
+                        <input type="text" placeholder="Search.." name="ks_search_account" class="ks_input" autocomplete="off"/>
+                        <t t-foreach="ks_df_informations['account']" t-as="a" t-key="a_index">
+                            <DropdownItem class="{'selected': a.selected,  'js_account_report_choice_filter': true}"
+                                          onSelected="()=>this.js_account_report_choice_filter(a.id,'account')">
+                                <t t-esc="a.name"/>
+                            </DropdownItem>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <input type="text" placeholder="Search.." name="ks_search_account_btn" class="ks_input" autocomplete="off" t-on-keyup="()=>this.onKsSearchFilter()"/>
+                        <t t-foreach="ks_df_informations['account']" t-as="a" t-key="a_index">
+                            <DropdownItem class="{'selected': a.selected, 'js_account_report_choice_filter': true}"
+                                          onSelected="()=>this.js_account_report_choice_filter(a.id,'account')">
+                                <t t-esc="a.name"/>
+                            </DropdownItem>
+                        </t>
+                    </t>
+                </t>
+            </div>
         </Dropdown>
-
     </t>
 
     <t t-name="ks_searchview_extra_ks_df_informations">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <span class="fa fa-filter"/>
+                <span class="fa fa-filter me-1"/>
                 Options:
                 <t t-if="ks_df_informations.ks_posted_entries !== undefined">
                     <t t-if="ks_df_informations.ks_posted_entries || ks_df_informations.ks_unposted_entries">
@@ -1192,150 +1269,6 @@
             </t>
         </Dropdown>
     </t>
-    <t t-name="ks_searchview_account_filter">
-        <Dropdown togglerClass="'btn btn-secondary'">
-            <t t-set-slot="toggler">
-                <span class="fa fa-user"/>
-                Account:
-                <t t-set="account_value">Both</t>
-                <t t-foreach="props.ks_master_value.ks_df_informations.account_type" t-as="a" t-key="a_index">
-                    <t t-if="a.selected == true">
-                        <t t-set="account_value" t-value="''"/>
-                        <t t-esc="a.name"/>
-                    </t>
-                </t>
-                <t t-esc="account_value"/>
-            </t>
-
-            <t t-if="ks_df_informations['ks_account_both_enable']">
-                <t t-foreach="ks_df_informations['account_type']" t-as="a" t-key="a['name']">
-                    <!--                        title="a['name']" data-bs-id="a['id']" data-bs-filter="account_type"-->
-                    <DropdownItem class="{'selected': a.selected}"
-                                  onSelected="()=>this.js_account_report_choice_filter(a.id,'account_type')">
-                        <t t-esc="a['name']"/>
-                    </DropdownItem>
-                </t>
-            </t>
-            <t t-else="">
-                <t t-foreach="ks_df_informations['account_type']" t-as="a" t-key="a_index">
-                    <!--                        title="a['name']" data-bs-id="a['id']" data-bs-filter="account_type"-->
-                    <DropdownItem class="{'selected': a.selected}"
-                                  onSelected="()=>this.js_account_report_choice_filter(a.id,'account_type')">
-                        <t t-esc="a['name']"/>
-                    </DropdownItem>
-                </t>
-            </t>
-        </Dropdown>
-    </t>
-
-    <t t-name="ks_searchview_analytic_filter">
-        <Dropdown togglerClass="'btn btn-secondary'">
-            <t t-set-slot="toggler">
-                <span class="fa fa-folder-open"/>
-                Analytic
-            </t>
-            <div class="dropdown-item">
-                <label>Analytic Account</label>
-                <MultiRecordSelector
-                        t-props="getMultiRecordSelectoraccount('account.analytic.account', 'analytic_accounts')"/>
-            </div>
-            <!--            <ul class="dropdown-menu o_filter_menu p-3" role="menu">-->
-            <!--                <li class="o_account_report_search js_account_analytic_m2m"/>-->
-            <!--            </ul>-->
-        </Dropdown>
-    </t>
-
-    <t t-name="ks_searchview_partner_filter">
-        <Dropdown t-if="ks_df_informations['ks_partner']" togglerClass="'btn btn-secondary'"
-        >
-            <t t-set-slot="toggler">
-                <span class="fa fa-folder-open"/>
-                Partners
-            </t>
-            <div class="dropdown-item">
-                <label>Partners</label>
-                <MultiRecordSelector t-props="getMultiRecordSelectorProps('res.partner', 'partner_ids')"/>
-            </div>
-        </Dropdown>
-
-    </t>
-
-    <t t-name="ks_searchview_journals_filter" owl="1">
-        <Dropdown togglerClass="'btn btn-secondary'">
-            <t t-set-slot="toggler">
-                <i class="fa fa-book"/>journals
-                <t t-set="selected_journals"
-                   t-value="ks_df_informations['name_journal_group'] || ks_df_informations['journals'].filter(journal => journal['selected']).map(journal => journal['code']).join(', ')"/>
-                <t t-if="selected_journals">
-                    <t t-esc="selected_journals"/>
-                </t>
-                <t t-else="">
-                    All
-                </t>
-            </t>
-            <t t-if="ks_df_informations['ks_journal_enable']">
-                <t t-foreach="ks_df_informations['journals']" t-as="j" t-key="j_index">
-                    <t t-if="j['id'] == 'divider'">
-                        <div role="separator" class="dropdown-divider"/>
-                        <DropdownItem>
-                            <b>
-                                <t t-esc="j['name']"/>
-                            </b>
-                        </DropdownItem>
-                        <div role="separator" class="dropdown-divider"/>
-                    </t>
-                    <t t-if="j['id'] != 'divider'">
-                        <t t-if="j['id'] == 'group'">
-                            <!--                            data-bs-filter="journals" data-bs-id="j['id']"-->
-                            <!--                                    data-bs-member-ids="j['ids']"-->
-                            <DropdownItem class="{'selected': j.selected}"
-                                          onSelected="()=>this.js_account_report_group_choice_filter('journals',j.ids)">
-                                <t t-esc="j['name']"/>
-                            </DropdownItem>
-                        </t>
-                        <t t-else="">
-                            <!--                            title="j['name']+ '-' + j['code']" data-bs-id="j['id']"-->
-                            <!--                                    data-bs-filter="journals"-->
-                            <DropdownItem class="{'selected': j.selected}"
-                                          onSelected="()=>this.js_account_report_choice_filter(j.id,'journals')">
-                                <t t-esc="j['name']"/>
-                            </DropdownItem>
-                        </t>
-                    </t>
-                </t>
-            </t>
-            <t t-else="">
-                <t t-foreach="ks_df_informations['journals']" t-as="j" t-key="j_index">
-                    <t t-if="j['id'] == 'divider'">
-                        <div role="separator" class="dropdown-divider"/>
-                        <DropdownItem>
-                            <b>
-                                <t t-esc="j['name']"/>
-                            </b>
-                        </DropdownItem>
-                        <div role="separator" class="dropdown-divider"/>
-                    </t>
-                    <t t-if="j['id'] != 'divider'">
-                        <t t-if="j['id'] == 'group'">
-                            <DropdownItem class="{'selected': j.selected}"
-                                          onSelected="()=>this.js_account_report_group_choice_filter('journals',j.ids)"
-                            >
-                                <t t-esc="j['name']"/>
-                            </DropdownItem>
-                        </t>
-                        <t t-else="">
-                            <DropdownItem class="{'selected': j.selected}"
-                                          onSelected="()=>this.js_account_report_choice_filter(j.id,'journals')"
-                            >
-                                <t t-esc="j['name']"/>
-                            </DropdownItem>
-                        </t>
-                    </t>
-                </t>
-            </t>
-        </Dropdown>
-    </t>
-
     <t t-name="ks_df_sub_receivable0" owl="1">
         <div class="ks_py-mline-table-div">
             <table class="table">
@@ -1434,15 +1367,13 @@
                             <t t-esc="ks_df_informations['date']['ks_end_date']"/>
                         </span>
                     </t>
-                    <t t-if="ks_df_informations['date']['ks_process'] == 'range'">From:
+                    <t t-if="ks_df_informations['date']['ks_process'] == 'range'">
                         <span class="js_format_date">
                             <t t-esc="ks_df_informations['date']['ks_start_date']"/>
                         </span>
-                        <br/>
-                        <span class="o_reports_date_to">to:
-                            <span class="js_format_date">
-                                <t t-esc="ks_df_informations['date']['ks_end_date']"/>
-                            </span>
+                        <span class="o_reports_date_to mx-1">-</span>
+                        <span class="js_format_date">
+                            <t t-esc="ks_df_informations['date']['ks_end_date']"/>
                         </span>
                     </t>
                 </t>
@@ -1525,7 +1456,7 @@
     <t t-name="ks_searchview_differentiate_filter" owl="1">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <span class="fa fa-bar-chart"/>
+                <span class="fa fa-bar-chart me-1"/>
                 Differentiate:
                 <t t-if="ks_df_informations['ks_differ']['string'] and ks_df_informations['ks_differ']['ks_differentiate_filter'] != 'custom'">
                     <t t-esc="ks_df_informations['ks_differ']['string']"/>

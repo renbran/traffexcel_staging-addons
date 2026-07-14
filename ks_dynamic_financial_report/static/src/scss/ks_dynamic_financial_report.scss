@@ -899,6 +899,145 @@ tr.ks-collapsible[data-bs-selector] {
     cursor: pointer;
 }
 
+/* Report header action button (single Actions dropdown: Print PDF / Export XLSX / Send Email) */
+.ks_report_actions {
+    margin-left: auto;
+    flex: 0 0 auto;
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        height: 34px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+}
+
+/* Accounts dropdown - merged Journals/Account Type/Partners/Analytic/Account list */
+.ks_accounts_filter_sections {
+    max-height: 360px;
+    overflow-y: auto;
+    min-width: 260px;
+
+    .dropdown-header {
+        font-size: 11px;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        padding: 0.35rem 1rem 0.15rem;
+    }
+}
+
+.ks_count_badge {
+    background-color: #714b67;
+    color: #fff;
+    font-size: 10px;
+    margin-left: 0.25rem;
+    vertical-align: middle;
+}
+
+/* Print-only filter summary - hidden on screen, shown only in print/PDF export */
+.ks_filters_print_summary {
+    display: none;
+}
+
+@media print {
+    .ks_report_filters_toolbar,
+    .ks_report_actions {
+        display: none !important;
+    }
+
+    .ks_filters_print_summary {
+        display: block !important;
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Report header filter toolbar (date/compare/accounts/options) -
+   a single compact enterprise-style control bar of collapsed dropdown
+   togglers, side by side. Nothing but the toggler button is ever visible
+   until clicked; all options stay hidden inside each dropdown's own menu. */
+.ks_report_filters_toolbar {
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    max-width: 100%;
+    row-gap: 0.35rem;
+
+    /* Only the visible toggler button of each top-level filter dropdown/pager -
+       never the buttons/inputs inside its opened menu (Apply, MultiRecordSelector, etc.) */
+    > .dropdown > .dropdown-toggle,
+    > .ks_pager {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        font-size: 13px;
+        line-height: 1.2;
+        height: 34px;
+        padding: 0 0.7rem;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+
+    > .dropdown > .dropdown-menu {
+        font-size: 13px;
+    }
+
+    > .ks_pager {
+        flex: 0 0 auto;
+        gap: 0.35rem;
+        height: 34px;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        background: #fff;
+
+        .btn-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+    }
+}
+
+/* Desktop: everything fits on a single row, no wrapping. */
+@media (min-width: 1200px) {
+    .ks_report_filters_toolbar {
+        flex-wrap: nowrap;
+    }
+}
+
+/* Tablet: tighten spacing/height so more controls fit before wrapping. */
+@media (max-width: 991.98px) {
+    .ks_report_filters_toolbar {
+        gap: 0.3rem;
+
+        > .dropdown > .dropdown-toggle,
+        > .ks_pager {
+            height: 32px;
+            font-size: 12px;
+            padding: 0 0.55rem;
+        }
+    }
+}
+
+/* Mobile: full-width wrapping toolbar, touch-friendly targets. */
+@media (max-width: 575.98px) {
+    .ks_report_filters_toolbar {
+        gap: 0.25rem;
+
+        > .dropdown > .dropdown-toggle,
+        > .ks_pager {
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+    }
+}
+
 /* Custom date filter dropdowns (report date range / comparison range) */
 .ks_custom_date_filter {
     min-width: 230px;
