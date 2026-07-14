@@ -8,7 +8,7 @@ import { Layout } from "@web/search/layout";
 import { AlertDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { ControlPanel } from "@web/search/control_panel/control_panel";
 import { _t } from "@web/core/l10n/translation";
-import { DateTimePicker } from "@web/core/datetime/datetime_picker";
+import { DateTimeInput } from "@web/core/datetime/datetime_input";
 import { renderToElement } from "@web/core/utils/render";
 const { DateTime } = luxon;
 
@@ -1701,7 +1701,8 @@ ksDynamicReportsWidget.components = {
     ControlPanel,
     DropdownItem,
     Dropdown,
-    DateTimePicker,MultiRecordSelector
+    DateTimeInput,
+    MultiRecordSelector,
 };
 ksDynamicReportsWidget.customizableComponents = {
 

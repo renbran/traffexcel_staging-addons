@@ -1495,24 +1495,28 @@
             </t>
             <div role="separator" class="dropdown-divider"></div>
 
-            <div class="dropdown-item date"
+            <div class="dropdown-item date ks_custom_date_filter"
                  t-att-class="(ks_df_informations['date']['ks_process'] == 'custom') ? 'selected' : ''">
                 <t t-if="ks_df_report_opt['ks_comparison_range']== 1">
-                    <label class="d-flex align-items-center">
-                        Start Date:
-                    </label>
-                    <DateTimeInput value="typeof props.ks_start_date === 'string' ? null : props.ks_start_date" type="'date'"
-                                   onChange="(date) => this.onDateTimeChangedStartDate(date)"/>
+                    <div class="ks_date_field_group mb-2">
+                        <label class="d-flex align-items-center mb-1">
+                            Start Date
+                        </label>
+                        <DateTimeInput value="typeof props.ks_start_date === 'string' ? null : props.ks_start_date" type="'date'"
+                                       onChange="(date) => this.onDateTimeChangedStartDate(date)"/>
+                    </div>
                 </t>
-                <label class="d-flex align-items-center">
-                    End Date:
-                </label>
-                <DateTimeInput value="typeof props.ks_end_date === 'string' ? null : props.ks_end_date" type="'date'"
-                               onChange="(date) => this.onDateTimeChanged(date)"/>
-                  <DropdownItem>
-                <button class="btn btn-sm btn-primary mt-2" t-on-click="() => this.updateFilter('custom')">
-                    Apply
-                </button>
+                <div class="ks_date_field_group mb-2">
+                    <label class="d-flex align-items-center mb-1">
+                        End Date
+                    </label>
+                    <DateTimeInput value="typeof props.ks_end_date === 'string' ? null : props.ks_end_date" type="'date'"
+                                   onChange="(date) => this.onDateTimeChanged(date)"/>
+                </div>
+                <DropdownItem>
+                    <button class="btn btn-sm btn-primary mt-2 w-100" t-on-click="() => this.updateFilter('custom')">
+                        Apply
+                    </button>
                 </DropdownItem>
             </div>
         </Dropdown>
@@ -1552,33 +1556,36 @@
             </DropdownItem>
             <!--            data-bs-filter="no_differentiation"-->
             <div role="separator" class="dropdown-divider"/>
-            <div class="dropdown-item date"
+            <div class="dropdown-item date ks_custom_date_filter"
                  data-bs-filter='earlier_interval_filter'>
-                <label for="periods_number">Number of Previous periods :</label>
-                <input type="number" name="periods_number" t-att-value="state.previous_period"
-                           t-on-change="(e) => this.previousPeriodChange(e.target.value)"/>
+                <div class="ks_date_field_group mb-2">
+                    <label for="periods_number" class="d-flex align-items-center mb-1">Number of Previous Periods</label>
+                    <input type="number" name="periods_number" class="form-control form-control-sm" t-att-value="state.previous_period"
+                               t-on-change="(e) => this.previousPeriodChange(e.target.value)"/>
+                </div>
                 <DropdownItem>
-                <button type="button" class="btn-sm btn btn-primary js_account_report_date_cmp_filter"
+                <button type="button" class="btn-sm btn btn-primary w-100 js_account_report_date_cmp_filter"
                         data-bs-filter='earlier_interval' t-on-click="() => this.OnChangeComp('earlier_interval')">Apply
                 </button>
                 </DropdownItem>
             </div>
             <div role="separator" class="dropdown-divider"></div>
 
-            <div class="dropdown-item date" data-bs-filter='custom_cmp_filter'>
-                <t>
-                    <label class="d-flex align-items-center">Start Date :</label>
+            <div class="dropdown-item date ks_custom_date_filter" data-bs-filter='custom_cmp_filter'>
+                <div class="ks_date_field_group mb-2">
+                    <label class="d-flex align-items-center mb-1">Start Date</label>
                     <DateTimeInput value="typeof props.date_from_cmp === 'string' ? null : props.date_from_cmp"
                                    type="'date'" onChange="(date) => this.fdate_from_cmp(date)"
                     />
-                </t>
-                <label class="d-flex align-items-center">End Date :
-                </label>
-                <DateTimeInput value="typeof props.date_to_cmp === 'string' ? null : props.date_to_cmp"
-                               type="'date'" onChange="(date) => this.fdate_to_cmp(date)"
-                />
+                </div>
+                <div class="ks_date_field_group mb-2">
+                    <label class="d-flex align-items-center mb-1">End Date</label>
+                    <DateTimeInput value="typeof props.date_to_cmp === 'string' ? null : props.date_to_cmp"
+                                   type="'date'" onChange="(date) => this.fdate_to_cmp(date)"
+                    />
+                </div>
                 <DropdownItem>
-                <button type="button" class="btn btn-sm btn-primary js_account_report_date_cmp_filter"
+                <button type="button" class="btn btn-sm btn-primary w-100 js_account_report_date_cmp_filter"
                         data-bs-filter='custom' t-on-click="() => this.OnChangeComp('custom')">Apply
                 </button>
                 </DropdownItem>
