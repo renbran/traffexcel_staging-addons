@@ -13,8 +13,8 @@
                 <field name="billing_date"/>
                 <field name="billing_period_start"/>
                 <field name="billing_period_end"/>
-                <field name="total_amount"/>
-                <field name="net_payable"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="net_payable" sum="Net Payable"/>
                 <field name="state" widget="badge"
                     decoration-success="state == 'paid'"
                     decoration-primary="state == 'approved'"
