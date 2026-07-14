@@ -899,6 +899,41 @@ tr.ks-collapsible[data-bs-selector] {
     cursor: pointer;
 }
 
+/* Report header toolbar (date/journal/partner/differentiate/options filters) */
+.ks_report_filters_toolbar {
+    row-gap: 0.35rem;
+
+    .dropdown-toggle,
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        font-size: 13px;
+        line-height: 1.2;
+        padding: 0.3rem 0.65rem;
+        white-space: nowrap;
+    }
+
+    .dropdown-menu {
+        font-size: 13px;
+    }
+
+    .ks_pager {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        font-size: 13px;
+
+        .btn-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+    }
+}
+
 /* Custom date filter dropdowns (report date range / comparison range) */
 .ks_custom_date_filter {
     min-width: 230px;
