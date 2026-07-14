@@ -27,6 +27,7 @@
                 <t t-set="payload" t-value="data.get(wiz.id, {})"/>
                 <t t-set="rows" t-value="payload.get('journals') or []"/>
                 <t t-set="totals" t-value="payload.get('totals') or {}"/>
+                <t t-set="company" t-value="wiz.company_id"/>
                 <t t-call="web.external_layout">
                     <div class="page eh_pdf_page">
                         <h1 class="eh_pdf_title">Reconciliation Exception Report</h1>
