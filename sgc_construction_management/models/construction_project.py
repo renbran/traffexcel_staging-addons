@@ -61,6 +61,10 @@ class ConstructionProject(models.Model):
     total_received = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
     receipt_percent = fields.Float(compute='_compute_financials', string='Receipt %', store=True,
         help="Percentage of actual receipt against billed invoices")
+    outstanding_balance = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
+        string='Outstanding Balance', help="Total invoiced minus the actual amount received against those invoices")
+    profit_margin = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
+        string='Profit Margin', help="Total invoiced minus total expenses")
     planned_progress = fields.Float(compute='_compute_progress', string='Planned Progress %')
     progress = fields.Float(compute='_compute_progress', string='Actual Progress %')
     budget_consumed = fields.Float(compute='_compute_financials', string='Budget Consumed %', store=True)
@@ -218,6 +222,7 @@ class ConstructionProject(models.Model):
                 rec.total_billed = rec.total_expenses = rec.budget_consumed = rec.margin_percent = 0.0
                 rec.invoice_count = rec.vendor_bill_count = 0
                 rec.total_received = rec.receipt_percent = 0.0
+                rec.outstanding_balance = rec.profit_margin = 0.0
             return
 
         # Fetch all move lines for all projects in one go.
@@ -240,6 +245,7 @@ class ConstructionProject(models.Model):
                 project.total_billed = project.total_expenses = project.budget_consumed = project.margin_percent = 0.0
                 project.invoice_count = project.vendor_bill_count = 0
                 project.total_received = project.receipt_percent = 0.0
+                project.outstanding_balance = project.profit_margin = 0.0
                 continue
 
             # In-memory filtering (faster than database round-trip in loop).
@@ -309,6 +315,9 @@ class ConstructionProject(models.Model):
                 project.receipt_percent = (project.total_received / project.total_billed) * 100
             else:
                 project.receipt_percent = 0.0
+
+            project.outstanding_balance = project.total_billed - project.total_received
+            project.profit_margin = project.total_billed - project.total_expenses
 
     def _compute_progress(self):
         wbs_data = self.env['construction.wbs']._read_group(
