@@ -899,12 +899,28 @@ tr.ks-collapsible[data-bs-selector] {
     cursor: pointer;
 }
 
-/* Report header toolbar (date/journal/partner/differentiate/options filters) */
+/* Report header action buttons (Print / Export / Send Email) */
+.ks_report_actions {
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .dropdown-toggle-split {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+/* Report header filter toolbar (date/journal/partner/differentiate/options) */
 .ks_report_filters_toolbar {
     row-gap: 0.35rem;
 
-    .dropdown-toggle,
-    .btn {
+    /* Only the visible toggler button of each top-level filter dropdown/pager -
+       never the buttons/inputs inside its opened menu (Apply, MultiRecordSelector, etc.) */
+    > .dropdown > .dropdown-toggle,
+    > .ks_pager {
         display: inline-flex;
         align-items: center;
         font-size: 13px;
@@ -913,18 +929,15 @@ tr.ks-collapsible[data-bs-selector] {
         white-space: nowrap;
     }
 
-    .dropdown-menu {
+    > .dropdown > .dropdown-menu {
         font-size: 13px;
     }
 
-    .ks_pager {
-        display: inline-flex;
-        align-items: center;
+    > .ks_pager {
         gap: 0.35rem;
-        padding: 0.3rem 0.5rem;
         border: 1px solid #dee2e6;
         border-radius: 0.25rem;
-        font-size: 13px;
+        background: #fff;
 
         .btn-group {
             display: inline-flex;

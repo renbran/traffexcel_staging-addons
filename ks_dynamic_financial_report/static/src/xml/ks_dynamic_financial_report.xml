@@ -3,25 +3,20 @@
     <t t-name="ks_tax_report_lines" owl="1">
         <ControlPanel display="display">
             <t t-set-slot="control-panel-create-button">
-                <Dropdown togglerClass="'btn btn-primary'" showCaret="true">
-                    <t t-set-slot="toggler">
-                        <span t-on-click="OnPrintPdf" type="button">Print
-                            (Pdf)
-                        </span>
-                    </t>
-                    <DropdownItem>
-                        <button t-on-click="ksPrintReportXlsx" type="button" class="btn btn-primary"
-                                style="position: relative;">
-                            Export (XLSX)
-                        </button>
-                    </DropdownItem>
-                    <DropdownItem>
-                        <button type="button" t-on-click="ksReportSendEmail" class="btn btn-primary"
-                                style="position: relative;">
-                            Send Email
-                        </button>
-                    </DropdownItem>
-                </Dropdown>
+                <div class="btn-group ks_report_actions" role="group">
+                    <button type="button" class="btn btn-primary" t-on-click="OnPrintPdf">
+                        <i class="fa fa-print me-1"/>Print (PDF)
+                    </button>
+                    <Dropdown togglerClass="'btn btn-primary dropdown-toggle-split'" showCaret="true">
+                        <t t-set-slot="toggler"><span/></t>
+                        <DropdownItem onSelected="() => this.ksPrintReportXlsx()">
+                            <i class="fa fa-file-excel-o me-1"/>Export (XLSX)
+                        </DropdownItem>
+                        <DropdownItem onSelected="() => this.ksReportSendEmail()">
+                            <i class="fa fa-envelope me-1"/>Send Email
+                        </DropdownItem>
+                    </Dropdown>
+                </div>
             </t>
             <t t-set-slot="layout-actions">
                 <t t-set="ks_df_informations" t-value="props.ks_master_value.ks_df_informations"/>
