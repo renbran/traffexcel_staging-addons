@@ -14,6 +14,7 @@
                 <field name="billing_period_start"/>
                 <field name="billing_period_end"/>
                 <field name="total_amount" sum="Total"/>
+                <field name="vat_amount" sum="VAT"/>
                 <field name="net_payable" sum="Net Payable"/>
                 <field name="state" widget="badge"
                     decoration-success="state == 'paid'"
@@ -94,6 +95,9 @@
                                     <field name="qty_cumulative" readonly="1"/>
                                     <field name="unit_rate"/>
                                     <field name="amount" readonly="1"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="tax_amount" readonly="1"/>
+                                    <field name="amount_total" readonly="1"/>
                                     <field name="currency_id" invisible="1"/>
                                 </list>
                             </field>
@@ -103,7 +107,9 @@
                         </page>
                     </notebook>
                     <group class="oe_subtotal_footer oe_right">
-                        <field name="total_amount" readonly="1"/>
+                        <field name="total_amount" readonly="1" string="Total Base Amount"/>
+                        <field name="vat_amount" readonly="1"/>
+                        <field name="total_amount_with_vat" readonly="1"/>
                         <field name="previous_billed" readonly="1"/>
                         <field name="net_amount" readonly="1"/>
                         <field name="retention_amount" readonly="1"/>

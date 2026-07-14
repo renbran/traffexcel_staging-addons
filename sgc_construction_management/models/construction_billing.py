@@ -23,6 +23,9 @@ class ConstructionRABilling(models.Model):
     retention_percent = fields.Float('Retention %', default=5.0)
     retention_amount = fields.Monetary(compute='_compute_retention', store=True, currency_field='currency_id')
     net_payable = fields.Monetary(compute='_compute_payable', store=True, currency_field='currency_id')
+    vat_amount = fields.Monetary('VAT', compute='_compute_vat_totals', store=True, currency_field='currency_id')
+    total_amount_with_vat = fields.Monetary('Total (Incl. VAT)', compute='_compute_vat_totals', store=True,
+        currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', index=True, related='project_id.currency_id')
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -84,6 +87,12 @@ class ConstructionRABilling(models.Model):
         for rec in self:
             rec.net_payable = rec.net_amount - rec.retention_amount
 
+    @api.depends('line_ids.tax_amount', 'total_amount')
+    def _compute_vat_totals(self):
+        for rec in self:
+            rec.vat_amount = sum(rec.line_ids.mapped('tax_amount'))
+            rec.total_amount_with_vat = rec.total_amount + rec.vat_amount
+
     def action_submit(self):
         self.state = 'submitted'
 
@@ -123,13 +132,19 @@ class ConstructionRABilling(models.Model):
         # Main work line
         analytic_distribution = {str(self.project_id.analytic_account_id.id): 100} if self.project_id.analytic_account_id else {}
 
-        invoice_vals['invoice_line_ids'].append((0, 0, {
+        # Use the VAT configured on the billing lines (rather than the
+        # product's own default taxes) so the invoice's base/VAT split
+        # matches what was defined on this RA Billing.
+        main_line_vals = {
             'name': self.name,
             'product_id': product.id if product else False,
             'quantity': 1,
             'price_unit': self.net_amount,
             'analytic_distribution': analytic_distribution,
-        }))
+        }
+        if self.line_ids.tax_ids:
+            main_line_vals['tax_ids'] = [(6, 0, self.line_ids.tax_ids.ids)]
+        invoice_vals['invoice_line_ids'].append((0, 0, main_line_vals))
 
         # Retention line
         if self.retention_amount > 0:
@@ -254,7 +269,11 @@ class ConstructionRABillingLine(models.Model):
     qty_current = fields.Float('Current Qty', digits=(12, 3))
     qty_cumulative = fields.Float(compute='_compute_cumulative', store=True, digits=(12, 3))
     unit_rate = fields.Monetary(currency_field='currency_id')
-    amount = fields.Monetary(compute='_compute_amount', store=True, currency_field='currency_id')
+    amount = fields.Monetary('Base Amount', compute='_compute_amount', store=True, currency_field='currency_id')
+    tax_ids = fields.Many2many('account.tax', string='VAT', domain="[('type_tax_use', '=', 'sale')]")
+    tax_amount = fields.Monetary('VAT Amount', compute='_compute_tax_amount', store=True, currency_field='currency_id')
+    amount_total = fields.Monetary('Total (Incl. VAT)', compute='_compute_tax_amount', store=True,
+        currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', index=True, related='billing_id.currency_id')
 
     def _is_percentage_uom(self):
@@ -311,6 +330,23 @@ class ConstructionRABillingLine(models.Model):
                 rec.amount = (rec.qty_current / 100.0) * rec.unit_rate
             else:
                 rec.amount = rec.qty_current * rec.unit_rate
+
+    @api.depends('amount', 'tax_ids')
+    def _compute_tax_amount(self):
+        for rec in self:
+            if rec.tax_ids:
+                taxes = rec.tax_ids.compute_all(
+                    rec.amount,
+                    currency=rec.currency_id,
+                    quantity=1,
+                    product=False,
+                    partner=rec.billing_id.project_id.client_id,
+                )
+                rec.tax_amount = taxes['total_included'] - taxes['total_excluded']
+                rec.amount_total = taxes['total_included']
+            else:
+                rec.tax_amount = 0.0
+                rec.amount_total = rec.amount
 
 
 class ConstructionProgressBilling(models.Model):
