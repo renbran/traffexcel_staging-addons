@@ -155,10 +155,10 @@
                 <field name="client_id"/>
                 <field name="state"/>
                 <field name="contract_value"/>
-                <field name="progress"/>
-                <field name="billing_percent" widget="progressbar" display_label="false"/>
-                <field name="receipt_percent" widget="progressbar" display_label="false"/>
-                <field name="expense_vs_billed_percent" widget="progressbar" display_label="false"/>
+                <field name="total_billed"/>
+                <field name="total_expenses"/>
+                <field name="outstanding_balance"/>
+                <field name="profit_margin"/>
                 <templates>
                     <t t-name="kanban-card">
                         <div class="oe_kanban_global_click">
@@ -170,10 +170,10 @@
                                     <field name="ref"/> | <field name="client_id"/>
                                 </div>
                                 <div class="mt-2">
-                                    <field name="progress" widget="progressbar"/>
-                                    <field name="billing_percent" widget="progressbar" display_label="false"/>
-                                    <field name="receipt_percent" widget="progressbar" display_label="false"/>
-                                    <field name="expense_vs_billed_percent" widget="progressbar" display_label="false"/>
+                                    <div>Total Invoiced: <field name="total_billed"/></div>
+                                    <div>Total Expense: <field name="total_expenses"/></div>
+                                    <div>Outstanding Balance: <field name="outstanding_balance"/></div>
+                                    <div>Profit Margin: <field name="profit_margin"/></div>
                                 </div>
                                 <div class="mt-1">
                                     <field name="contract_value"/>
