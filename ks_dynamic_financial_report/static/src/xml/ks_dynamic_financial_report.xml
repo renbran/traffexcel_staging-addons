@@ -990,7 +990,7 @@
     </t>
 
     <t t-name="ks_report_filters" owl="1">
-        <div class="d-flex flex-wrap align-items-center gap-1 ks_report_filters_toolbar">
+        <div class="ks_report_filters_toolbar">
             <t t-if="ks_df_informations['ks_title']=='Partner Ledger' || ks_df_informations['ks_title']=='General Ledger' || new_ks_df_reports_ids=='Age Receivable' || new_ks_df_reports_ids=='Age Payable'">
                 <t t-call="pager_buttons"/>
             </t>
@@ -1429,15 +1429,13 @@
                             <t t-esc="ks_df_informations['date']['ks_end_date']"/>
                         </span>
                     </t>
-                    <t t-if="ks_df_informations['date']['ks_process'] == 'range'">From:
+                    <t t-if="ks_df_informations['date']['ks_process'] == 'range'">
                         <span class="js_format_date">
                             <t t-esc="ks_df_informations['date']['ks_start_date']"/>
                         </span>
-                        <br/>
-                        <span class="o_reports_date_to">to:
-                            <span class="js_format_date">
-                                <t t-esc="ks_df_informations['date']['ks_end_date']"/>
-                            </span>
+                        <span class="o_reports_date_to mx-1">-</span>
+                        <span class="js_format_date">
+                            <t t-esc="ks_df_informations['date']['ks_end_date']"/>
                         </span>
                     </t>
                 </t>

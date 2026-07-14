@@ -913,9 +913,20 @@ tr.ks-collapsible[data-bs-selector] {
     }
 }
 
-/* Report header filter toolbar (date/journal/partner/differentiate/options) */
+/* Report header filter toolbar (date/journal/partner/differentiate/options) -
+   packs every filter into at most 2 rows across the full 12-column width
+   instead of wrapping tall and pushing the report table down. */
 .ks_report_filters_toolbar {
-    row-gap: 0.35rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    column-gap: 0.4rem;
+    row-gap: 0.3rem;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
 
     /* Only the visible toggler button of each top-level filter dropdown/pager -
        never the buttons/inputs inside its opened menu (Apply, MultiRecordSelector, etc.) */
@@ -923,9 +934,9 @@ tr.ks-collapsible[data-bs-selector] {
     > .ks_pager {
         display: inline-flex;
         align-items: center;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.2;
-        padding: 0.3rem 0.65rem;
+        padding: 0.25rem 0.55rem;
         white-space: nowrap;
     }
 
