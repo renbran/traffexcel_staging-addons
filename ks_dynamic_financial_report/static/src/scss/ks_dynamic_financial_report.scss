@@ -899,6 +899,24 @@ tr.ks-collapsible[data-bs-selector] {
     cursor: pointer;
 }
 
+/* Tighten Odoo's default control-panel chrome around any report toolbar
+   built from this widget, so breadcrumb + actions + filters occupy the
+   smallest possible header height. Scoped via :has() so it never touches
+   control panels elsewhere in the app. */
+.o_control_panel:has(.ks_report_filters_toolbar) {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    row-gap: 0.25rem;
+    min-height: 0;
+}
+
+.o_control_panel:has(.ks_report_filters_toolbar) .o_control_panel_main,
+.o_control_panel:has(.ks_report_filters_toolbar) .o_cp_bottom {
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 /* Report header action button (single Actions dropdown: Print PDF / Export XLSX / Send Email) */
 .ks_report_actions {
     margin-left: auto;
@@ -907,7 +925,9 @@ tr.ks-collapsible[data-bs-selector] {
     .btn {
         display: inline-flex;
         align-items: center;
-        height: 34px;
+        height: 30px;
+        padding: 0 0.6rem;
+        font-size: 12px;
         border-radius: 6px;
         white-space: nowrap;
     }
@@ -964,10 +984,10 @@ tr.ks-collapsible[data-bs-selector] {
     flex: 1 1 auto;
     flex-flow: row wrap;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.3rem;
     width: 100%;
     max-width: 100%;
-    row-gap: 0.35rem;
+    row-gap: 0.25rem;
 
     /* Only the visible toggler button of each top-level filter dropdown/pager -
        never the buttons/inputs inside its opened menu (Apply, MultiRecordSelector, etc.) */
@@ -976,10 +996,10 @@ tr.ks-collapsible[data-bs-selector] {
         display: inline-flex;
         align-items: center;
         flex: 0 0 auto;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.2;
-        height: 34px;
-        padding: 0 0.7rem;
+        height: 30px;
+        padding: 0 0.55rem;
         border-radius: 6px;
         white-space: nowrap;
     }
@@ -990,8 +1010,8 @@ tr.ks-collapsible[data-bs-selector] {
 
     > .ks_pager {
         flex: 0 0 auto;
-        gap: 0.35rem;
-        height: 34px;
+        gap: 0.3rem;
+        height: 30px;
         border: 1px solid #dee2e6;
         border-radius: 6px;
         background: #fff;
@@ -1014,13 +1034,13 @@ tr.ks-collapsible[data-bs-selector] {
 /* Tablet: tighten spacing/height so more controls fit before wrapping. */
 @media (max-width: 991.98px) {
     .ks_report_filters_toolbar {
-        gap: 0.3rem;
+        gap: 0.25rem;
 
         > .dropdown > .dropdown-toggle,
         > .ks_pager {
-            height: 32px;
-            font-size: 12px;
-            padding: 0 0.55rem;
+            height: 28px;
+            font-size: 11px;
+            padding: 0 0.45rem;
         }
     }
 }
