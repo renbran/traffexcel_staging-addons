@@ -766,7 +766,9 @@ export class ksDynamicReportsWidget extends Component {
         }
     }
     async ksReportSendEmail(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         var self = this;
         this.orm.call("ks.dynamic.financial.reports", 'ks_get_dynamic_fin_info', [this.props.action.context.id, this.ks_df_report_opt], {
             context: this.props.action.context
