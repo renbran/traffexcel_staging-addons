@@ -995,7 +995,7 @@
     </t>
 
     <t t-name="ks_report_filters" owl="1">
-        <div class="gap-1 d-flex">
+        <div class="d-flex flex-wrap align-items-center gap-1 ks_report_filters_toolbar">
             <t t-if="ks_df_informations['ks_title']=='Partner Ledger' || ks_df_informations['ks_title']=='General Ledger' || new_ks_df_reports_ids=='Age Receivable' || new_ks_df_reports_ids=='Age Payable'">
                 <t t-call="pager_buttons"/>
             </t>
@@ -1051,7 +1051,7 @@
     <t t-name="ks_searchview_extra_ks_account_information">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <i class="fa fa-book"/>
+                <i class="fa fa-book me-1"/>
                 Account
                 <t t-set="selected_account"
                    t-value="ks_df_informations['account'].filter(account => account.selected).map(account => account.name).join(', ')"/>
@@ -1095,7 +1095,7 @@
     <t t-name="ks_searchview_extra_ks_df_informations">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <span class="fa fa-filter"/>
+                <span class="fa fa-filter me-1"/>
                 Options:
                 <t t-if="ks_df_informations.ks_posted_entries !== undefined">
                     <t t-if="ks_df_informations.ks_posted_entries || ks_df_informations.ks_unposted_entries">
@@ -1195,7 +1195,7 @@
     <t t-name="ks_searchview_account_filter">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <span class="fa fa-user"/>
+                <span class="fa fa-user me-1"/>
                 Account:
                 <t t-set="account_value">Both</t>
                 <t t-foreach="props.ks_master_value.ks_df_informations.account_type" t-as="a" t-key="a_index">
@@ -1231,7 +1231,7 @@
     <t t-name="ks_searchview_analytic_filter">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <span class="fa fa-folder-open"/>
+                <span class="fa fa-folder-open me-1"/>
                 Analytic
             </t>
             <div class="dropdown-item">
@@ -1249,7 +1249,7 @@
         <Dropdown t-if="ks_df_informations['ks_partner']" togglerClass="'btn btn-secondary'"
         >
             <t t-set-slot="toggler">
-                <span class="fa fa-folder-open"/>
+                <span class="fa fa-folder-open me-1"/>
                 Partners
             </t>
             <div class="dropdown-item">
@@ -1263,7 +1263,7 @@
     <t t-name="ks_searchview_journals_filter" owl="1">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <i class="fa fa-book"/>journals
+                <i class="fa fa-book me-1"/>Journals
                 <t t-set="selected_journals"
                    t-value="ks_df_informations['name_journal_group'] || ks_df_informations['journals'].filter(journal => journal['selected']).map(journal => journal['code']).join(', ')"/>
                 <t t-if="selected_journals">
@@ -1525,7 +1525,7 @@
     <t t-name="ks_searchview_differentiate_filter" owl="1">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <span class="fa fa-bar-chart"/>
+                <span class="fa fa-bar-chart me-1"/>
                 Differentiate:
                 <t t-if="ks_df_informations['ks_differ']['string'] and ks_df_informations['ks_differ']['ks_differentiate_filter'] != 'custom'">
                     <t t-esc="ks_df_informations['ks_differ']['string']"/>
