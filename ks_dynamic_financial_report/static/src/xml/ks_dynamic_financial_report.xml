@@ -4,10 +4,11 @@
         <ControlPanel display="display">
             <t t-set-slot="control-panel-create-button">
                 <div class="ks_report_actions">
-                    <Dropdown togglerClass="'btn btn-primary'" showCaret="true">
-                        <t t-set-slot="toggler">
+                    <Dropdown>
+                        <button class="btn btn-primary dropdown-toggle">
                             <i class="fa fa-cog me-1"/>Actions
-                        </t>
+                        </button>
+                        <t t-set-slot="content">
                         <DropdownItem onSelected="() => this.OnPrintPdf()">
                             <i class="fa fa-print me-1"/>Print (PDF)
                         </DropdownItem>
@@ -17,6 +18,7 @@
                         <DropdownItem onSelected="() => this.ksReportSendEmail()">
                             <i class="fa fa-envelope me-1"/>Send Email
                         </DropdownItem>
+                        </t>
                     </Dropdown>
                 </div>
             </t>
@@ -1037,15 +1039,16 @@
     </t>
 
     <t t-name="ks_searchview_accounts_filter" owl="1">
-        <Dropdown togglerClass="'btn btn-secondary'">
-            <t t-set-slot="toggler">
+        <Dropdown>
+            <button class="btn btn-secondary dropdown-toggle">
                 <i class="fa fa-university me-1"/>
                 Accounts
                 <t t-if="accountsFilterCount">
                     <span class="badge rounded-pill ks_count_badge" t-esc="'(' + accountsFilterCount + ')'"/>
                 </t>
-            </t>
+            </button>
 
+            <t t-set-slot="content">
             <div class="ks_accounts_filter_sections">
                 <t t-if="ks_df_informations['ks_journal_filter_visiblity']">
                     <div class="dropdown-header">Journals</div>
@@ -1166,12 +1169,13 @@
                     </t>
                 </t>
             </div>
+            </t>
         </Dropdown>
     </t>
 
     <t t-name="ks_searchview_extra_ks_df_informations">
-        <Dropdown togglerClass="'btn btn-secondary'">
-            <t t-set-slot="toggler">
+        <Dropdown>
+            <button class="btn btn-secondary dropdown-toggle">
                 <span class="fa fa-filter me-1"/>
                 Options:
                 <t t-if="ks_df_informations.ks_posted_entries !== undefined">
@@ -1187,8 +1191,9 @@
                         <t>Posted Entries,Draft Entries</t>
                     </t>
                 </t>
-            </t>
+            </button>
 
+            <t t-set-slot="content">
             <t t-if="ks_df_informations.ks_option_enable">
                 <!--data-bs-filter="ks_posted_entries"-->
 
@@ -1266,6 +1271,7 @@
                               t-if="!['Balance Sheet', 'Profit and Loss', 'Cash Flow Statement', 'Executive Summary', 'Tax Report', 'Trial Balance'].includes(new_ks_df_reports_ids)">
                     To Print Report With Details
                 </DropdownItem>
+            </t>
             </t>
         </Dropdown>
     </t>
@@ -1354,9 +1360,9 @@
     </t>
     <t t-name="ks_searchview_date_filter" owl="1">
 
-        <Dropdown togglerClass="'btn btn-secondary'">
+        <Dropdown>
             <t t-set="ks_df_informations" t-value="props.ks_master_value.ks_df_informations"/>
-            <t t-set-slot="toggler">
+            <button class="btn btn-secondary dropdown-toggle">
                 <i class="fa fa-calendar me-1"/>
                 <t t-if="ks_df_informations['date']['ks_string'] and ks_df_informations['date']['ks_filter'] != 'custom'">
                     <t t-esc="ks_df_informations['date']['ks_string']"/>
@@ -1377,7 +1383,9 @@
                         </span>
                     </t>
                 </t>
-            </t>
+            </button>
+            <t t-set-slot="content">
+            <t t-set="ks_df_informations" t-value="props.ks_master_value.ks_df_informations"/>
             <t t-if="ks_df_informations['date']['ks_process'] == 'single'">
                 <DropdownItem class="{'selected': (ks_df_informations.date.ks_filter == 'today')}"
                               onSelected="() => this.updateFilter('today')">
@@ -1450,12 +1458,13 @@
                     </button>
                 </DropdownItem>
             </div>
+            </t>
         </Dropdown>
     </t>
 
     <t t-name="ks_searchview_differentiate_filter" owl="1">
-        <Dropdown togglerClass="'btn btn-secondary'">
-            <t t-set-slot="toggler">
+        <Dropdown>
+            <button class="btn btn-secondary dropdown-toggle">
                 <span class="fa fa-bar-chart me-1"/>
                 Differentiate:
                 <t t-if="ks_df_informations['ks_differ']['string'] and ks_df_informations['ks_differ']['ks_differentiate_filter'] != 'custom'">
@@ -1481,7 +1490,8 @@
                     </t>
                 </t>
                 -
-            </t>
+            </button>
+            <t t-set-slot="content">
             <DropdownItem class="{'selected': ks_df_informations['ks_diff_filter']['ks_diff_filter_enablity']!=1}"
                           onSelected="() => this.OnChangeComp('no_differentiation')">No Comparison
             </DropdownItem>
@@ -1521,6 +1531,7 @@
                 </button>
                 </DropdownItem>
             </div>
+            </t>
 
         </Dropdown>
     </t>
