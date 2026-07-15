@@ -133,6 +133,13 @@ class ProjectSoAXlsx(models.AbstractModel):
                 sheet.write('A5', 'No analytic account linked to this project.', bold)
                 continue
 
+            # Filter on lines whose analytic_distribution contains this
+            # project's analytic account. `analytic_distribution` is a
+            # JSON dict {account_id: pct}; the `in` operator uses Postgres
+            # JSON containment, so a line distributed to multiple projects
+            # (incl. this one) will match. That is acceptable for the
+            # project-level SoA — downstream consumers don't need the
+            # per-line percentage split.
             lines = self.env['account.move.line'].search([
                 ('parent_state', '=', 'posted'),
                 ('analytic_distribution', 'in', [project.analytic_account_id.id]),
@@ -152,6 +159,12 @@ class ProjectSoAXlsx(models.AbstractModel):
             for col, h in enumerate(headers):
                 sheet.write(row, col, h, bold)
             row += 1
+            # Per-row amounts use the move's *own* currency (`amount_total`),
+            # so the number in the Total column actually matches the value
+            # in the Currency column on the right. Totals (Invoices Total,
+            # Bills Total, Net) below sum the signed company-currency
+            # amounts (`amount_total_signed`) so the final figure is always
+            # in AED regardless of mixed currencies in the line items.
             inv_total = 0.0
             for inv in invoices:
                 sheet.write(row, 0, inv.invoice_date or '', date_fmt)
@@ -159,12 +172,13 @@ class ProjectSoAXlsx(models.AbstractModel):
                 sheet.write(row, 2, inv.partner_id.display_name or '', border)
                 sheet.write(row, 3, inv.ref or '', border)
                 sheet.write(row, 4, type_sel.get(inv.move_type, inv.move_type), border)
-                sheet.write(row, 5, inv.amount_total_signed or 0.0, money)
+                sheet.write(row, 5, inv.amount_total or 0.0, money)
                 sheet.write(row, 6, inv.currency_id.name or '', border)
                 inv_total += inv.amount_total_signed or 0.0
                 row += 1
             sheet.write(row, 0, 'Invoices Total', bold)
             sheet.write(row, 5, inv_total, money)
+            sheet.write(row, 6, project.company_id.currency_id.name or '', border)
             row += 2
 
             sheet.merge_range(row, 0, row, 6, 'BILLS (AP)', section_fmt)
@@ -179,16 +193,18 @@ class ProjectSoAXlsx(models.AbstractModel):
                 sheet.write(row, 2, bill.partner_id.display_name or '', border)
                 sheet.write(row, 3, bill.ref or '', border)
                 sheet.write(row, 4, type_sel.get(bill.move_type, bill.move_type), border)
-                sheet.write(row, 5, bill.amount_total_signed or 0.0, money)
+                sheet.write(row, 5, bill.amount_total or 0.0, money)
                 sheet.write(row, 6, bill.currency_id.name or '', border)
                 bill_total += bill.amount_total_signed or 0.0
                 row += 1
             sheet.write(row, 0, 'Bills Total', bold)
             sheet.write(row, 5, bill_total, money)
+            sheet.write(row, 6, project.company_id.currency_id.name or '', border)
             row += 2
 
             sheet.write(row, 0, 'Net (AR - AP)', bold)
             sheet.write(row, 5, inv_total - bill_total, money)
+            sheet.write(row, 6, project.company_id.currency_id.name or '', border)
 
             sheet.set_column('A:A', 12)
             sheet.set_column('B:B', 18)
