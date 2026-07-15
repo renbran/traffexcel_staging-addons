@@ -11,12 +11,19 @@
                 <field name="x_plan2_id" string="Construction Project"/>
                 <field name="account_id"/>
                 <field name="partner_id"/>
+                <field name="move_line_id"/>
             </field>
             <filter name="month" position="after">
                 <separator/>
                 <filter string="Construction Projects"
                         name="construction_projects"
                         domain="[('x_plan2_id', '!=', False)]"/>
+                <filter string="Posted Entries"
+                        name="posted_entries"
+                        domain="[('move_line_id.move_id.state', '=', 'posted')]"/>
+                <filter string="Draft Entries"
+                        name="draft_entries"
+                        domain="[('move_line_id.move_id.state', '=', 'draft')]"/>
             </filter>
             <filter name="group_date" position="after">
                 <filter string="Construction Project"
@@ -25,6 +32,9 @@
                 <filter string="Analytic Account"
                         name="group_by_analytic_account"
                         context="{'group_by': 'account_id'}"/>
+                <filter string="Entry State"
+                        name="group_by_entry_state"
+                        context="{'group_by': 'move_line_id.move_id.state'}"/>
             </filter>
         </field>
     </record>
@@ -38,17 +48,6 @@
         <field name="view_mode">list,kanban,form</field>
     </record>
 
-    <!-- Project Statement download (XLSX) -->
-    <record id="action_project_statement_xlsx" model="ir.actions.act_url">
-        <field name="name">Project Statement (XLSX)</field>
-        <field name="url">/traffexcel/project_statement/xlsx</field>
-        <field name="target">new</field>
-    </record>
-
-    <menuitem id="menu_project_statement_xlsx"
-              name="Project Statement (XLSX)"
-              parent="account.account_reports_management_menu"
-              action="action_project_statement_xlsx"
-              sequence="26"/>
+    <!-- Project Statement wizard + menu live in project_statement_wizard_views.xml -->
 
 </odoo>

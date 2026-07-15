@@ -6,7 +6,9 @@
     'summary': 'Analytic report predefined by Construction Project + Project Statement XLSX export',
     'depends': ['account', 'analytic'],
     'data': [
+        'security/ir.model.access.csv',
         'views/analytic_report_views.xml',
+        'views/project_statement_wizard_views.xml',
     ],
     'installable': True,
     'license': 'LGPL-3',
