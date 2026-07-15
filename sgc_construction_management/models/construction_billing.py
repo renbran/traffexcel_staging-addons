@@ -95,6 +95,86 @@ class ConstructionRABilling(models.Model):
             rec.vat_amount = sum(rec.line_ids.mapped('tax_amount'))
             rec.total_amount_with_vat = rec.total_amount + rec.vat_amount
 
+    # Fields whose change must be mirrored onto the linked customer invoice.
+    _INVOICE_SYNC_FIELDS = ('retention_percent', 'previous_billed', 'name', 'billing_date')
+
+    def write(self, vals):
+        if set(self._INVOICE_SYNC_FIELDS) & set(vals):
+            self._check_invoice_editable()
+        res = super().write(vals)
+        if set(self._INVOICE_SYNC_FIELDS) & set(vals):
+            self._sync_draft_invoice()
+        return res
+
+    def _check_invoice_editable(self):
+        # A posted/paid invoice is legally final: amounts on the billing can
+        # no longer change. Reset the invoice to draft first.
+        for rec in self:
+            if rec.move_id and rec.move_id.state == 'posted':
+                raise ValidationError(
+                    "The invoice %s linked to billing %s is posted. "
+                    "Reset it to draft in Accounting before changing the billing amounts." %
+                    (rec.move_id.name, rec.ref)
+                )
+
+    def _prepare_invoice_line_cmds(self):
+        """Build invoice line commands from the billing. Shared by invoice
+        creation and by the draft-invoice sync so both always match."""
+        self.ensure_one()
+        product = self.env.ref('%s.product_construction_progress_billing' % self._module, raise_if_not_found=False)
+        retention_product = self.env.ref('%s.product_retention_deduction' % self._module, raise_if_not_found=False)
+        analytic_distribution = {str(self.project_id.analytic_account_id.id): 100} if self.project_id.analytic_account_id else {}
+
+        cmds = []
+        # One line per tax combination so mixed VAT rates compute correctly.
+        tax_groups = {}
+        for line in self.line_ids:
+            tax_groups.setdefault(tuple(line.tax_ids.ids), 0.0)
+            tax_groups[tuple(line.tax_ids.ids)] += line.amount
+        for tax_ids, group_amount in tax_groups.items():
+            cmds.append((0, 0, {
+                'name': self.name,
+                'product_id': product.id if product else False,
+                'quantity': 1,
+                'price_unit': group_amount,
+                'analytic_distribution': analytic_distribution,
+                'tax_ids': [(6, 0, list(tax_ids))],
+            }))
+        # "Previous Billed" manual adjustment: untaxed (VAT for earlier work
+        # was charged on the earlier invoices).
+        if self.previous_billed:
+            cmds.append((0, 0, {
+                'name': 'Previously Billed Deduction',
+                'product_id': product.id if product else False,
+                'quantity': 1,
+                'price_unit': -self.previous_billed,
+                'analytic_distribution': analytic_distribution,
+                'tax_ids': [(5, 0, 0)],
+            }))
+        # Retention: untaxed deduction.
+        if self.retention_amount > 0:
+            cmds.append((0, 0, {
+                'name': 'Retention Deduction',
+                'product_id': retention_product.id if retention_product else False,
+                'quantity': 1,
+                'price_unit': -self.retention_amount,
+                'analytic_distribution': analytic_distribution,
+                'tax_ids': [(5, 0, 0)],
+            }))
+        return cmds
+
+    def _sync_draft_invoice(self):
+        """Push the billing amounts onto the linked draft invoice so both
+        documents always match."""
+        for rec in self:
+            move = rec.move_id
+            if not move or move.state != 'draft':
+                continue
+            move.with_context(ra_billing_sync=True).write({
+                'invoice_date': rec.billing_date,
+                'invoice_line_ids': [(5, 0, 0)] + rec._prepare_invoice_line_cmds(),
+            })
+
     def action_submit(self):
         self.state = 'submitted'
 
@@ -120,65 +200,15 @@ class ConstructionRABilling(models.Model):
                 ', '.join(failed_checks.mapped('name'))
             )
 
-        product = self.env.ref('%s.product_construction_progress_billing' % self._module, raise_if_not_found=False)
-        retention_product = self.env.ref('%s.product_retention_deduction' % self._module, raise_if_not_found=False)
-
         invoice_vals = {
             'move_type': 'out_invoice',
             'partner_id': self.project_id.client_id.id,
             'invoice_date': self.billing_date,
             'project_id': self.project_id.id, # If we add project_id to account.move
-            'invoice_line_ids': [],
+            'invoice_line_ids': self._prepare_invoice_line_cmds(),
         }
 
-        # Main work line
-        analytic_distribution = {str(self.project_id.analytic_account_id.id): 100} if self.project_id.analytic_account_id else {}
-
-        # Use the VAT configured on the billing lines (rather than the
-        # product's own default taxes) so the invoice's base/VAT split
-        # matches what was defined on this RA Billing. Lines are grouped by
-        # tax combination: lumping everything on one line with the union of
-        # all taxes would tax the full amount at every rate when lines carry
-        # different VAT (e.g. 5% and zero-rated).
-        tax_groups = {}
-        for line in self.line_ids:
-            tax_groups.setdefault(tuple(line.tax_ids.ids), 0.0)
-            tax_groups[tuple(line.tax_ids.ids)] += line.amount
-        for tax_ids, group_amount in tax_groups.items():
-            group_line_vals = {
-                'name': self.name,
-                'product_id': product.id if product else False,
-                'quantity': 1,
-                'price_unit': group_amount,
-                'analytic_distribution': analytic_distribution,
-                'tax_ids': [(6, 0, list(tax_ids))],
-            }
-            invoice_vals['invoice_line_ids'].append((0, 0, group_line_vals))
-
-        # "Previous Billed" manual adjustment: deduct untaxed (the VAT for
-        # earlier work was charged on the earlier invoices).
-        if self.previous_billed:
-            invoice_vals['invoice_line_ids'].append((0, 0, {
-                'name': 'Previously Billed Deduction',
-                'product_id': product.id if product else False,
-                'quantity': 1,
-                'price_unit': -self.previous_billed,
-                'analytic_distribution': analytic_distribution,
-                'tax_ids': [(5, 0, 0)],
-            }))
-
-        # Retention line
-        if self.retention_amount > 0:
-            invoice_vals['invoice_line_ids'].append((0, 0, {
-                'name': 'Retention Deduction',
-                'product_id': retention_product.id if retention_product else False,
-                'quantity': 1,
-                'price_unit': -self.retention_amount,
-                'analytic_distribution': analytic_distribution,
-                'tax_ids': [(5, 0, 0)], # Usually no tax on retention deduction
-            }))
-
-        move = self.env['account.move'].create(invoice_vals)
+        move = self.env['account.move'].with_context(ra_billing_sync=True).create(invoice_vals)
         self.write({
             'move_id': move.id,
             'state': 'invoice_created'
@@ -296,6 +326,30 @@ class ConstructionRABillingLine(models.Model):
     amount_total = fields.Monetary('Total (Incl. VAT)', compute='_compute_tax_amount', store=True,
         currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', index=True, related='billing_id.currency_id')
+
+    # ---- Keep the linked customer invoice in sync with line changes ----
+    @api.model_create_multi
+    def create(self, vals_list):
+        lines = super().create(vals_list)
+        lines.billing_id._check_invoice_editable()
+        lines.billing_id._sync_draft_invoice()
+        return lines
+
+    def write(self, vals):
+        financial = {'qty_current', 'unit_rate', 'tax_ids', 'uom_id', 'boq_line_id'}
+        if financial & set(vals):
+            self.billing_id._check_invoice_editable()
+        res = super().write(vals)
+        if financial & set(vals):
+            self.billing_id._sync_draft_invoice()
+        return res
+
+    def unlink(self):
+        billings = self.billing_id
+        billings._check_invoice_editable()
+        res = super().unlink()
+        billings._sync_draft_invoice()
+        return res
 
     def _is_percentage_uom(self):
         """Check if this line uses a percentage-based unit of measure."""

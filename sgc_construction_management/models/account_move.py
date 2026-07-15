@@ -1,10 +1,29 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
+from odoo.exceptions import UserError
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
     project_id = fields.Many2one('construction.project', index=True, string='Construction Project')
+
+    def write(self, vals):
+        # An invoice generated from an RA Billing must stay identical to it:
+        # its lines can only be changed through the billing (which re-syncs
+        # the draft invoice), never edited directly.
+        if 'invoice_line_ids' in vals and not self.env.context.get('ra_billing_sync'):
+            for move in self:
+                if move.state != 'draft' or move.move_type != 'out_invoice':
+                    continue
+                billing = self.env['construction.ra.billing'].sudo().search(
+                    [('move_id', '=', move.id)], limit=1)
+                if billing:
+                    raise UserError(
+                        "Invoice %s is managed by RA Billing %s. "
+                        "Edit the RA Billing instead - the invoice is updated automatically." %
+                        (move.name or move.ref or move.id, billing.ref)
+                    )
+        return super().write(vals)
 
     def _get_distributed_analytic_account_ids(self):
         analytic_ids = set()
