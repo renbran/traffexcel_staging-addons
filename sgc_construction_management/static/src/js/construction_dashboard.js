@@ -29,6 +29,7 @@ class ConstructionDashboard extends Component {
         this.healthMatrixRef = useRef("healthMatrix");
         this.financialChartRef = useRef("financialChart");
 
+        const today = new Date();
         this.state = useState({
             // KPIs
             total_revenue: 0,
@@ -40,11 +41,9 @@ class ConstructionDashboard extends Component {
             receivables: 0,
             open_rfqs: 0,
             critical_ncrs: 0,
-            equipment_utilization: 0,
             total_contract_value: 0,
             pending_billing: 0,
             overdue_invoices: 0,
-            manhours_logged: 0,
 
             // Status breakdowns
             projects_active: 0,
@@ -74,6 +73,10 @@ class ConstructionDashboard extends Component {
             // Theme
             theme: "light",
             loading: true,
+
+            // Dynamic date
+            today: today,
+            today_formatted: today.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
         });
 
         onWillStart(async () => {
@@ -241,6 +244,7 @@ class ConstructionDashboard extends Component {
                     { order: "actual_end asc", limit: 4 }
                 );
                 milestones = allWOs.map((w) => ({
+                    id: w.id,
                     name: w.name,
                     project: w.project_id ? w.project_id[1] : "",
                     state: w.state,
@@ -250,13 +254,47 @@ class ConstructionDashboard extends Component {
                 }));
             } catch (_) {}
 
+            // Monthly financial data from real invoices/bills
+            let monthly_revenue = Array(12).fill(0);
+            let monthly_costs = Array(12).fill(0);
+            try {
+                const analyticIds = projects.filter(p => p.analytic_account_id).map(p => p.analytic_account_id[0]);
+                if (analyticIds.length) {
+                    const [outInvoices, inInvoices] = await Promise.all([
+                        this.orm.searchRead('account.move', [
+                            ['move_type', '=', 'out_invoice'],
+                            ['state', '=', 'posted'],
+                            ['invoice_date', '!=', false],
+                            ['line_ids.analytic_distribution', 'in', analyticIds],
+                        ], ['invoice_date', 'amount_total_signed']),
+                        this.orm.searchRead('account.move', [
+                            ['move_type', '=', 'in_invoice'],
+                            ['state', '=', 'posted'],
+                            ['invoice_date', '!=', false],
+                            ['line_ids.analytic_distribution', 'in', analyticIds],
+                        ], ['invoice_date', 'amount_total_signed']),
+                    ]);
+                    for (const inv of outInvoices) {
+                        if (inv.invoice_date) {
+                            const m = new Date(inv.invoice_date).getMonth();
+                            monthly_revenue[m] += Number(inv.amount_total_signed) || 0;
+                        }
+                    }
+                    for (const inv of inInvoices) {
+                        if (inv.invoice_date) {
+                            const m = new Date(inv.invoice_date).getMonth();
+                            monthly_costs[m] += Number(inv.amount_total_signed) || 0;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Monthly financial fetch failed", e);
+            }
+            this.state.monthly_revenue = monthly_revenue;
+            this.state.monthly_costs = monthly_costs;
+
             const total_contract_value = projects.reduce(
                 (s, p) => s + (p.contract_value || 0), 0
-            );
-
-            // Synthetic manhours estimate (real field may exist later)
-            const manhours_logged = projects.reduce(
-                (s, p) => s + Math.round(((p.contract_value || p.total_billed || 0) / 85000000) * 12500), 0
             );
 
             // Aggregated KPIs
@@ -309,9 +347,6 @@ class ConstructionDashboard extends Component {
                 }
             }
 
-            // Demo equipment utilization (replace with real data hook later)
-            const equipment_utilization = 82;
-
             this.state.projects = projects;
             this.state.total_revenue = total_revenue;
             this.state.total_costs = total_costs;
@@ -323,11 +358,9 @@ class ConstructionDashboard extends Component {
             this.state.receivables = receivables;
             this.state.open_rfqs = rfqCount;
             this.state.critical_ncrs = ncrCount;
-            this.state.equipment_utilization = equipment_utilization;
             this.state.total_contract_value = total_contract_value;
             this.state.pending_billing = pending_billing;
             this.state.overdue_invoices = overdue_amount;
-            this.state.manhours_logged = manhours_logged;
             this.state.projects_active = projects_active;
             this.state.projects_completed = projects_completed;
             this.state.projects_on_hold = projects_on_hold;
@@ -386,25 +419,7 @@ class ConstructionDashboard extends Component {
             contract: g.projects.reduce((s, p) => s + (p.contract_value || 0), 0),
         }));
 
-        const demoPins = [
-            { lat: 25.79, lon: 55.94, city: "RAS AL KHAIMAH", names: ["RAK Mixed-Use"], status: "amber", contract: 32000000 },
-            { lat: 25.52, lon: 55.77, city: "UMM AL QUWAIN", names: ["UAQ Logistics Hub"], status: "amber", contract: 18000000 },
-            { lat: 25.40, lon: 55.51, city: "AJMAN", names: ["Ajman Tower"], status: "green", contract: 24000000 },
-            { lat: 25.34, lon: 55.40, city: "SHARJAH", names: ["Marina Development Project"], status: "green", contract: 45000000 },
-            { lat: 25.20, lon: 55.27, city: "DUBAI", names: ["Highway Bridge Expansion - Sector 7"], status: "green", contract: 38000000 },
-            { lat: 25.13, lon: 56.34, city: "FUJAIRAH", names: ["Fujairah Coastal"], status: "red", contract: 28000000 },
-            { lat: 24.45, lon: 54.38, city: "ABU DHABI", names: ["Al Nasr Tower - Residential Complex"], status: "green", contract: 85000000 },
-            { lat: 24.20, lon: 55.74, city: "AL AIN", names: ["Al Ain Mall"], status: "green", contract: 32000000 },
-            { lat: 25.10, lon: 55.90, city: "DUBAI OUTSKIRTS", names: ["Desert Resort"], status: "amber", contract: 22000000 },
-            { lat: 24.80, lon: 55.65, city: "ABU DHABI OUTSKIRTS", names: ["Highway Extension"], status: "red", contract: 41000000 },
-            { lat: 25.60, lon: 56.10, city: "EAST COAST", names: ["Coastal Villa"], status: "green", contract: 18000000 },
-            { lat: 24.10, lon: 55.30, city: "WESTERN REGION", names: ["Desert Solar Farm"], status: "amber", contract: 56000000 },
-            { lat: 25.45, lon: 55.50, city: "AJMAN OUTSKIRTS", names: ["Industrial Zone"], status: "green", contract: 29000000 },
-            { lat: 24.65, lon: 54.80, city: "ABU DHABI METRO", names: ["Metro Phase 2"], status: "red", contract: 78000000 },
-            { lat: 25.25, lon: 55.40, city: "SHARJAH OUTSKIRTS", names: ["Warehouse Complex"], status: "green", contract: 15000000 },
-        ];
-
-        const pins = realPins.length > 0 ? realPins : demoPins;
+        const pins = realPins;
 
         // Initialize the Leaflet map centered on UAE
         const map = window.L.map(el, {
@@ -1138,6 +1153,132 @@ class ConstructionDashboard extends Component {
         return worst;
     }
 
+    /* ----------------------------- DRILL-DOWN ACTIONS ----------------------------- */
+    _openListAction(resModel, domain, name, viewMode) {
+        return this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: resModel,
+            name: name,
+            views: [[false, viewMode || "list"], [false, "form"]],
+            domain: domain,
+        });
+    }
+
+    _openFormAction(resModel, resId) {
+        return this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: resModel,
+            res_id: resId,
+            views: [[false, "form"]],
+            target: "current",
+        });
+    }
+
+    openRevenue() {
+        this._openListAction("account.move", [
+            ["move_type", "=", "out_invoice"],
+            ["state", "=", "posted"],
+        ], "Customer Invoices");
+    }
+
+    openCosts() {
+        this._openListAction("account.move", [
+            ["move_type", "=", "in_invoice"],
+            ["state", "=", "posted"],
+        ], "Vendor Bills");
+    }
+
+    openNetProfit() {
+        this._openListAction("construction.project", [], "All Projects", "list,form");
+    }
+
+    openActiveWIP() {
+        this._openListAction("construction.work.order", [
+            ["state", "in", ["draft", "confirmed", "in_progress"]],
+        ], "Active Work Orders");
+    }
+
+    openCriticalRisk() {
+        this._openListAction("construction.project", [], "Projects - Critical Risk", "list,form");
+    }
+
+    openWipValue() {
+        this._openListAction("construction.project", [["state", "=", "active"]], "Active Projects", "list,form");
+    }
+
+    openReceivables() {
+        this._openListAction("account.move", [
+            ["move_type", "=", "out_invoice"],
+            ["state", "=", "posted"],
+            ["payment_state", "!=", "paid"],
+        ], "Outstanding Receivables");
+    }
+
+    openRFQs() {
+        this._openListAction("construction.material.requisition", [
+            ["state", "=", "submitted"],
+        ], "Open RFQs / Material Requisitions");
+    }
+
+    openNCRs() {
+        this._openListAction("construction.quality.check", [
+            ["state", "in", ["draft", "in_progress", "failed"]],
+        ], "Open NCRs / Quality Checks");
+    }
+
+    openEquipmentUtil() {
+        this._openListAction("construction.work.order", [
+            ["state", "=", "in_progress"],
+        ], "Work Orders In Progress");
+    }
+
+    openActiveProjects() {
+        this._openListAction("construction.project", [["state", "=", "active"]], "Active Projects", "list,form");
+    }
+
+    openPendingBilling() {
+        this._openListAction("construction.ra.billing", [
+            ["state", "=", "approved"],
+        ], "Pending RA Billings");
+    }
+
+    openOverdueInvoices() {
+        this._openListAction("account.move", [
+            ["move_type", "=", "out_invoice"],
+            ["state", "=", "posted"],
+            ["payment_state", "!=", "paid"],
+            ["invoice_date_due", "<", new Date().toISOString().slice(0, 10)],
+        ], "Overdue Invoices");
+    }
+
+    openProjectsByState(state) {
+        this._openListAction("construction.project", [["state", "=", state]], `Projects - ${state}`, "list,form");
+    }
+
+    openDelayed() {
+        this._openListAction("construction.project", [], "Delayed Projects", "list,form");
+    }
+
+    openWorkOrdersByState(state) {
+        this._openListAction("construction.work.order", [["state", "=", state]], `Work Orders - ${state}`);
+    }
+
+    openRequisitionsByState(state) {
+        this._openListAction("construction.material.requisition", [["state", "=", state]], `Material Requisitions - ${state}`);
+    }
+
+    openWorkOrder(woId) {
+        if (woId) this._openFormAction("construction.work.order", woId);
+    }
+
+    openProject(projectId) {
+        if (projectId) this._openFormAction("construction.project", projectId);
+    }
+
+    openProjectsByEmirate(emirate) {
+        this._openListAction("construction.project", [["emirate", "=", emirate]], `Projects - ${emirate.replace(/_/g, " ")}`, "list,form");
+    }
+
     /* ----------------------------- CHARTS ----------------------------- */
     renderHealthMatrix() {
         if (!this.healthMatrixRef.el || !window.echarts) {
@@ -1237,11 +1378,9 @@ class ConstructionDashboard extends Component {
         const dark = this.state.theme === "dark";
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-        // Synthesized demo data scaled to current revenue/cost totals
-        const totalRev = this.state.total_revenue || 0;
-        const totalCost = this.state.total_costs || 0;
-        const monthlyRev = Array(12).fill(0).map((_, i) => Math.round((totalRev / 12) * (0.7 + Math.sin(i) * 0.2 + i * 0.05)));
-        const monthlyCost = Array(12).fill(0).map((_, i) => Math.round((totalCost / 12) * (0.6 + Math.cos(i) * 0.15 + i * 0.04)));
+        // Real monthly data from invoices/bills (loaded in loadData)
+        const monthlyRev = this.state.monthly_revenue || Array(12).fill(0);
+        const monthlyCost = this.state.monthly_costs || Array(12).fill(0);
         const monthlyProfit = monthlyRev.map((r, i) => r - monthlyCost[i]);
 
         const chart = window.echarts.init(this.financialChartRef.el, null, { renderer: "canvas" });
