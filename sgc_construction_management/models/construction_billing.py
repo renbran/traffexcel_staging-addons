@@ -22,7 +22,7 @@ class ConstructionRABilling(models.Model):
     net_amount = fields.Monetary(compute='_compute_net', store=True, currency_field='currency_id')
     retention_percent = fields.Float('Retention %', default=5.0)
     retention_amount = fields.Monetary(compute='_compute_retention', store=True, currency_field='currency_id')
-    net_payable = fields.Monetary(compute='_compute_payable', store=True, currency_field='currency_id')
+    net_payable = fields.Monetary('Net Payable (Incl. VAT)', compute='_compute_payable', store=True, currency_field='currency_id')
     vat_amount = fields.Monetary('VAT', compute='_compute_vat_totals', store=True, currency_field='currency_id')
     total_amount_with_vat = fields.Monetary('Total (Incl. VAT)', compute='_compute_vat_totals', store=True,
         currency_field='currency_id')
@@ -82,10 +82,12 @@ class ConstructionRABilling(models.Model):
         for rec in self:
             rec.retention_amount = rec.net_amount * (rec.retention_percent / 100)
 
-    @api.depends('net_amount', 'retention_amount')
+    @api.depends('net_amount', 'retention_amount', 'vat_amount')
     def _compute_payable(self):
+        # Mirrors the generated invoice: taxed work amount minus untaxed
+        # retention deduction (VAT applies to the work, not the retention).
         for rec in self:
-            rec.net_payable = rec.net_amount - rec.retention_amount
+            rec.net_payable = rec.net_amount + rec.vat_amount - rec.retention_amount
 
     @api.depends('line_ids.tax_amount', 'total_amount')
     def _compute_vat_totals(self):
@@ -134,17 +136,36 @@ class ConstructionRABilling(models.Model):
 
         # Use the VAT configured on the billing lines (rather than the
         # product's own default taxes) so the invoice's base/VAT split
-        # matches what was defined on this RA Billing.
-        main_line_vals = {
-            'name': self.name,
-            'product_id': product.id if product else False,
-            'quantity': 1,
-            'price_unit': self.net_amount,
-            'analytic_distribution': analytic_distribution,
-        }
-        if self.line_ids.tax_ids:
-            main_line_vals['tax_ids'] = [(6, 0, self.line_ids.tax_ids.ids)]
-        invoice_vals['invoice_line_ids'].append((0, 0, main_line_vals))
+        # matches what was defined on this RA Billing. Lines are grouped by
+        # tax combination: lumping everything on one line with the union of
+        # all taxes would tax the full amount at every rate when lines carry
+        # different VAT (e.g. 5% and zero-rated).
+        tax_groups = {}
+        for line in self.line_ids:
+            tax_groups.setdefault(tuple(line.tax_ids.ids), 0.0)
+            tax_groups[tuple(line.tax_ids.ids)] += line.amount
+        for tax_ids, group_amount in tax_groups.items():
+            group_line_vals = {
+                'name': self.name,
+                'product_id': product.id if product else False,
+                'quantity': 1,
+                'price_unit': group_amount,
+                'analytic_distribution': analytic_distribution,
+                'tax_ids': [(6, 0, list(tax_ids))],
+            }
+            invoice_vals['invoice_line_ids'].append((0, 0, group_line_vals))
+
+        # "Previous Billed" manual adjustment: deduct untaxed (the VAT for
+        # earlier work was charged on the earlier invoices).
+        if self.previous_billed:
+            invoice_vals['invoice_line_ids'].append((0, 0, {
+                'name': 'Previously Billed Deduction',
+                'product_id': product.id if product else False,
+                'quantity': 1,
+                'price_unit': -self.previous_billed,
+                'analytic_distribution': analytic_distribution,
+                'tax_ids': [(5, 0, 0)],
+            }))
 
         # Retention line
         if self.retention_amount > 0:
