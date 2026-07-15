@@ -257,27 +257,44 @@ class ConstructionProject(models.Model):
             out_lines = p_lines.filtered(lambda l: l.move_id.move_type == 'out_invoice')
             in_lines = p_lines.filtered(lambda l: l.move_id.move_type == 'in_invoice')
 
-            project.total_billed = sum(out_lines.mapped('credit')) - sum(out_lines.mapped('debit'))
-            project.total_expenses = sum(in_lines.mapped('debit')) - sum(in_lines.mapped('credit'))
+            # Compute net analytic amount per move first (tax lines have no
+            # analytic_distribution in Odoo core, so they're excluded from the
+            # gross sum). Then read each move's gross tax-inclusive
+            # amount_total_signed to attribute tax back to the analytic share.
+            net_out_by_move = {}
+            for line in out_lines:
+                net_out_by_move[line.move_id] = net_out_by_move.get(line.move_id, 0.0) + line.credit - line.debit
+            net_in_by_move = {}
+            for line in in_lines:
+                net_in_by_move[line.move_id] = net_in_by_move.get(line.move_id, 0.0) + line.debit - line.credit
+
+            project.total_billed = sum((m.amount_total_signed or 0.0) for m in net_out_by_move)
+            project.total_expenses = sum((m.amount_total_signed or 0.0) for m in net_in_by_move)
             project.invoice_count = len(out_lines.mapped('move_id'))
             project.vendor_bill_count = len(in_lines.mapped('move_id'))
 
-            # Actual receipts: prorate each invoice's payment progress (a gross,
-            # tax-inclusive ratio from core's amount_total_signed/amount_residual_signed,
-            # both positive for out_invoice and shrinking toward 0 as payments reconcile)
-            # onto this project's own net/untaxed billed amount for that invoice - matching
-            # total_billed's basis. Without this, a fully-paid invoice would show ~105%
-            # received (the VAT rider) instead of 100%, since tax lines carry no analytic
-            # distribution and are excluded from total_billed.
-            net_billed_by_move = {}
-            for line in out_lines:
-                net_billed_by_move[line.move_id] = net_billed_by_move.get(line.move_id, 0.0) + line.credit - line.debit
-
+            # Actual receipts: prorate each invoice's payment progress
+            # (a gross, tax-inclusive ratio from core's
+            # amount_total_signed/amount_residual_signed) onto this project's
+            # own gross-billed amount for that invoice, so a fully-paid
+            # invoice shows 100% received — matching the now-gross basis of
+            # total_billed above.
             total_received = 0.0
-            for move, move_net_billed in net_billed_by_move.items():
+            for move, move_net_billed in net_out_by_move.items():
                 if move.amount_total_signed:
                     paid_ratio = (move.amount_total_signed - move.amount_residual_signed) / move.amount_total_signed
-                    total_received += move_net_billed * paid_ratio
+                    # gross share for this project = net * (amount_total_signed / sum_analytic_credit)
+                    # BUT: shared analytic doesn't happen for invoices; instead we attribute the
+                    # full amount_total_signed by the project's share of net_billed.
+                    move_total_net = sum(
+                        (l.credit - l.debit)
+                        for l in move.line_ids.filtered(lambda l: l.analytic_distribution and p_id_str in (l.analytic_distribution or {}))
+                    )
+                    if move_total_net:
+                        project_share = move_net_billed / move_total_net
+                    else:
+                        project_share = 1.0
+                    total_received += (move.amount_total_signed * project_share) * paid_ratio
             project.total_received = total_received
 
             # Calculate billing percentages (must be after totals are computed)
