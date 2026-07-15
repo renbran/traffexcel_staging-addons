@@ -50,8 +50,8 @@
         <field name="report_file">sgc_construction_management.report_wip_template</field>
         <field name="print_report_name">'WIP - %s' % (object.name)</field>
         <field name="paperformat_id" ref="paperformat_construction_landscape"/>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu; kept available via
+             the Reporting menu / server actions. -->
     </record>
 
     <!-- VO Register Action -->
@@ -63,8 +63,7 @@
         <field name="report_file">sgc_construction_management.report_vo_register_template</field>
         <field name="print_report_name">'VO_Register - %s' % (object.name)</field>
         <field name="paperformat_id" ref="paperformat_construction_landscape"/>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- Profitability Report Action -->
@@ -76,8 +75,7 @@
         <field name="report_file">sgc_construction_management.report_profitability_template</field>
         <field name="print_report_name">'Profitability - %s' % (object.name)</field>
         <field name="paperformat_id" ref="paperformat_construction_landscape"/>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- WIP Report Action (Excel) -->
@@ -88,8 +86,7 @@
         <field name="report_name">sgc_construction_management.report_wip_xlsx</field>
         <field name="report_file">sgc_construction_management.report_wip_xlsx</field>
         <field name="print_report_name">'WIP - %s' % (object.name)</field>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- RA Billing Report Action (Excel) -->
@@ -112,8 +109,7 @@
         <field name="report_name">sgc_construction_management.report_profitability_xlsx</field>
         <field name="report_file">sgc_construction_management.report_profitability_xlsx</field>
         <field name="print_report_name">'Profitability - %s' % (object.name)</field>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- Cost-to-Complete Report Action -->
@@ -125,8 +121,7 @@
         <field name="report_file">sgc_construction_management.report_cost_to_complete_template</field>
         <field name="print_report_name">'Cost-to-Complete - %s' % (object.name)</field>
         <field name="paperformat_id" ref="paperformat_construction_portrait"/>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- Cash Flow Forecast Report Action — Portrait -->
@@ -138,8 +133,7 @@
         <field name="report_file">sgc_construction_management.report_cash_flow_forecast_template</field>
         <field name="print_report_name">'Cash Flow Forecast - %s' % (object.name)</field>
         <field name="paperformat_id" ref="paperformat_construction_portrait"/>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- Project Monthly Progress Report Action — Portrait -->
@@ -151,8 +145,7 @@
         <field name="report_file">sgc_construction_management.report_progress_report_template</field>
         <field name="print_report_name">'Progress Report - %s' % (object.name)</field>
         <field name="paperformat_id" ref="paperformat_construction_portrait"/>
-        <field name="binding_model_id" ref="model_construction_project"/>
-        <field name="binding_type">report</field>
+        <!-- Intentionally not bound to the project Print menu. -->
     </record>
 
     <!-- Executive Portfolio Report Action (not bound to a single record's Print
