@@ -122,8 +122,9 @@ class ProjectSoAXlsx(models.AbstractModel):
         section_fmt = workbook.add_format({'bold': True, 'bg_color': '#EFEFEF', 'border': 1})
 
         for project in projects:
-            sheet = workbook.add_worksheet((project.name or 'Project')[:31])
-            sheet.merge_range('A1:G1', 'PROJECT STATEMENT OF ACCOUNT', title_fmt)
+            sheet_name = ("%s - %s" % (project.ref or '', project.name or 'Project')).strip(' -')[:31]
+            sheet = workbook.add_worksheet(sheet_name)
+            sheet.merge_range('A1:I1', 'PROJECT STATEMENT OF ACCOUNT', title_fmt)
             sheet.write('A2', 'Project:', bold)
             sheet.write('B2', project.name or '', border)
             sheet.write('A3', 'Analytic Account:', bold)
@@ -142,17 +143,26 @@ class ProjectSoAXlsx(models.AbstractModel):
             invoices = moves.filtered(lambda m: m.move_type in ('out_invoice', 'out_refund')).sorted('invoice_date')
             bills = moves.filtered(lambda m: m.move_type in ('in_invoice', 'in_refund')).sorted('invoice_date')
 
-            headers = ['Date', 'Number', 'Partner', 'Reference', 'Type', 'Total', 'Currency']
+            headers = ['Date', 'Number', 'Partner', 'Reference', 'Type', 'Total', 'Outstanding', 'Payment Status', 'Currency']
             type_sel = {'out_invoice': 'Customer Invoice', 'out_refund': 'Customer Credit Note',
                         'in_invoice': 'Vendor Bill', 'in_refund': 'Vendor Credit Note'}
+            payment_labels = {
+                'not_paid': 'Not Paid',
+                'paid': 'Paid',
+                'partial': 'Partial',
+                'in_payment': 'In Payment',
+                'reversed': 'Reversed',
+                'not_paid': 'Not Paid',
+            }
 
             row = 5
-            sheet.merge_range(row, 0, row, 6, 'INVOICES (AR)', section_fmt)
+            sheet.merge_range(row, 0, row, 8, 'INVOICES (AR)', section_fmt)
             row += 1
             for col, h in enumerate(headers):
                 sheet.write(row, col, h, bold)
             row += 1
             inv_total = 0.0
+            inv_outstanding = 0.0
             for inv in invoices:
                 sheet.write(row, 0, inv.invoice_date or '', date_fmt)
                 sheet.write(row, 1, inv.name or '', border)
@@ -160,41 +170,54 @@ class ProjectSoAXlsx(models.AbstractModel):
                 sheet.write(row, 3, inv.ref or '', border)
                 sheet.write(row, 4, type_sel.get(inv.move_type, inv.move_type), border)
                 sheet.write(row, 5, inv.amount_total_signed or 0.0, money)
-                sheet.write(row, 6, inv.currency_id.name or '', border)
+                sheet.write(row, 6, inv.amount_residual_signed or 0.0, money)
+                sheet.write(row, 7, payment_labels.get(inv.payment_state, inv.payment_state or ''), border)
+                sheet.write(row, 8, inv.currency_id.name or '', border)
                 inv_total += inv.amount_total_signed or 0.0
+                inv_outstanding += inv.amount_residual_signed or 0.0
                 row += 1
             sheet.write(row, 0, 'Invoices Total', bold)
             sheet.write(row, 5, inv_total, money)
+            sheet.write(row, 6, inv_outstanding, money)
             row += 2
 
-            sheet.merge_range(row, 0, row, 6, 'BILLS (AP)', section_fmt)
+            sheet.merge_range(row, 0, row, 8, 'BILLS (AP)', section_fmt)
             row += 1
             for col, h in enumerate(headers):
                 sheet.write(row, col, h, bold)
             row += 1
             bill_total = 0.0
+            bill_outstanding = 0.0
             for bill in bills:
                 ap_amount = -(bill.amount_total_signed or 0.0)
+                ap_outstanding = -(bill.amount_residual_signed or 0.0)
                 sheet.write(row, 0, bill.invoice_date or '', date_fmt)
                 sheet.write(row, 1, bill.name or '', border)
                 sheet.write(row, 2, bill.partner_id.display_name or '', border)
                 sheet.write(row, 3, bill.ref or '', border)
                 sheet.write(row, 4, type_sel.get(bill.move_type, bill.move_type), border)
                 sheet.write(row, 5, ap_amount, money)
-                sheet.write(row, 6, bill.currency_id.name or '', border)
+                sheet.write(row, 6, ap_outstanding, money)
+                sheet.write(row, 7, payment_labels.get(bill.payment_state, bill.payment_state or ''), border)
+                sheet.write(row, 8, bill.currency_id.name or '', border)
                 bill_total += ap_amount
+                bill_outstanding += ap_outstanding
                 row += 1
             sheet.write(row, 0, 'Bills Total', bold)
             sheet.write(row, 5, bill_total, money)
+            sheet.write(row, 6, bill_outstanding, money)
             row += 2
 
             sheet.write(row, 0, 'Net (AR - AP)', bold)
             sheet.write(row, 5, inv_total - bill_total, money)
+            sheet.write(row, 6, inv_outstanding - bill_outstanding, money)
 
             sheet.set_column('A:A', 12)
             sheet.set_column('B:B', 18)
             sheet.set_column('C:C', 30)
             sheet.set_column('D:D', 18)
-            sheet.set_column('E:E', 14)
+            sheet.set_column('E:E', 16)
             sheet.set_column('F:F', 16)
-            sheet.set_column('G:G', 10)
+            sheet.set_column('G:G', 16)
+            sheet.set_column('H:H', 14)
+            sheet.set_column('I:I', 10)
