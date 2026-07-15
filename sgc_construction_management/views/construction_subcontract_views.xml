@@ -14,14 +14,14 @@
                 <field name="wbs_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
-                <field name="contract_value"/>
-                <field name="amount_paid"/>
-                <field name="amount_remaining"/>
+                <field name="contract_value" sum="Total Contract"/>
+                <field name="amount_paid" sum="Total Paid"/>
+                <field name="amount_remaining" sum="Total Remaining"/>
                 <field name="state" widget="badge"
-                    decoration-success="state == 'completed'"
-                    decoration-primary="state == 'active'"
+                    decoration-success="state in ('active', 'posted', 'completed')"
+                    decoration-info="state == 'bill_created'"
                     decoration-danger="state == 'terminated'"
-                    decoration-muted="state == 'draft'"/>
+                    decoration-warning="state == 'draft'"/>
             </list>
         </field>
     </record>
@@ -38,17 +38,19 @@
                     <button name="action_create_bill" type="object" string="Create Bill"
                         invisible="state != 'active'" class="btn-primary" groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_complete" type="object" string="Complete"
-                        invisible="state not in ('active', 'posted')" class="btn-primary"/>
+                        invisible="state not in ('active', 'posted')" class="btn-success"/>
                     <button name="action_terminate" type="object" string="Terminate"
-                        invisible="state not in ('draft', 'active', 'bill_created', 'posted')"/>
+                        invisible="state not in ('draft', 'active', 'bill_created', 'posted')"
+                        class="btn-danger"/>
                     <button name="action_cancel" type="object" string="Cancel Bill"
-                        invisible="state != 'bill_created'" class="btn-secondary"
+                        invisible="state != 'bill_created'" class="btn-danger"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reopen_bill" type="object" string="Reopen Bill"
                         invisible="move_state != 'cancel'" class="btn-primary"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reset" type="object" string="Reset to Draft"
-                        invisible="state not in ('terminated', 'active')"/>
+                        invisible="state not in ('terminated', 'active', 'bill_created')"
+                        class="btn-warning"/>
                     <field name="move_state" invisible="1"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,bill_created,posted,completed"/>
                 </header>
@@ -57,6 +59,26 @@
                         <button name="action_view_bill" type="object" class="oe_stat_button" icon="fa-book" invisible="not move_id">
                             <div class="o_stat_info">
                                 <span class="o_stat_text">Vendor Bill</span>
+                            </div>
+                        </button>
+                        <button name="action_view_project" type="object" class="oe_stat_button" icon="fa-sitemap" invisible="not project_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Project</span>
+                            </div>
+                        </button>
+                        <button name="action_view_wbs" type="object" class="oe_stat_button" icon="fa-tasks" invisible="not wbs_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">WBS</span>
+                            </div>
+                        </button>
+                        <button name="action_view_subcontractor" type="object" class="oe_stat_button" icon="fa-user" invisible="not subcontractor_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Subcontractor</span>
+                            </div>
+                        </button>
+                        <button name="action_view_attachments" type="object" class="oe_stat_button" icon="fa-paperclip">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Attachments</span>
                             </div>
                         </button>
                     </div>

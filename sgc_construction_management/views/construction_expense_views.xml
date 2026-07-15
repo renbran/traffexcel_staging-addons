@@ -26,12 +26,12 @@
                 <field name="date"/>
                 <field name="category_id"/>
                 <field name="employee_id"/>
-                <field name="amount"/>
+                <field name="amount" sum="Total"/>
                 <field name="state" widget="badge"
-                    decoration-success="state == 'approved'"
-                    decoration-info="state == 'submitted'"
+                    decoration-success="state in ('approved', 'posted')"
+                    decoration-info="state in ('submitted', 'bill_created')"
                     decoration-danger="state == 'rejected'"
-                    decoration-muted="state == 'draft'"/>
+                    decoration-warning="state == 'draft'"/>
             </list>
         </field>
     </record>
@@ -58,7 +58,7 @@
                         invisible="move_state != 'cancel'" class="btn-primary"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reset" type="object" string="Reset to Draft"
-                        invisible="state not in ('rejected', 'approved', 'bill_created')"/>
+                        invisible="state in ('draft', 'posted')" class="btn-warning"/>
                     <field name="move_state" invisible="1"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,bill_created,posted"/>
                 </header>
@@ -67,6 +67,21 @@
                         <button name="action_view_bill" type="object" class="oe_stat_button" icon="fa-book" invisible="not move_id">
                             <div class="o_stat_info">
                                 <span class="o_stat_text">Vendor Bill</span>
+                            </div>
+                        </button>
+                        <button name="action_view_project" type="object" class="oe_stat_button" icon="fa-sitemap" invisible="not project_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Project</span>
+                            </div>
+                        </button>
+                        <button name="action_view_wbs" type="object" class="oe_stat_button" icon="fa-tasks" invisible="not wbs_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">WBS</span>
+                            </div>
+                        </button>
+                        <button name="action_view_attachments" type="object" class="oe_stat_button" icon="fa-paperclip">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Attachments</span>
                             </div>
                         </button>
                     </div>

@@ -20,9 +20,9 @@
                 <field name="actual_cost"/>
                 <field name="state" widget="badge"
                     decoration-success="state == 'completed'"
-                    decoration-primary="state == 'in_progress'"
+                    decoration-info="state == 'in_progress'"
                     decoration-danger="state == 'delayed'"
-                    decoration-muted="state == 'planned'"/>
+                    decoration-warning="state == 'planned'"/>
             </list>
         </field>
     </record>

@@ -12,17 +12,18 @@
                 <field name="project_manager_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
-                <field name="contract_value" sum="Contract Value"/>
-                <field name="total_billed" sum="Total Invoiced" string="Total Invoiced"/>
-                <field name="total_expenses" sum="Total Expense" string="Total Expense"/>
-                <field name="outstanding_balance" sum="Outstanding Balance" string="Outstanding Balance"/>
-                <field name="profit_margin" sum="Profit Margin" string="Profit Margin"/>
+                <field name="contract_value"/>
+                <field name="total_billed"/>
+                <field name="total_expenses"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="billing_percent" widget="progressbar"/>
+                <field name="receipt_percent" widget="progressbar"/>
+                <field name="expense_vs_billed_percent" widget="progressbar"/>
                 <field name="state" widget="badge"
-                    decoration-success="state == 'active'"
-                    decoration-warning="state == 'on_hold'"
+                    decoration-success="state in ('active', 'completed')"
+                    decoration-warning="state in ('draft', 'on_hold')"
                     decoration-danger="state == 'cancelled'"
-                    decoration-info="state == 'completed'"
-                    decoration-muted="state == 'draft'"/>
+                    decoration-info="state == 'completed'"/>
             </list>
         </field>
     </record>
@@ -35,15 +36,17 @@
             <form>
                 <header>
                     <button name="action_activate" type="object" string="Activate"
-                        invisible="state != 'draft'" class="btn-primary"/>
+                        invisible="state != 'draft'" class="btn-success"/>
                     <button name="action_hold" type="object" string="On Hold"
                         invisible="state != 'active'"/>
                     <button name="action_complete" type="object" string="Complete"
-                        invisible="state not in ('active', 'on_hold')" class="btn-primary"/>
+                        invisible="state not in ('active', 'on_hold')" class="btn-success"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                        invisible="state not in ('draft', 'active', 'on_hold')"/>
+                        invisible="state not in ('draft', 'active', 'on_hold')"
+                        class="btn-danger"/>
                     <button name="action_reset" type="object" string="Reset to Draft"
-                        invisible="state != 'cancelled'"/>
+                        invisible="state != 'cancelled'"
+                        class="btn-warning"/>
                     <button name="action_export_wip_xlsx" type="object" string="Export WIP (XLSX)"
                         class="btn-secondary"/>
                     <button name="%(sgc_construction_management.action_report_project_soa)d" type="action"
@@ -118,10 +121,12 @@
                         </group>
                     </group>
                     <group string="Financial Summary" col="4">
-                        <field name="total_billed" readonly="1" string="Total Invoiced"/>
-                        <field name="total_expenses" readonly="1" string="Total Expense"/>
-                        <field name="outstanding_balance" readonly="1" string="Outstanding Balance"/>
-                        <field name="profit_margin" readonly="1" string="Profit Margin"/>
+                        <field name="total_billed" readonly="1"/>
+                        <field name="total_expenses" readonly="1"/>
+                        <field name="progress" widget="progressbar" display_label="false"/>
+                        <field name="billing_percent" widget="progressbar" display_label="false"/>
+                        <field name="receipt_percent" widget="progressbar" display_label="false"/>
+                        <field name="expense_vs_billed_percent" widget="progressbar" display_label="false"/>
                     </group>
                     <notebook>
                         <page string="Description" name="description_page">
@@ -134,7 +139,47 @@
                                     <field name="name"/>
                                     <field name="taken_by_id"/>
                                     <field name="image_128" widget="image" options="{'size': [64, 64]}"/>
+                                    <field name="original_file" widget="binary" filename="original_filename"
+                                        string="Original Photo"/>
+                                    <field name="original_filename" column_invisible="1"/>
                                 </list>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="taken_by_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="image_1920" widget="image"/>
+                                        <field name="original_file" widget="binary" filename="original_filename"
+                                            string="Original Photo File (preserved as-is)"/>
+                                        <field name="original_filename" invisible="1"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Contract Documents" name="contract_docs">
+                            <field name="contract_doc_ids">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="category"/>
+                                    <field name="original_file" widget="binary" filename="original_filename"/>
+                                    <field name="original_filename" column_invisible="1"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="category"/>
+                                        <field name="date"/>
+                                    </group>
+                                    <group string="Document File">
+                                        <field name="original_file" widget="binary" filename="original_filename"
+                                            string="Upload File (PDF, Excel, Word, etc.)"/>
+                                        <field name="original_filename" invisible="1"/>
+                                        <field name="notes"/>
+                                    </group>
+                                </form>
                             </field>
                         </page>
                     </notebook>
@@ -155,10 +200,10 @@
                 <field name="client_id"/>
                 <field name="state"/>
                 <field name="contract_value"/>
-                <field name="total_billed"/>
-                <field name="total_expenses"/>
-                <field name="outstanding_balance"/>
-                <field name="profit_margin"/>
+                <field name="progress"/>
+                <field name="billing_percent" widget="progressbar" display_label="false"/>
+                <field name="receipt_percent" widget="progressbar" display_label="false"/>
+                <field name="expense_vs_billed_percent" widget="progressbar" display_label="false"/>
                 <templates>
                     <t t-name="kanban-card">
                         <div class="oe_kanban_global_click">
@@ -170,10 +215,10 @@
                                     <field name="ref"/> | <field name="client_id"/>
                                 </div>
                                 <div class="mt-2">
-                                    <div>Total Invoiced: <field name="total_billed"/></div>
-                                    <div>Total Expense: <field name="total_expenses"/></div>
-                                    <div>Outstanding Balance: <field name="outstanding_balance"/></div>
-                                    <div>Profit Margin: <field name="profit_margin"/></div>
+                                    <field name="progress" widget="progressbar"/>
+                                    <field name="billing_percent" widget="progressbar" display_label="false"/>
+                                    <field name="receipt_percent" widget="progressbar" display_label="false"/>
+                                    <field name="expense_vs_billed_percent" widget="progressbar" display_label="false"/>
                                 </div>
                                 <div class="mt-1">
                                     <field name="contract_value"/>
