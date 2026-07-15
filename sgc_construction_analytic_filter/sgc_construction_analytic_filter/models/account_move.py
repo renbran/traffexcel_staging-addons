@@ -7,7 +7,7 @@ class AccountMove(models.Model):
 
     construction_project_id = fields.Many2one(
         'construction.project',
-        string='Construction Project',
+        string='Project',
         compute='_compute_construction_project_id',
         store=True,
         index=True,
@@ -85,3 +85,16 @@ class AccountMove(models.Model):
             'res_id': self.construction_project_id.id,
             'target': 'current',
         }
+
+
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    construction_project_id = fields.Many2one(
+        'construction.project',
+        string='Project',
+        related='move_id.construction_project_id',
+        store=True,
+        index=True,
+        help='Construction project linked via analytic distribution on the parent invoice',
+    )

@@ -21,7 +21,7 @@
     <record id="view_move_bill_tree_inherit_construction_project" model="ir.ui.view">
         <field name="name">account.move.bill.tree.construction.project</field>
         <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_in_tree"/>
+        <field name="inherit_id" ref="account.view_in_invoice_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="construction_project_id" optional="show" string="Project"/>
@@ -142,7 +142,7 @@
     <record id="view_move_search_inherit_construction" model="ir.ui.view">
         <field name="name">account.move.search.construction.project</field>
         <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_line_search"/>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//filter[1]" position="before">
                 <separator/>
@@ -175,7 +175,7 @@
     <record id="view_account_move_line_search_inherit_construction" model="ir.ui.view">
         <field name="name">account.move.line.search.construction.project</field>
         <field name="model">account.move.line</field>
-        <field name="inherit_id" ref="account.view_account_move_line_search"/>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//filter[1]" position="before">
                 <separator/>
