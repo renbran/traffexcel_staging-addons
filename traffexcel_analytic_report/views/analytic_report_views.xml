@@ -32,9 +32,6 @@
                 <filter string="Analytic Account"
                         name="group_by_analytic_account"
                         context="{'group_by': 'account_id'}"/>
-                <filter string="Entry State"
-                        name="group_by_entry_state"
-                        context="{'group_by': 'move_line_id.move_id.state'}"/>
             </filter>
         </field>
     </record>
