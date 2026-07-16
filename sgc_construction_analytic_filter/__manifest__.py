@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'SGC Construction - Analytic Invoice Filter',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'summary': 'Filter and group invoices/bills by construction project analytic account',
     'description': """
 SGC Construction - Analytic Invoice Filter
@@ -21,7 +21,7 @@ Extends Accounting invoices and bills with construction project filtering:
     'data': [
         'views/account_move_views.xml',
     ],
-    'installable': False,
+    'installable': True,
     'application': False,
     'license': 'OPL-1',
 }
