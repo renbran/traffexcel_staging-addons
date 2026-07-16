@@ -19,7 +19,6 @@ class ProjectSoAReport(models.AbstractModel):
             lines = self.env['account.move.line'].search([
                 ('parent_state', '=', 'posted'),
                 ('analytic_distribution', 'in', [project.analytic_account_id.id]),
-                ('analytic_account_id.active', '=', True),
                 ('move_id.move_type', 'in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))
             ])
 

@@ -8,7 +8,8 @@
         <field name="report_file">sgc_construction_management.report_project_soa</field>
         <field name="print_report_name">'Project SoA - %s' % (object.name)</field>
         <field name="paperformat_id" ref="sgc_construction_management.paperformat_construction_portrait"/>
-        <!-- PDF variant not bound to Print menu; use the Excel variant below for Print-menu access. -->
+        <field name="binding_model_id" ref="model_construction_project"/>
+        <field name="binding_type">report</field>
     </record>
 
     <!-- Project Statement of Account — Excel (Print-menu binding) -->
