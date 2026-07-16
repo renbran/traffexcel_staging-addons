@@ -27,7 +27,7 @@
     <!-- Menu: Reports under Billing -->
     <menuitem id="menu_billing_reports"
               name="Reports"
-              parent="sgc_construction_management.menu_project_billing"
+              parent="sgc_construction_management.menu_construction_billing"
               sequence="50"/>
 
     <menuitem id="menu_action_report_soa_summary"
