@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models, api, tools
+from odoo import fields, models, api
 
 
 class ConstructionProjectPnl(models.Model):
@@ -48,8 +48,7 @@ class ConstructionProjectPnl(models.Model):
     percent_complete = fields.Float(string='% Complete', readonly=True)
 
     def init(self):
-        if tools.table_exists(self.env.cr, 'v_construction_project_pnl'):
-            tools.drop_view(self.env.cr, 'v_construction_project_pnl')
+        self.env.cr.execute("DROP VIEW IF EXISTS v_construction_project_pnl")
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW v_construction_project_pnl AS
             WITH revenue AS (
@@ -195,8 +194,7 @@ class ConstructionProjectInvoiceLine(models.Model):
     line_description = fields.Char(string='Description', readonly=True)
 
     def init(self):
-        if tools.table_exists(self.env.cr, 'v_construction_project_invoices'):
-            tools.drop_view(self.env.cr, 'v_construction_project_invoices')
+        self.env.cr.execute("DROP VIEW IF EXISTS v_construction_project_invoices")
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW v_construction_project_invoices AS
             SELECT
@@ -255,8 +253,7 @@ class ConstructionProjectAnalyticLine(models.Model):
     move_line_name = fields.Char(string='Move Line Description', readonly=True)
 
     def init(self):
-        if tools.table_exists(self.env.cr, 'v_construction_project_analytic_lines'):
-            tools.drop_view(self.env.cr, 'v_construction_project_analytic_lines')
+        self.env.cr.execute("DROP VIEW IF EXISTS v_construction_project_analytic_lines")
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW v_construction_project_analytic_lines AS
             SELECT
