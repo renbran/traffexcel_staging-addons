@@ -2,76 +2,13 @@
 <odoo>
 
     <!-- ============================================ -->
-    <!-- SEARCH VIEWS (must come before actions)      -->
-    <!-- ============================================ -->
-
-    <record id="view_construction_project_pnl_search" model="ir.ui.view">
-        <field name="name">construction.project.pnl.search</field>
-        <field name="model">construction.project.pnl</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="project_name"/>
-                <field name="analytic_account_name"/>
-                <filter name="project_state" string="Active Projects"
-                        domain="[('project_state', '=', 'active')]"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_project" string="Project" context="{'group_by': 'project_name'}"/>
-                    <filter name="group_state" string="State" context="{'group_by': 'project_state'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <record id="view_construction_project_invoice_line_search" model="ir.ui.view">
-        <field name="name">construction.project.invoice.line.search</field>
-        <field name="model">construction.project.invoice.line</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="project_name"/>
-                <field name="invoice_ref"/>
-                <filter name="out_invoices" string="Customer Invoices"
-                        domain="[('move_type', '=', 'out_invoice')]"/>
-                <filter name="in_invoices" string="Vendor Bills"
-                        domain="[('move_type', '=', 'in_invoice')]"/>
-                <separator/>
-                <filter name="paid" string="Paid" domain="[('payment_state', '=', 'paid')]"/>
-                <filter name="not_paid" string="Not Paid" domain="[('payment_state', '=', 'not_paid')]"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_project" string="Project" context="{'group_by': 'project_name'}"/>
-                    <filter name="group_type" string="Type" context="{'group_by': 'move_type'}"/>
-                    <filter name="group_date" string="Date" context="{'group_by': 'invoice_date'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <record id="view_construction_project_analytic_line_search" model="ir.ui.view">
-        <field name="name">construction.project.analytic.line.search</field>
-        <field name="model">construction.project.analytic.line</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="project_name"/>
-                <field name="description"/>
-                <field name="account_name"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_project" string="Project" context="{'group_by': 'project_name'}"/>
-                    <filter name="group_date" string="Date" context="{'group_by': 'date'}"/>
-                    <filter name="group_account" string="Account" context="{'group_by': 'account_name'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <!-- ============================================ -->
-    <!-- ACTIONS (must come before views that ref them) -->
+    <!-- ACTIONS                                      -->
     <!-- ============================================ -->
 
     <record id="action_construction_project_pnl" model="ir.actions.act_window">
         <field name="name">Project P&amp;L</field>
         <field name="res_model">construction.project.pnl</field>
         <field name="view_mode">list,pivot,graph,form</field>
-        <field name="search_view_id" ref="view_construction_project_pnl_search"/>
-        <field name="context">{'search_default_project_state': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No project P&amp;L data available.
@@ -85,7 +22,6 @@
         <field name="name">Invoices &amp; Bills by Project</field>
         <field name="res_model">construction.project.invoice.line</field>
         <field name="view_mode">list,pivot,form</field>
-        <field name="search_view_id" ref="view_construction_project_invoice_line_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No invoice or bill lines found.
@@ -99,7 +35,6 @@
         <field name="name">Analytic Lines by Project</field>
         <field name="res_model">construction.project.analytic.line</field>
         <field name="view_mode">list,pivot,form</field>
-        <field name="search_view_id" ref="view_construction_project_analytic_line_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 No analytic lines found.
