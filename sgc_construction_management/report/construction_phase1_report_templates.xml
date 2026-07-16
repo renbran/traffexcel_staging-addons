@@ -68,6 +68,13 @@
                                 _______________________
                             </div>
                         </div>
+
+                        <div class="mt-5 p-3" style="background-color:#f8f9fa; border: 2px solid #212529; border-radius: 5px;">
+                            <h4 class="text-center text-primary"><strong>PAYMENT REQUEST</strong></h4>
+                            <p class="text-center">We kindly request payment of the net payable amount of <strong><span t-field="o.net_payable" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong> for the work completed during this period as certified above.</p>
+                            <p class="text-center">Please remit payment to the bank account details on file within the agreed payment terms.</p>
+                            <p class="text-center small text-muted">This certificate represents completion of work to date and serves as formal request for payment.</p>
+                        </div>
                     </div>
                 </t>
             </t>
