@@ -40,6 +40,7 @@ A comprehensive module for managing construction projects including:
         'report/construction_report_layout.xml',
         'report/proforma_invoice_report_template.xml',
         'report/project_reports.xml',
+        'report/project_soa_report_template.xml',
         'views/construction_project_views.xml',
         'views/construction_boq_views.xml',
         'views/construction_wbs_views.xml',
