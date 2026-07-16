@@ -12,23 +12,23 @@
                 <field name="project_manager_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
-                <field name="contract_value" class="text-end"/>
-                <field name="total_billed" class="text-end"/>
-                <field name="total_received" class="text-end"/>
-                <field name="outstanding_balance" class="text-end"/>
-                <field name="billing_percent" string="Billing Progress (%)" widget="badge" class="text-end"
+                <field name="contract_value" string="Contract" class="text-end"/>
+                <field name="total_billed" string="Billed" class="text-end"/>
+                <field name="total_received" string="Received" class="text-end"/>
+                <field name="outstanding_balance" string="Balance" class="text-end"/>
+                <field name="billing_percent" string="Bill %" widget="badge" class="text-end" digits="[69, 1]"
                     decoration-danger="billing_percent &lt; 70"
                     decoration-warning="billing_percent &gt;= 70 and billing_percent &lt; 90"
                     decoration-success="billing_percent &gt;= 90"/>
-                <field name="receipt_percent" string="Collection Rate (%)" widget="badge" class="text-end"
+                <field name="receipt_percent" string="Coll. %" widget="badge" class="text-end" digits="[69, 1]"
                     decoration-danger="receipt_percent &lt; 70"
                     decoration-warning="receipt_percent &gt;= 70 and receipt_percent &lt; 90"
                     decoration-success="receipt_percent &gt;= 90"/>
-                <field name="margin_percent" string="Gross Margin (%)" widget="badge" class="text-end"
+                <field name="margin_percent" string="Margin (%)" widget="badge" class="text-end" digits="[69, 1]"
                     decoration-danger="margin_percent &lt; 70"
                     decoration-warning="margin_percent &gt;= 70 and margin_percent &lt; 90"
                     decoration-success="margin_percent &gt;= 90"/>
-                <field name="progress" string="Project Progress (%)" widget="badge" class="text-end"
+                <field name="progress" string="Prog. %" widget="badge" class="text-end" digits="[69, 1]"
                     decoration-danger="progress &lt; 70"
                     decoration-warning="progress &gt;= 70 and progress &lt; 90"
                     decoration-success="progress &gt;= 90"/>
@@ -134,23 +134,23 @@
                         </group>
                     </group>
                     <group string="Financial Summary" col="4">
-                        <field name="contract_value" readonly="1"/>
-                        <field name="total_billed" readonly="1"/>
-                        <field name="total_received" readonly="1"/>
-                        <field name="outstanding_balance" readonly="1"/>
-                        <field name="billing_percent" widget="badge" display_label="false"
+                        <field name="contract_value" string="Contract" readonly="1"/>
+                        <field name="total_billed" string="Billed" readonly="1"/>
+                        <field name="total_received" string="Received" readonly="1"/>
+                        <field name="outstanding_balance" string="Balance" readonly="1"/>
+                        <field name="billing_percent" widget="badge" display_label="false" digits="[69, 1]"
                             decoration-danger="billing_percent &lt; 70"
                             decoration-warning="billing_percent &gt;= 70 and billing_percent &lt; 90"
                             decoration-success="billing_percent &gt;= 90"/>
-                        <field name="receipt_percent" widget="badge" display_label="false"
+                        <field name="receipt_percent" widget="badge" display_label="false" digits="[69, 1]"
                             decoration-danger="receipt_percent &lt; 70"
                             decoration-warning="receipt_percent &gt;= 70 and receipt_percent &lt; 90"
                             decoration-success="receipt_percent &gt;= 90"/>
-                        <field name="margin_percent" widget="badge" display_label="false"
+                        <field name="margin_percent" widget="badge" display_label="false" digits="[69, 1]"
                             decoration-danger="margin_percent &lt; 70"
                             decoration-warning="margin_percent &gt;= 70 and margin_percent &lt; 90"
                             decoration-success="margin_percent &gt;= 90"/>
-                        <field name="progress" widget="badge" display_label="false"
+                        <field name="progress" widget="badge" display_label="false" digits="[69, 1]"
                             decoration-danger="progress &lt; 70"
                             decoration-warning="progress &gt;= 70 and progress &lt; 90"
                             decoration-success="progress &gt;= 90"/>
@@ -241,16 +241,16 @@
                                 </div>
                                 <div class="small">
                                     <span t-attf-class="badge me-1 {{record.billing_percent.raw_value &lt; 70 ? 'text-bg-danger' : record.billing_percent.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Billing Progress: <field name="billing_percent"/>%
+                                        Bill: <field name="billing_percent" digits="[69, 1]"/>%
                                     </span>
                                     <span t-attf-class="badge me-1 {{record.receipt_percent.raw_value &lt; 70 ? 'text-bg-danger' : record.receipt_percent.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Collection: <field name="receipt_percent"/>%
+                                        Coll.: <field name="receipt_percent" digits="[69, 1]"/>%
                                     </span>
                                     <span t-attf-class="badge me-1 {{record.margin_percent.raw_value &lt; 70 ? 'text-bg-danger' : record.margin_percent.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Gross Margin: <field name="margin_percent"/>%
+                                        Margin: <field name="margin_percent" digits="[69, 1]"/>%
                                     </span>
                                     <span t-attf-class="badge me-1 {{record.progress.raw_value &lt; 70 ? 'text-bg-danger' : record.progress.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Project Progress: <field name="progress"/>%
+                                        Prog.: <field name="progress" digits="[69, 1]"/>%
                                     </span>
                                 </div>
                             </div>

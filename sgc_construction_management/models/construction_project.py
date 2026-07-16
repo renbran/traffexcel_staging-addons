@@ -53,16 +53,16 @@ class ConstructionProject(models.Model):
 
     total_billed = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
     total_expenses = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
-    margin_percent = fields.Float(compute='_compute_financials', string='Gross Margin (%)', store=True)
-    billing_percent = fields.Float(compute='_compute_financials', string='Billing %', store=True,
+    margin_percent = fields.Float(compute='_compute_financials', string='Margin (%)', store=True)
+    billing_percent = fields.Float(compute='_compute_financials', string='Bill %', store=True,
         help="Percentage of contract value billed to client")
     expense_vs_billed_percent = fields.Float(compute='_compute_financials', string='Expense vs Billed %', store=True,
         help="Percentage of billed amount consumed by expenses")
     total_received = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
-    receipt_percent = fields.Float(compute='_compute_financials', string='Collection Rate (%)', store=True,
+    receipt_percent = fields.Float(compute='_compute_financials', string='Coll. %', store=True,
         help="Percentage of actual receipt against billed invoices")
     outstanding_balance = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
-        string='Outstanding Balance', help="Total invoiced minus the actual amount received against those invoices")
+        string='Balance', help="Total invoiced minus the actual amount received against those invoices")
     profit_margin = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
         string='Profit Margin', help="Total invoiced minus total expenses")
     planned_progress = fields.Float(compute='_compute_progress', string='Planned Progress %')
@@ -301,7 +301,8 @@ class ConstructionProject(models.Model):
 
             # Calculate billing percentages (must be after totals are computed)
             if project.contract_value > 0:
-                project.billing_percent = (project.total_billed / project.contract_value) * 100
+                raw_bill_pct = (project.total_billed / project.contract_value) * 100
+                project.billing_percent = min(raw_bill_pct, 100.0)
             else:
                 project.billing_percent = 0.0
 
@@ -331,7 +332,8 @@ class ConstructionProject(models.Model):
                 project.margin_percent = 0.0
 
             if project.total_billed > 0:
-                project.receipt_percent = (project.total_received / project.total_billed) * 100
+                raw_coll_pct = (project.total_received / project.total_billed) * 100
+                project.receipt_percent = min(raw_coll_pct, 100.0)
             else:
                 project.receipt_percent = 0.0
 
