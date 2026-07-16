@@ -5569,7 +5569,7 @@ class ks_dynamic_financial_base(models.Model):
             domain = expression.normalize_domain(ast.literal_eval(ks_action.get('domain') or '[]'))
             if ks_df_informations.get('analytic_accounts'):
                 analytic_ids = [int(r) for r in ks_df_informations['analytic_accounts']]
-                domain = expression.AND([domain, [('analytic_distribution', 'in', analytic_ids)]])
+                domain = expression.AND([domain, [('analytic_account_id', 'in', analytic_ids)]])
             if ks_df_informations.get('date'):
                 opt_date = ks_df_informations['date']
                 if ks_df_informations['date']['ks_process'] == 'single':
