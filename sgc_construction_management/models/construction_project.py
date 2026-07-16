@@ -53,13 +53,13 @@ class ConstructionProject(models.Model):
 
     total_billed = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
     total_expenses = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
-    margin_percent = fields.Float(compute='_compute_financials', string='Margin %', store=True)
+    margin_percent = fields.Float(compute='_compute_financials', string='Gross Margin (%)', store=True)
     billing_percent = fields.Float(compute='_compute_financials', string='Billing %', store=True,
         help="Percentage of contract value billed to client")
     expense_vs_billed_percent = fields.Float(compute='_compute_financials', string='Expense vs Billed %', store=True,
         help="Percentage of billed amount consumed by expenses")
     total_received = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
-    receipt_percent = fields.Float(compute='_compute_financials', string='Receipt %', store=True,
+    receipt_percent = fields.Float(compute='_compute_financials', string='Collection Rate (%)', store=True,
         help="Percentage of actual receipt against billed invoices")
     outstanding_balance = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
         string='Outstanding Balance', help="Total invoiced minus the actual amount received against those invoices")

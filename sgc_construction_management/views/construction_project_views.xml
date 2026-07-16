@@ -240,17 +240,17 @@
                                     <span class="badge text-bg-warning"><field name="outstanding_balance"/></span>
                                 </div>
                                 <div class="small">
-                                    <span t-attf-class="badge me-1 {{record.billing_percent.raw_value &lt; 50 ? 'text-bg-danger' : record.billing_percent.raw_value &lt; 80 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Billed: <field name="billing_percent"/>%
+                                    <span t-attf-class="badge me-1 {{record.billing_percent.raw_value &lt; 70 ? 'text-bg-danger' : record.billing_percent.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
+                                        Billing Progress: <field name="billing_percent"/>%
                                     </span>
-                                    <span t-attf-class="badge me-1 {{record.margin_percent.raw_value &lt; 10 ? 'text-bg-danger' : record.margin_percent.raw_value &lt; 20 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Margin: <field name="margin_percent"/>%
+                                    <span t-attf-class="badge me-1 {{record.receipt_percent.raw_value &lt; 70 ? 'text-bg-danger' : record.receipt_percent.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
+                                        Collection: <field name="receipt_percent"/>%
                                     </span>
-                                    <span t-attf-class="badge me-1 {{record.receipt_percent.raw_value &lt; 60 ? 'text-bg-danger' : record.receipt_percent.raw_value &lt; 85 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Receipt: <field name="receipt_percent"/>%
+                                    <span t-attf-class="badge me-1 {{record.margin_percent.raw_value &lt; 70 ? 'text-bg-danger' : record.margin_percent.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
+                                        Gross Margin: <field name="margin_percent"/>%
                                     </span>
-                                    <span t-attf-class="badge me-1 {{record.progress.raw_value &lt; 50 ? 'text-bg-danger' : record.progress.raw_value &lt; 75 ? 'text-bg-warning' : 'text-bg-success'}}">
-                                        Progress: <field name="progress"/>%
+                                    <span t-attf-class="badge me-1 {{record.progress.raw_value &lt; 70 ? 'text-bg-danger' : record.progress.raw_value &lt; 90 ? 'text-bg-warning' : 'text-bg-success'}}">
+                                        Project Progress: <field name="progress"/>%
                                     </span>
                                 </div>
                             </div>
