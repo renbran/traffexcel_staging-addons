@@ -9,7 +9,6 @@
         <field name="partner_to">${object.project_id.client_id.id}</field>
         <field name="reply_to">${object.company_id.email or ''}</field>
         <field name="auto_delete" eval="True"/>
-        <field name="report_template" ref="action_report_proforma_invoice"/>
         <field name="body_html" type="html">
             <div style="margin: 0px; padding: 0px;">
                 <p>Dear ${object.project_id.client_id.name or 'Sir/Madam'},</p>
