@@ -125,7 +125,7 @@
         <field name="name">construction.project.pnl.pivot</field>
         <field name="model">construction.project.pnl</field>
         <field name="arch" type="xml">
-            <pivot create="false">
+            <pivot>
                 <field name="project_name" type="row"/>
                 <field name="total_revenue" type="measure"/>
                 <field name="total_cogs" type="measure"/>
@@ -138,7 +138,7 @@
         <field name="name">construction.project.pnl.graph</field>
         <field name="model">construction.project.pnl</field>
         <field name="arch" type="xml">
-            <graph create="false" type="bar" sample="1">
+            <graph type="bar" sample="1">
                 <field name="project_name"/>
                 <field name="total_revenue" type="measure"/>
                 <field name="total_cogs" type="measure"/>
@@ -215,7 +215,7 @@
         <field name="name">construction.project.invoice.line.pivot</field>
         <field name="model">construction.project.invoice.line</field>
         <field name="arch" type="xml">
-            <pivot create="false">
+            <pivot>
                 <field name="project_name" type="row"/>
                 <field name="move_type" type="column"/>
                 <field name="amount" type="measure"/>
@@ -277,7 +277,7 @@
         <field name="name">construction.project.analytic.line.pivot</field>
         <field name="model">construction.project.analytic.line</field>
         <field name="arch" type="xml">
-            <pivot create="false">
+            <pivot>
                 <field name="project_name" type="row"/>
                 <field name="date" type="col"/>
                 <field name="amount" type="measure"/>
