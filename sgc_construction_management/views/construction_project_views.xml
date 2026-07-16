@@ -62,8 +62,6 @@
                         class="btn-warning"/>
                     <button name="action_export_wip_xlsx" type="object" string="Export WIP (XLSX)"
                         class="btn-secondary"/>
-                    <button name="%(sgc_construction_management.action_report_project_soa)d" type="action"
-                        string="Statement of Account" class="btn-secondary"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,completed"/>
                 </header>
                 <sheet>

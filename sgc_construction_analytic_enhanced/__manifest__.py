@@ -19,8 +19,6 @@
         "views/analytic_report_views.xml",
         "views/project_statement_wizard_views.xml",
         'report/soa_reports.xml',
-        'report/soa_summary_report_template.xml',
-        'report/combined_soa_template.xml',
     ],
     "installable": True,
     "application": False,
