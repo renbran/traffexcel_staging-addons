@@ -201,9 +201,9 @@
                             <field name="amount"/>
                         </group>
                         <group string="Move Line">
-                            <field name="move_line_name"/>
-                            <field name="move_debit"/>
-                            <field name="move_credit"/>
+                            <field name="line_description"/>
+                            <field name="debit"/>
+                            <field name="credit"/>
                         </group>
                     </group>
                 </sheet>
