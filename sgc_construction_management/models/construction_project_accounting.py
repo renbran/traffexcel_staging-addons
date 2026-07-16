@@ -187,7 +187,7 @@ class ConstructionProjectInvoiceLine(models.Model):
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account', readonly=True)
     account_type = fields.Selection(related='account_id.account_type', string='Account Type')
     account_code = fields.Char(string='Account Code', readonly=True)
-    account_name = fields.Char(string='Account', readonly=True)
+    account_name = fields.Char(string='Account Name', readonly=True)
     account_id = fields.Many2one('account.account', string='Account', readonly=True)
     debit = fields.Monetary(string='Debit', currency_field='currency_id', readonly=True)
     credit = fields.Monetary(string='Credit', currency_field='currency_id', readonly=True)
