@@ -10,6 +10,6 @@
         'views/analytic_report_views.xml',
         'views/project_statement_wizard_views.xml',
     ],
-    'installable': True,
+    'installable': False,
     'license': 'LGPL-3',
 }

@@ -21,7 +21,7 @@ Extends Accounting invoices and bills with construction project filtering:
     'data': [
         'views/account_move_views.xml',
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
     'license': 'OPL-1',
 }
