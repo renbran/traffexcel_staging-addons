@@ -7,6 +7,7 @@ class ConstructionProjectPnl(models.Model):
     _name = 'construction.project.pnl'
     _description = 'Construction Project P&L'
     _auto = False
+    _table = 'v_construction_project_pnl'
     _order = 'project_id'
 
     project_id = fields.Many2one('construction.project', string='Project', readonly=True)
@@ -156,6 +157,7 @@ class ConstructionProjectInvoiceLine(models.Model):
     _name = 'construction.project.invoice.line'
     _description = 'Construction Project Invoice Line'
     _auto = False
+    _table = 'v_construction_project_invoices'
     _order = 'project_id, invoice_date'
 
     project_id = fields.Many2one('construction.project', string='Project', readonly=True)
@@ -235,6 +237,7 @@ class ConstructionProjectAnalyticLine(models.Model):
     _name = 'construction.project.analytic.line'
     _description = 'Construction Project Analytic Line'
     _auto = False
+    _table = 'v_construction_project_analytic_lines'
     _order = 'project_id, date desc'
 
     project_id = fields.Many2one('construction.project', string='Project', readonly=True)
