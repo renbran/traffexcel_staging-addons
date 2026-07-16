@@ -17,10 +17,9 @@
                 <field name="total_received"/>
                 <field name="outstanding_balance"/>
                 <field name="billing_percent" string="% Billed" widget="badge"
-                    decoration-danger="billing_percent &lt; 50"
+                    decoration-danger="billing_percent &lt; 50 or billing_percent &gt; 100"
                     decoration-warning="billing_percent &gt;= 50 and billing_percent &lt; 80"
-                    decoration-success="billing_percent &gt;= 80 and billing_percent &lt;= 100"
-                    decoration-danger="billing_percent &gt; 100"/>
+                    decoration-success="billing_percent &gt;= 80 and billing_percent &lt;= 100"/>
                 <field name="margin_percent" string="Margin %" widget="badge"
                     decoration-danger="margin_percent &lt; 10"
                     decoration-warning="margin_percent &gt;= 10 and margin_percent &lt; 20"
@@ -140,10 +139,9 @@
                         <field name="total_received" readonly="1"/>
                         <field name="outstanding_balance" readonly="1"/>
                         <field name="billing_percent" widget="badge" display_label="false"
-                            decoration-danger="billing_percent &lt; 50"
+                            decoration-danger="billing_percent &lt; 50 or billing_percent &gt; 100"
                             decoration-warning="billing_percent &gt;= 50 and billing_percent &lt; 80"
-                            decoration-success="billing_percent &gt;= 80 and billing_percent &lt;= 100"
-                            decoration-danger="billing_percent &gt; 100"/>
+                            decoration-success="billing_percent &gt;= 80 and billing_percent &lt;= 100"/>
                         <field name="margin_percent" widget="badge" display_label="false"
                             decoration-danger="margin_percent &lt; 10"
                             decoration-warning="margin_percent &gt;= 10 and margin_percent &lt; 20"
