@@ -62,6 +62,7 @@ A comprehensive module for managing construction projects including:
         'report/construction_boq_report.xml',
         'report/construction_boq_report_template.xml',
         'report/construction_phase1_reports.xml',
+        'report/construction_phase1_report_templates.xml',
         # Loaded after the reports above because it adds a menu under
         # menu_construction_reporting (defined in construction_phase1_reports.xml).
         'views/res_partner_views.xml',
