@@ -13,13 +13,13 @@
                 <field name="billing_date"/>
                 <field name="billing_period_start"/>
                 <field name="billing_period_end"/>
-                <field name="total_amount" sum="Total"/>
-                <field name="vat_amount" sum="VAT"/>
-                <field name="net_payable" sum="Net Payable"/>
+                <field name="total_amount"/>
+                <field name="net_payable"/>
                 <field name="state" widget="badge"
-                    decoration-success="state in ('approved', 'posted', 'paid')"
-                    decoration-info="state in ('submitted', 'invoice_created')"
-                    decoration-warning="state == 'draft'"/>
+                    decoration-success="state == 'paid'"
+                    decoration-primary="state == 'approved'"
+                    decoration-info="state == 'submitted'"
+                    decoration-muted="state == 'draft'"/>
             </list>
         </field>
     </record>
@@ -37,19 +37,22 @@
                         invisible="state != 'submitted'" class="btn-success"/>
                     <button name="action_load_boq" type="object" string="Load BOQ Lines"
                         invisible="state != 'draft'" class="btn-secondary"/>
+                    <button name="action_print_proforma_invoice" type="object" string="Print Proforma Invoice"
+                        invisible="state != 'approved'" class="btn-secondary"/>
+                    <button name="action_send_proforma_email" type="object" string="Send Proforma Email"
+                        invisible="state != 'approved'" class="btn-secondary"/>
                     <button name="action_create_invoice" type="object" string="Create Invoice"
                         invisible="state != 'approved'" class="btn-primary" groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_pay" type="object" string="Mark Paid"
                         invisible="state != 'posted'" class="btn-primary"/>
                     <button name="action_cancel" type="object" string="Cancel Invoice"
-                        invisible="state != 'invoice_created'" class="btn-danger"
+                        invisible="state != 'invoice_created'" class="btn-secondary"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reopen_invoice" type="object" string="Reopen Invoice"
                         invisible="move_state != 'cancel'" class="btn-primary"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reset" type="object" string="Reset to Draft"
-                        invisible="state not in ('submitted', 'approved', 'invoice_created')"
-                        class="btn-warning"/>
+                        invisible="state not in ('submitted', 'approved', 'invoice_created')"/>
                     <field name="move_state" invisible="1"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,invoice_created,posted,paid"/>
                 </header>
@@ -137,12 +140,12 @@
                 <field name="project_id"/>
                 <field name="billing_date"/>
                 <field name="percent_complete" string="% Complete"/>
-                <field name="amount_earned" sum="Total Earned"/>
-                <field name="amount_this_period" sum="Total This Period"/>
+                <field name="amount_earned"/>
+                <field name="amount_this_period"/>
                 <field name="state" widget="badge"
-                    decoration-success="state in ('approved', 'posted')"
-                    decoration-info="state == 'invoice_created'"
-                    decoration-warning="state == 'draft'"/>
+                    decoration-success="state == 'invoiced'"
+                    decoration-primary="state == 'approved'"
+                    decoration-muted="state == 'draft'"/>
             </list>
         </field>
     </record>
@@ -155,17 +158,17 @@
             <form>
                 <header>
                     <button name="action_approve" type="object" string="Approve"
-                        invisible="state != 'draft'" class="btn-success"/>
+                        invisible="state != 'draft'" class="btn-primary"/>
                     <button name="action_create_invoice" type="object" string="Create Invoice"
                         invisible="state != 'approved'" class="btn-primary" groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_cancel" type="object" string="Cancel Invoice"
-                        invisible="state != 'invoice_created'" class="btn-danger"
+                        invisible="state != 'invoice_created'" class="btn-secondary"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reopen_invoice" type="object" string="Reopen Invoice"
                         invisible="move_state != 'cancel'" class="btn-primary"
                         groups="sgc_construction_management.group_construction_finance"/>
                     <button name="action_reset" type="object" string="Reset to Draft"
-                        invisible="state not in ('approved', 'invoice_created')" class="btn-warning"/>
+                        invisible="state not in ('approved', 'invoice_created')"/>
                     <field name="move_state" invisible="1"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,approved,invoice_created,posted"/>
                 </header>

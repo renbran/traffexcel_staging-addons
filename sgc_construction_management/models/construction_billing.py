@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -22,10 +22,7 @@ class ConstructionRABilling(models.Model):
     net_amount = fields.Monetary(compute='_compute_net', store=True, currency_field='currency_id')
     retention_percent = fields.Float('Retention %', default=5.0)
     retention_amount = fields.Monetary(compute='_compute_retention', store=True, currency_field='currency_id')
-    net_payable = fields.Monetary('Net Payable (Incl. VAT)', compute='_compute_payable', store=True, currency_field='currency_id')
-    vat_amount = fields.Monetary('VAT', compute='_compute_vat_totals', store=True, currency_field='currency_id')
-    total_amount_with_vat = fields.Monetary('Total (Incl. VAT)', compute='_compute_vat_totals', store=True,
-        currency_field='currency_id')
+    net_payable = fields.Monetary(compute='_compute_payable', store=True, currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', index=True, related='project_id.currency_id')
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -82,104 +79,34 @@ class ConstructionRABilling(models.Model):
         for rec in self:
             rec.retention_amount = rec.net_amount * (rec.retention_percent / 100)
 
-    @api.depends('net_amount', 'retention_amount', 'vat_amount')
+    @api.depends('net_amount', 'retention_amount')
     def _compute_payable(self):
-        # Mirrors the generated invoice: taxed work amount minus untaxed
-        # retention deduction (VAT applies to the work, not the retention).
         for rec in self:
-            rec.net_payable = rec.net_amount + rec.vat_amount - rec.retention_amount
-
-    @api.depends('line_ids.tax_amount', 'total_amount')
-    def _compute_vat_totals(self):
-        for rec in self:
-            rec.vat_amount = sum(rec.line_ids.mapped('tax_amount'))
-            rec.total_amount_with_vat = rec.total_amount + rec.vat_amount
-
-    # Fields whose change must be mirrored onto the linked customer invoice.
-    _INVOICE_SYNC_FIELDS = ('retention_percent', 'previous_billed', 'name', 'billing_date')
-
-    def write(self, vals):
-        if set(self._INVOICE_SYNC_FIELDS) & set(vals):
-            self._check_invoice_editable()
-        res = super().write(vals)
-        if set(self._INVOICE_SYNC_FIELDS) & set(vals):
-            self._sync_draft_invoice()
-        return res
-
-    def _check_invoice_editable(self):
-        # A posted/paid invoice is legally final: amounts on the billing can
-        # no longer change. Reset the invoice to draft first.
-        for rec in self:
-            if rec.move_id and rec.move_id.state == 'posted':
-                raise ValidationError(
-                    "The invoice %s linked to billing %s is posted. "
-                    "Reset it to draft in Accounting before changing the billing amounts." %
-                    (rec.move_id.name, rec.ref)
-                )
-
-    def _prepare_invoice_line_cmds(self):
-        """Build invoice line commands from the billing. Shared by invoice
-        creation and by the draft-invoice sync so both always match."""
-        self.ensure_one()
-        product = self.env.ref('%s.product_construction_progress_billing' % self._module, raise_if_not_found=False)
-        retention_product = self.env.ref('%s.product_retention_deduction' % self._module, raise_if_not_found=False)
-        analytic_distribution = {str(self.project_id.analytic_account_id.id): 100} if self.project_id.analytic_account_id else {}
-
-        cmds = []
-        # One line per tax combination so mixed VAT rates compute correctly.
-        tax_groups = {}
-        for line in self.line_ids:
-            tax_groups.setdefault(tuple(line.tax_ids.ids), 0.0)
-            tax_groups[tuple(line.tax_ids.ids)] += line.amount
-        for tax_ids, group_amount in tax_groups.items():
-            cmds.append((0, 0, {
-                'name': self.name,
-                'product_id': product.id if product else False,
-                'quantity': 1,
-                'price_unit': group_amount,
-                'analytic_distribution': analytic_distribution,
-                'tax_ids': [(6, 0, list(tax_ids))],
-            }))
-        # "Previous Billed" manual adjustment: untaxed (VAT for earlier work
-        # was charged on the earlier invoices).
-        if self.previous_billed:
-            cmds.append((0, 0, {
-                'name': 'Previously Billed Deduction',
-                'product_id': product.id if product else False,
-                'quantity': 1,
-                'price_unit': -self.previous_billed,
-                'analytic_distribution': analytic_distribution,
-                'tax_ids': [(5, 0, 0)],
-            }))
-        # Retention: untaxed deduction.
-        if self.retention_amount > 0:
-            cmds.append((0, 0, {
-                'name': 'Retention Deduction',
-                'product_id': retention_product.id if retention_product else False,
-                'quantity': 1,
-                'price_unit': -self.retention_amount,
-                'analytic_distribution': analytic_distribution,
-                'tax_ids': [(5, 0, 0)],
-            }))
-        return cmds
-
-    def _sync_draft_invoice(self):
-        """Push the billing amounts onto the linked draft invoice so both
-        documents always match."""
-        for rec in self:
-            move = rec.move_id
-            if not move or move.state != 'draft':
-                continue
-            move.with_context(ra_billing_sync=True).write({
-                'invoice_date': rec.billing_date,
-                'invoice_line_ids': [(5, 0, 0)] + rec._prepare_invoice_line_cmds(),
-            })
+            rec.net_payable = rec.net_amount - rec.retention_amount
 
     def action_submit(self):
         self.state = 'submitted'
 
     def action_approve(self):
         self.state = 'approved'
+
+    def action_print_proforma_invoice(self):
+        self.ensure_one()
+        return self.env.ref('sgc_construction_management.action_report_proforma_invoice').report_action(self)
+
+    def action_send_proforma_email(self):
+        self.ensure_one()
+        template = self.env.ref('sgc_construction_management.email_template_proforma_invoice', raise_if_not_found=False)
+        if not template:
+            return
+        template.send_mail(self.id, force_send=True, raise_exception=True)
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'RA Billing',
+            'res_model': 'construction.ra.billing',
+            'view_mode': 'form',
+            'res_id': self.id,
+        }
 
     def action_create_invoice(self):
         self.ensure_one()
@@ -200,41 +127,62 @@ class ConstructionRABilling(models.Model):
                 ', '.join(failed_checks.mapped('name'))
             )
 
+        product = self.env.ref('%s.product_construction_progress_billing' % self._module, raise_if_not_found=False)
+        retention_product = self.env.ref('%s.product_retention_deduction' % self._module, raise_if_not_found=False)
+
         invoice_vals = {
             'move_type': 'out_invoice',
             'partner_id': self.project_id.client_id.id,
             'invoice_date': self.billing_date,
             'project_id': self.project_id.id, # If we add project_id to account.move
-            'invoice_line_ids': self._prepare_invoice_line_cmds(),
+            'invoice_line_ids': [],
         }
 
-        move = self.env['account.move'].with_context(ra_billing_sync=True).create(invoice_vals)
+        # Main work line
+        analytic_distribution = {str(self.project_id.analytic_account_id.id): 100} if self.project_id.analytic_account_id else {}
+
+        invoice_vals['invoice_line_ids'].append((0, 0, {
+            'name': self.name,
+            'product_id': product.id if product else False,
+            'quantity': 1,
+            'price_unit': self.net_amount,
+            'analytic_distribution': analytic_distribution,
+        }))
+
+        # Retention line
+        if self.retention_amount > 0:
+            invoice_vals['invoice_line_ids'].append((0, 0, {
+                'name': 'Retention Deduction',
+                'product_id': retention_product.id if retention_product else False,
+                'quantity': 1,
+                'price_unit': -self.retention_amount,
+                'analytic_distribution': analytic_distribution,
+                'tax_ids': [(5, 0, 0)], # Usually no tax on retention deduction
+            }))
+
+        move = self.env['account.move'].create(invoice_vals)
         self.write({
             'move_id': move.id,
             'state': 'invoice_created'
         })
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = move.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': move.id,
+            'context': {'default_move_type': 'out_invoice', 'default_project_id': self.project_id.id},
+        }
 
     def action_view_invoice(self):
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = self.move_id.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': self.move_id.id,
+            'context': {'default_project_id': self.project_id.id},
+        }
 
     def action_load_boq(self):
         self.ensure_one()
@@ -320,44 +268,8 @@ class ConstructionRABillingLine(models.Model):
     qty_current = fields.Float('Current Qty', digits=(12, 3))
     qty_cumulative = fields.Float(compute='_compute_cumulative', store=True, digits=(12, 3))
     unit_rate = fields.Monetary(currency_field='currency_id')
-    amount = fields.Monetary('Base Amount', compute='_compute_amount', store=True, currency_field='currency_id')
-    tax_ids = fields.Many2many('account.tax', string='VAT', domain="[('type_tax_use', '=', 'sale')]")
-    tax_amount = fields.Monetary('VAT Amount', compute='_compute_tax_amount', store=True, currency_field='currency_id')
-    amount_total = fields.Monetary('Total (Incl. VAT)', compute='_compute_tax_amount', store=True,
-        currency_field='currency_id')
+    amount = fields.Monetary(compute='_compute_amount', store=True, currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', index=True, related='billing_id.currency_id')
-
-    # ---- Keep the linked customer invoice in sync with line changes ----
-    @api.model_create_multi
-    def create(self, vals_list):
-        lines = super().create(vals_list)
-        lines.billing_id._check_invoice_editable()
-        lines.billing_id._sync_draft_invoice()
-        return lines
-
-    def write(self, vals):
-        financial = {'qty_current', 'unit_rate', 'tax_ids', 'uom_id', 'boq_line_id'}
-        if financial & set(vals):
-            self.billing_id._check_invoice_editable()
-        res = super().write(vals)
-        if financial & set(vals):
-            self.billing_id._sync_draft_invoice()
-        return res
-
-    def unlink(self):
-        billings = self.billing_id
-        billings._check_invoice_editable()
-        res = super().unlink()
-        billings._sync_draft_invoice()
-        return res
-
-    def _is_percentage_uom(self):
-        """Check if this line uses a percentage-based unit of measure."""
-        self.ensure_one()
-        if not self.uom_id:
-            return False
-        # Odoo 19 removed uom.category; match by name instead
-        return 'percent' in self.uom_id.name.lower() or '%' in self.uom_id.name
 
     @api.depends('qty_previous', 'qty_current')
     def _compute_cumulative(self):
@@ -367,16 +279,10 @@ class ConstructionRABillingLine(models.Model):
     @api.constrains('qty_cumulative', 'boq_qty')
     def _check_qty_limit(self):
         for rec in self:
-            if not rec.boq_line_id:
-                continue
-            if rec._is_percentage_uom():
-                max_qty = 100.0
-            else:
-                max_qty = rec.boq_qty
-            if rec.qty_cumulative > max_qty:
+            if rec.boq_line_id and rec.qty_cumulative > rec.boq_qty:
                 raise ValidationError(
-                    "Cumulative %s (%s) cannot exceed %s for item: %s" %
-                    ("%" if rec._is_percentage_uom() else "quantity", rec.qty_cumulative, max_qty, rec.boq_line_description)
+                    "Cumulative quantity (%s) cannot exceed BOQ quantity (%s) for item: %s" %
+                    (rec.qty_cumulative, rec.boq_qty, rec.boq_line_description)
                 )
 
     @api.onchange('boq_line_id')
@@ -397,31 +303,10 @@ class ConstructionRABillingLine(models.Model):
             ])
             self.qty_previous = sum(prev_lines.mapped('qty_current'))
 
-    @api.depends('qty_current', 'unit_rate', 'uom_id')
+    @api.depends('qty_current', 'unit_rate')
     def _compute_amount(self):
         for rec in self:
-            if rec._is_percentage_uom():
-                # Percentage: qty_current is the % complete, unit_rate is total value
-                rec.amount = (rec.qty_current / 100.0) * rec.unit_rate
-            else:
-                rec.amount = rec.qty_current * rec.unit_rate
-
-    @api.depends('amount', 'tax_ids')
-    def _compute_tax_amount(self):
-        for rec in self:
-            if rec.tax_ids:
-                taxes = rec.tax_ids.compute_all(
-                    rec.amount,
-                    currency=rec.currency_id,
-                    quantity=1,
-                    product=False,
-                    partner=rec.billing_id.project_id.client_id,
-                )
-                rec.tax_amount = taxes['total_included'] - taxes['total_excluded']
-                rec.amount_total = taxes['total_included']
-            else:
-                rec.tax_amount = 0.0
-                rec.amount_total = rec.amount
+            rec.amount = rec.qty_current * rec.unit_rate
 
 
 class ConstructionProgressBilling(models.Model):
@@ -522,28 +407,24 @@ class ConstructionProgressBilling(models.Model):
             'move_id': move.id,
             'state': 'invoice_created'
         })
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = move.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': move.id,
+            'context': {'default_move_type': 'out_invoice', 'default_project_id': self.project_id.id},
+        }
 
     def action_view_invoice(self):
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = self.move_id.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': self.move_id.id,
+            'context': {'default_project_id': self.project_id.id},
+        }
 
     def action_cancel(self):
         # Reversible cancel: cancel the linked draft invoice; reopen via

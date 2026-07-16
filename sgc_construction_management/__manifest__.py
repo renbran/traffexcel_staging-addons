@@ -36,7 +36,9 @@ A comprehensive module for managing construction projects including:
         'data/construction_data.xml',
         'data/ir_sequence.xml',
         'data/construction_sequences.xml',
+        'data/email_templates.xml',
         'report/construction_report_layout.xml',
+        'report/proforma_invoice_report_template.xml',
         'report/project_reports.xml',
         'report/project_soa_report_template.xml',
         'views/construction_project_views.xml',
@@ -63,6 +65,7 @@ A comprehensive module for managing construction projects including:
         # menu_construction_reporting (defined in construction_phase1_reports.xml).
         'views/res_partner_views.xml',
         'report/construction_purchase_order_report.xml',
+        'report/proforma_invoice_report.xml',
     ],
     'assets': {
         'web.assets_backend': [

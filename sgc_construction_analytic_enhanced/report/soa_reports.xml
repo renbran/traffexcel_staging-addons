@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SOA Summary Report Action -->
+    <record id="action_report_soa_summary" model="ir.actions.report">
+        <field name="name">SOA Summary</field>
+        <field name="model">construction.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sgc_construction_analytic_enhanced.report_soa_summary</field>
+        <field name="report_file">sgc_construction_analytic_enhanced.report_soa_summary</field>
+        <field name="print_report_name">'SOA Summary - %s' % object.name</field>
+        <field name="binding_model_id" ref="sgc_construction_management.model_construction_project"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Combined SOA Report (bulk print from RA Billing tree view) -->
+    <record id="action_report_combined_soa" model="ir.actions.report">
+        <field name="name">Combined SOA</field>
+        <field name="model">construction.ra.billing</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sgc_construction_analytic_enhanced.report_combined_soa</field>
+        <field name="report_file">sgc_construction_analytic_enhanced.report_combined_soa</field>
+        <field name="print_report_name">'Combined SOA - %s' % object.name</field>
+        <field name="binding_model_id" ref="sgc_construction_management.model_construction_ra_billing"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Menu: Reports under Billing -->
+    <menuitem id="menu_billing_reports"
+              name="Reports"
+              parent="sgc_construction_management.menu_project_billing"
+              sequence="50"/>
+
+    <menuitem id="menu_action_report_soa_summary"
+              name="SOA Summary"
+              parent="menu_billing_reports"
+              action="action_report_soa_summary"
+              sequence="10"/>
+
+    <menuitem id="menu_soa_print"
+              name="Print Project Statement"
+              parent="menu_billing_reports"
+              action="sgc_construction_analytic_enhanced.action_project_statement_wizard"
+              sequence="20"/>
+
+    <!-- Bulk SOA Print Action on RA Billing tree view -->
+    <record id="action_print_soa_ra_billing" model="ir.actions.server">
+        <field name="name">Print Combined SOA</field>
+        <field name="model_id" ref="sgc_construction_management.model_construction_ra_billing"/>
+        <field name="binding_model_id" ref="sgc_construction_management.model_construction_ra_billing"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">
+action = records.action_print_combined_soa()
+        </field>
+    </record>
+</odoo>
