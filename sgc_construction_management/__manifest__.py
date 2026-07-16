@@ -56,6 +56,7 @@ A comprehensive module for managing construction projects including:
         'views/construction_transmittal_views.xml',
         'views/construction_hse_views.xml',
         'views/construction_dashboard_views.xml',
+        'views/construction_analytic_views.xml',
         'views/construction_menu.xml',
         'views/portal_templates.xml',
         'report/construction_boq_report.xml',

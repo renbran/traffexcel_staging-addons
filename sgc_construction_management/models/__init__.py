@@ -16,3 +16,4 @@ from . import construction_transmittal
 from . import construction_hse
 from . import res_partner
 from . import construction_project_photo
+from . import construction_project_accounting
