@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="email_template_proforma_invoice" model="mail.template">
+        <field name="name">RA Billing - Proforma Invoice</field>
+        <field name="model_id" ref="model_construction_ra_billing"/>
+        <field name="subject">Proforma Invoice - ${object.project_id.name} - RA No. ${object.ra_number or ''}</field>
+        <field name="email_from">${object.company_id.email or ''}</field>
+        <field name="email_to">${object.project_id.client_id.email or ''}</field>
+        <field name="partner_to">${object.project_id.client_id.id}</field>
+        <field name="reply_to">${object.company_id.email or ''}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="report_template" ref="action_report_proforma_invoice"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p>Dear ${object.project_id.client_id.name or 'Sir/Madam'},</p>
+                <br/>
+                <p>Please find attached the Proforma Invoice for <strong>${object.project_id.name}</strong>.</p>
+                <p><strong>RA No.:</strong> ${object.ra_number or ''}</p>
+                <p><strong>Billing Period:</strong> ${object.billing_period_start or ''} to ${object.billing_period_end or ''}</p>
+                <p><strong>Net Payable:</strong> ${object.net_payable or 0.0}</p>
+                <br/>
+                <p>This is a computer-generated document. For any queries, please contact the project team.</p>
+                <br/>
+                <p>Best regards,</p>
+                <p><strong>${object.company_id.name or ''}</strong></p>
+            </div>
+        </field>
+    </record>
+</odoo>
