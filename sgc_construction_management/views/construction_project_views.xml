@@ -186,27 +186,15 @@
                             </field>
                         </page>
                         <page string="Contract Documents" name="contract_docs">
-                            <field name="contract_doc_ids">
-                                <list editable="bottom">
-                                    <field name="date"/>
+                            <field name="contract_doc_ids" readonly="1">
+                                <list>
+                                    <field name="number"/>
                                     <field name="name"/>
                                     <field name="category"/>
-                                    <field name="original_file" widget="binary" filename="original_filename"/>
-                                    <field name="original_filename" column_invisible="1"/>
+                                    <field name="issue_date"/>
+                                    <field name="status"/>
+                                    <field name="amount"/>
                                 </list>
-                                <form>
-                                    <group>
-                                        <field name="name"/>
-                                        <field name="category"/>
-                                        <field name="date"/>
-                                    </group>
-                                    <group string="Document File">
-                                        <field name="original_file" widget="binary" filename="original_filename"
-                                            string="Upload File (PDF, Excel, Word, etc.)"/>
-                                        <field name="original_filename" invisible="1"/>
-                                        <field name="notes"/>
-                                    </group>
-                                </form>
                             </field>
                         </page>
                     </notebook>

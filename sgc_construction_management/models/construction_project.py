@@ -80,6 +80,8 @@ class ConstructionProject(models.Model):
     weather_status = fields.Char(default='Clear', string='Site Weather')
     last_site_diary = fields.Date(string='Last Site Diary')
     photo_ids = fields.One2many('construction.project.photo', 'project_id', string='Site Photos')
+    contract_doc_ids = fields.One2many('construction.document', 'project_id', string='Contract Documents',
+        domain=[('category', '=', 'CON')])
 
     @api.depends('progress', 'planned_progress', 'budget_consumed')
     def _compute_rag_status(self):
