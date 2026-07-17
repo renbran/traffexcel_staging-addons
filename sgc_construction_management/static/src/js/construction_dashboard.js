@@ -147,6 +147,7 @@ class ConstructionDashboard extends Component {
                     "rag_status", "end_date",
                     "total_billed", "total_expenses",
                     "project_manager_id", "margin_percent", "open_ncr_count", "last_site_diary",
+                    "analytic_account_id",
                 ],
                 { order: "name" }
             );
