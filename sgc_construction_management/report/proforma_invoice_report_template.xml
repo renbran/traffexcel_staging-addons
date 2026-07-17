@@ -9,38 +9,61 @@
 
                         <div class="row mt-4 mb-4">
                             <div class="col-12 text-center">
-                                <h2 class="fw-bold" style="color: #dc3545;">PROFORMA INVOICE</h2>
-                                <h4 t-field="o.name"/>
-                                <span>RA No.: <span t-field="o.ra_number"/></span>
+                                <h2 class="fw-bold" style="color: #0F213D; font-family: 'IBM Plex Serif', Georgia, serif;">PROFORMA INVOICE</h2>
+                                <h4 t-field="o.name" style="color: #B79554;"/>
+                                <span style="color: #5F6775; text-transform: uppercase; letter-spacing: 1px; font-size: 10px;">RA No.: <span t-field="o.ra_number"/></span>
                             </div>
                         </div>
 
                         <div class="row mb-4">
                             <div class="col-6">
-                                <strong>Client:</strong> <span t-field="o.project_id.client_id"/><br/>
-                                <strong>Project:</strong> <span t-field="o.project_id.name"/><br/>
-                                <strong>Project Code:</strong> <span t-field="o.project_id.ref"/>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="fw-bold" style="color: #0F213D; width:40%; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Client</td>
+                                        <td style="color: #1C2430;"><span t-field="o.project_id.client_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold" style="color: #0F213D; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Project</td>
+                                        <td style="color: #1C2430;"><span t-field="o.project_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold" style="color: #0F213D; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Project Code</td>
+                                        <td style="color: #1C2430;"><span t-field="o.project_id.ref"/></td>
+                                    </tr>
+                                </table>
                             </div>
                             <div class="col-6 text-end">
-                                <strong>Billing Date:</strong> <span t-field="o.billing_date"/><br/>
-                                <strong>Period:</strong>
-                                <span t-field="o.billing_period_start"/> to <span t-field="o.billing_period_end"/><br/>
-                                <strong>Billing Ref:</strong> <span t-field="o.ref"/>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="fw-bold" style="color: #0F213D; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Billing Date</td>
+                                        <td style="color: #1C2430;"><span t-field="o.billing_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold" style="color: #0F213D; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Period</td>
+                                        <td style="color: #1C2430;">
+                                            <span t-field="o.billing_period_start"/> to <span t-field="o.billing_period_end"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold" style="color: #0F213D; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Billing Ref</td>
+                                        <td style="color: #1C2430;"><span t-field="o.ref"/></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 
-                        <h4 class="mt-4 border-bottom pb-2">Billing Lines</h4>
-                        <table class="table table-sm o_main_table table-striped mt-2">
+                        <h4 class="mt-4 border-bottom pb-2" style="color: #0F213D;">Billing Lines</h4>
+                        <table class="table table-sm o_main_table mt-2">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Description</th>
-                                    <th>Work Type</th>
-                                    <th class="text-end">BOQ Qty</th>
-                                    <th class="text-end">Prev. Qty</th>
-                                    <th class="text-end">Current Qty</th>
-                                    <th class="text-end">Unit Rate</th>
-                                    <th class="text-end">Amount</th>
+                                    <th style="width: 5%;">#</th>
+                                    <th style="width: 30%;">Description</th>
+                                    <th style="width: 12%;">Work Type</th>
+                                    <th style="width: 10%;" class="text-end">BOQ Qty</th>
+                                    <th style="width: 10%;" class="text-end">Prev. Qty</th>
+                                    <th style="width: 10%;" class="text-end">Current Qty</th>
+                                    <th style="width: 12%;" class="text-end">Unit Rate</th>
+                                    <th style="width: 11%;" class="text-end">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,32 +91,32 @@
                             <div class="col-6 offset-6">
                                 <table class="table table-sm">
                                     <tr>
-                                        <td><strong>Total Amount (before retention):</strong></td>
-                                        <td class="text-end">
+                                        <td style="color: #5F6775; text-transform: uppercase; letter-spacing: 0.5px; font-size: 9px;">Total Amount (before retention)</td>
+                                        <td class="text-end" style="color: #1C2430;">
                                             <span t-field="o.total_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Less: Previous Billed:</td>
-                                        <td class="text-end">
+                                        <td style="color: #5F6775;">Less: Previous Billed</td>
+                                        <td class="text-end" style="color: #1C2430;">
                                             <span t-field="o.previous_billed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Net Amount:</td>
-                                        <td class="text-end">
+                                        <td style="color: #5F6775;">Net Amount</td>
+                                        <td class="text-end" style="color: #1C2430;">
                                             <span t-field="o.net_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Retention (<span t-field="o.retention_percent"/>%):</td>
-                                        <td class="text-end">
+                                        <td style="color: #5F6775;">Retention (<span t-field="o.retention_percent"/>%)</td>
+                                        <td class="text-end" style="color: #1C2430;">
                                             <span t-field="o.retention_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
-                                    <tr class="fw-bold fs-5 border-top">
-                                        <td>NET PAYABLE:</td>
-                                        <td class="text-end">
+                                    <tr class="border-top" style="background-color: #0F213D;">
+                                        <td style="color: #FFFFFF; font-weight: 700; font-size: 12px;">NET PAYABLE</td>
+                                        <td class="text-end" style="color: #B79554; font-weight: 700; font-size: 14px; font-family: 'IBM Plex Serif', Georgia, serif;">
                                             <span t-field="o.net_payable" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
@@ -103,7 +126,7 @@
 
                         <div class="row mt-5">
                             <div class="col-12">
-                                <p><em>This is a computer-generated proforma invoice and does not require a signature.</em></p>
+                                <p style="color: #5F6775; font-style: italic; font-size: 10px;"><em>This is a computer-generated proforma invoice and does not require a signature.</em></p>
                             </div>
                         </div>
 
