@@ -20,8 +20,62 @@
     print-color-adjust: exact !important;
 }
 
-/* ── Font Imports (CDN) ── */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap');
+/* ── Font Imports (Local files for offline PDF generation) ── */
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/IBM-Plex-Sans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/IBM-Plex-Sans-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/IBM-Plex-Sans-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/IBM-Plex-Sans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/IBM-Plex-Serif-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/IBM-Plex-Serif-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/IBM-Plex-Serif-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/IBM-Plex-Serif-Bold.woff2') format('woff2');
+}
 
 /* ── Base Report Styling ── */
 .sgc-report {
