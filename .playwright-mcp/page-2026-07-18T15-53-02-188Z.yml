@@ -1,0 +1,89 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e5]:
+    - link "" [ref=f1e6] [cursor=pointer]:
+      - /url: "#"
+    - link "Editor" [ref=f1e7] [cursor=pointer]:
+      - /url: https://app.sgctech.ai/@/web/login
+  - generic [ref=f1e8]:
+    - link "Skip to main content" [ref=f1e9] [cursor=pointer]:
+      - /url: "#wrap"
+    - banner [ref=f1e10]:
+      - text:     
+      - navigation "Mobile" [ref=f1e11]:
+        - generic [ref=f1e12]:
+          - generic [ref=f1e13]:
+            - link [ref=f1e14] [cursor=pointer]:
+              - /url: /
+              - img "Logo of SGC TECH AI" [ref=f1e15]:
+                - img "SGC TECH AI" [ref=f1e16]
+            - list [ref=f1e17]:
+              - listitem [ref=f1e18]:
+                - link "eCommerce cart" [ref=f1e19] [cursor=pointer]:
+                  - /url: /shop/cart
+                  - generic [ref=f1e20]: 
+              - text: 
+          - button "Toggle navigation" [ref=f1e22] [cursor=pointer]
+    - main [ref=f1e24]:
+      - generic [ref=f1e26]:
+        - text: ✓ ✓ ✓
+        - generic [ref=f1e29]:
+          - generic [ref=f1e30]:
+            - img "SGC Tech AI logo" [ref=f1e31]
+            - paragraph [ref=f1e32]: Access your SGC workspace, website operations, orders, and premium support flows.
+          - text:  
+          - generic [ref=f1e33]:
+            - link "Manage Databases" [ref=f1e34] [cursor=pointer]:
+              - /url: /web/database/manager
+            - link "Powered by Scholarix" [ref=f1e35] [cursor=pointer]:
+              - /url: https://scholarixglobal.com
+    - contentinfo [ref=f1e36]:
+      - generic [ref=f1e37]:
+        - generic [ref=f1e38]:
+          - generic [ref=f1e39]:
+            - heading "SGC TECH AI (Scholarix Global Consultant FZE)" [level=5] [ref=f1e40]
+            - paragraph [ref=f1e41]: Maseed Building Office No. 304, 119/12st Al Rigga DUBAI, United Arab Emirates
+          - generic [ref=f1e42]:
+            - heading "Contact" [level=6] [ref=f1e43]
+            - list [ref=f1e44]:
+              - listitem [ref=f1e45]:
+                - link "hello@sgctech.ai" [ref=f1e46] [cursor=pointer]:
+                  - /url: mailto:hello@sgctech.ai
+              - listitem [ref=f1e47]:
+                - link "+971 52 198 5231" [ref=f1e48] [cursor=pointer]:
+                  - /url: tel:+971 52 198 5231
+          - generic [ref=f1e49]:
+            - heading "Quick Links" [level=6] [ref=f1e50]
+            - list [ref=f1e51]:
+              - listitem [ref=f1e52]:
+                - link "About Us" [ref=f1e53] [cursor=pointer]:
+                  - /url: /about-us
+              - listitem [ref=f1e54]:
+                - link "Services" [ref=f1e55] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=f1e56]:
+                - link "Industries" [ref=f1e57] [cursor=pointer]:
+                  - /url: /our-industries
+              - listitem [ref=f1e58]:
+                - link "Contact" [ref=f1e59] [cursor=pointer]:
+                  - /url: /contact-us
+          - generic [ref=f1e60]:
+            - heading "Follow Us" [level=6] [ref=f1e61]
+            - generic [ref=f1e62]:
+              - link "LinkedIn" [ref=f1e63] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/sgctechai/
+              - link "Twitter" [ref=f1e66] [cursor=pointer]:
+                - /url: https://x.com/sgctech_ai
+              - link "Facebook" [ref=f1e69] [cursor=pointer]:
+                - /url: https://www.facebook.com/sgctechai
+              - link "Instagram" [ref=f1e72] [cursor=pointer]:
+                - /url: https://www.instagram.com/sgctech.ai/
+              - link "YouTube" [ref=f1e75] [cursor=pointer]:
+                - /url: https://www.youtube.com/@sgctechai
+        - separator [ref=f1e78]
+        - generic [ref=f1e79]:
+          - paragraph [ref=f1e81]: © 2026 SGC TECH AI (Scholarix Global Consultant FZE). All rights reserved.
+          - generic [ref=f1e82]:
+            - link "Privacy Policy" [ref=f1e83] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Service" [ref=f1e84] [cursor=pointer]:
+              - /url: /terms
