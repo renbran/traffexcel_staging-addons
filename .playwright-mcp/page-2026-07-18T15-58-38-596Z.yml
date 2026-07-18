@@ -1,0 +1,69 @@
+- generic [active] [ref=f6e1]:
+  - banner [ref=f6e2]:
+    - navigation [ref=f6e3]:
+      - button "" [ref=f6e5] [cursor=pointer]
+      - menuitem "KYC Enhanced" [ref=f6e7] [cursor=pointer]
+      - menu [ref=f6e8]:
+        - menuitem "Dashboard" [ref=f6e9] [cursor=pointer]
+        - button "KYC Applications" [ref=f6e10] [cursor=pointer]
+        - button "Approval Workflows" [ref=f6e12] [cursor=pointer]
+        - button "" [ref=f6e15] [cursor=pointer]
+      - menu [ref=f6e17]:
+        - button [ref=f6e18] [cursor=pointer]:
+          - img "Attendance" [ref=f6e19]: 
+        - button "Messages 29" [ref=f6e21] [cursor=pointer]:
+          - img "Messages" [ref=f6e22]: 
+          - generic [ref=f6e23]: "29"
+        - button "Activities 2" [ref=f6e24] [cursor=pointer]:
+          - img "Activities" [ref=f6e25]: 
+          - generic [ref=f6e26]: "2"
+        - generic "AI Brain":
+          - img "AI Brain"
+        - button "" [disabled] [ref=f6e28]
+        - generic: 
+        - button [ref=f6e31] [cursor=pointer]:
+          - generic [ref=f6e32]:
+            - img "User" [ref=f6e33]
+            - img "User is offline" [ref=f6e36]: 
+          - text: 
+  - generic [ref=f6e38]:
+    - generic [ref=f6e39]:
+      - heading " KYC Dashboard" [level=2] [ref=f6e40]:
+        - generic [ref=f6e41]: 
+        - text: KYC Dashboard
+      - button " Refresh" [ref=f6e42] [cursor=pointer]:
+        - generic [ref=f6e43]: 
+        - text: Refresh
+    - generic [ref=f6e44]:
+      - generic [ref=f6e47] [cursor=pointer]:
+        - heading "0" [level=3] [ref=f6e48]
+        - text: Total
+      - generic [ref=f6e51] [cursor=pointer]:
+        - heading "0" [level=3] [ref=f6e52]
+        - text: Draft
+      - generic [ref=f6e55] [cursor=pointer]:
+        - heading "0" [level=3] [ref=f6e56]
+        - text: Submitted
+      - generic [ref=f6e59] [cursor=pointer]:
+        - heading "0" [level=3] [ref=f6e60]
+        - text: Pending Review
+      - generic [ref=f6e63] [cursor=pointer]:
+        - heading "0" [level=3] [ref=f6e64]
+        - text: Approved
+      - generic [ref=f6e67] [cursor=pointer]:
+        - heading "0" [level=3] [ref=f6e68]
+        - text: Rejected
+    - generic [ref=f6e69]:
+      - generic [ref=f6e70]:
+        - heading " Recent Applications" [level=5] [ref=f6e71]:
+          - generic [ref=f6e72]: 
+          - text: Recent Applications
+        - button "View All " [ref=f6e73] [cursor=pointer]:
+          - text: View All
+          - generic [ref=f6e74]: 
+      - generic [ref=f6e76]:
+        - generic [ref=f6e77]: 
+        - text: No KYC applications yet.
+  - generic:
+    - generic:
+      - paragraph: Press esc to exit full screen
