@@ -1,0 +1,589 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - button "" [ref=e5] [cursor=pointer]
+      - menuitem "Settings" [ref=e7] [cursor=pointer]
+      - menu [ref=e8]:
+        - menuitem "General Settings" [ref=e9] [cursor=pointer]
+        - button "Users & Companies" [ref=e10] [cursor=pointer]
+        - button "MCP" [ref=e12] [cursor=pointer]
+      - menu [ref=e14]:
+        - button [ref=e15] [cursor=pointer]:
+          - img "Attendance" [ref=e16]: 
+        - button "Messages 30" [ref=e18] [cursor=pointer]:
+          - img "Messages" [ref=e19]: 
+          - generic [ref=e20]: "30"
+        - button "Activities 2" [ref=e21] [cursor=pointer]:
+          - img "Activities" [ref=e22]: 
+          - generic [ref=e23]: "2"
+        - generic "AI Brain":
+          - img "AI Brain"
+        - button "" [disabled] [ref=e25]
+        - generic: 
+        - button [ref=e28] [cursor=pointer]:
+          - generic [ref=e29]:
+            - img "User" [ref=e30]
+            - img "User is online" [ref=e33]: 
+          - text: 
+  - generic [ref=e37]:
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - button "Save" [ref=e42] [cursor=pointer]
+          - button "Discard" [ref=e43] [cursor=pointer]
+        - generic [ref=e44]: Settings
+      - search [ref=e48]:
+        - search [ref=e49]:
+          - img "Search..." [ref=e50]: 
+          - searchbox "Search..." [ref=e52]
+      - search [ref=e773]:
+        - navigation "Pager" [ref=e774]:
+          - generic [ref=e775]:
+            - generic [ref=e776]: "1"
+            - text: / 1
+          - generic [ref=e777]:
+            - button "Previous" [disabled]:
+              - generic: 
+            - button "Next" [disabled]:
+              - generic: 
+    - main [ref=e54]:
+      - generic [ref=e56]:
+        - generic [ref=e58]:
+          - tab "General Settings" [ref=e59] [cursor=pointer]
+          - tab "Mailcow" [ref=e62] [cursor=pointer]
+          - tab "CRM" [ref=e65] [cursor=pointer]
+          - tab "Sales" [ref=e68] [cursor=pointer]
+          - tab "Voice Assistant" [ref=e71] [cursor=pointer]
+          - tab "Calendar" [ref=e74] [cursor=pointer]
+          - tab "LLM Lead Scoring" [ref=e77] [cursor=pointer]
+          - tab "Website" [ref=e80] [cursor=pointer]
+          - tab "eLearning" [ref=e83] [cursor=pointer]
+          - tab "Purchase" [ref=e86] [cursor=pointer]
+          - tab "Inventory" [ref=e89] [cursor=pointer]
+          - tab "Invoicing" [ref=e92] [cursor=pointer]
+          - tab "Project" [ref=e95] [cursor=pointer]
+          - tab "Email Marketing" [ref=e98] [cursor=pointer]
+          - tab "Employees" [ref=e101] [cursor=pointer]
+          - tab "Recruitment" [ref=e104] [cursor=pointer]
+          - tab "Attendances" [ref=e107] [cursor=pointer]
+          - tab "Bank Email Monitor" [ref=e110] [cursor=pointer]
+          - tab "Point of Sale" [ref=e113] [cursor=pointer]
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - heading "Users" [level=2] [ref=e119]
+              - generic [ref=e120]:
+                - generic [ref=e125]:
+                  - paragraph [ref=e126]: Invite New Users
+                  - generic [ref=e127]:
+                    - textbox "Enter an email" [ref=e128]
+                    - button [ref=e129] [cursor=pointer]:
+                      - strong [ref=e130]: Invite
+                  - paragraph [ref=e131]: "Pending Invitations:"
+                  - link "t.user@sgctech.ai" [ref=e133] [cursor=pointer]:
+                    - /url: "#"
+                  - link "r.test@sgctech.ai" [ref=e135] [cursor=pointer]:
+                    - /url: "#"
+                  - link "direct-e2e-1781436556805@example.com" [ref=e137] [cursor=pointer]:
+                    - /url: "#"
+                  - link "hr@sgctech.ai" [ref=e139] [cursor=pointer]:
+                    - /url: "#"
+                - generic [ref=e142]:
+                  - generic "Number of active users" [ref=e143]: 
+                  - generic [ref=e144]: "18"
+                  - generic [ref=e145]: Active Users
+                  - link "" [ref=e147] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/general/users.html
+                  - button " Manage Users" [ref=e149] [cursor=pointer]:
+                    - generic [ref=e150]: 
+                    - text: Manage Users
+            - generic [ref=e151]:
+              - heading "Languages" [level=2] [ref=e152]
+              - generic [ref=e156]:
+                - generic [ref=e157]:
+                  - generic [ref=e158]: "3"
+                  - generic [ref=e159]: Languages
+                - button " Add Languages" [ref=e161] [cursor=pointer]:
+                  - generic [ref=e162]: 
+                  - text: Add Languages
+            - generic [ref=e163]:
+              - heading "Companies" [level=2] [ref=e164]
+              - generic [ref=e165]:
+                - generic [ref=e168]:
+                  - generic [ref=e169]: SGC TECH AI (Scholarix Global Consultant FZE)
+                  - generic [ref=e170]: Maseed Building Office No. 304, 119/12st Al Rigga 0000 - DUBAI Dubai (AE) United Arab Emirates
+                  - button " Update Info" [ref=e171] [cursor=pointer]:
+                    - generic [ref=e172]: 
+                    - text: Update Info
+                - generic [ref=e175]:
+                  - generic [ref=e176]: "1"
+                  - generic [ref=e177]: Company
+                  - button " Manage Companies" [ref=e179] [cursor=pointer]:
+                    - generic [ref=e180]: 
+                    - text: Manage Companies
+                - generic [ref=e182]:
+                  - generic [ref=e183]: Document Layout
+                  - generic [ref=e184]: Choose the layout of your documents
+                  - button " Configure Document Layout" [ref=e187] [cursor=pointer]:
+                    - generic [ref=e188]: 
+                    - text: Configure Document Layout
+                - generic [ref=e190]:
+                  - generic [ref=e191]: Email Templates
+                  - generic [ref=e192]: Customize the look and feel of automated emails
+                  - generic [ref=e193]:
+                    - generic [ref=e194]:
+                      - generic [ref=e195]: Button Text
+                      - textbox [ref=e198]: "#b8945f"
+                    - generic [ref=e199]:
+                      - generic [ref=e200]: Button Color
+                      - textbox [ref=e203]: "#0a0e1a"
+                    - button " Review All Templates" [ref=e204] [cursor=pointer]:
+                      - generic [ref=e205]: 
+                      - text: Review All Templates
+                - generic [ref=e206]:
+                  - checkbox "Inter-Company Transactions Enterprise" [ref=e210] [cursor=pointer]
+                  - generic [ref=e211]:
+                    - generic [ref=e212]:
+                      - text: Inter-Company Transactions
+                      - generic [ref=e213] [cursor=pointer]: Enterprise
+                    - generic [ref=e214]: Create corresponding in/out orders and bills when you sell/buy between your companies
+            - heading "Units of Measure" [level=2] [ref=e215]
+            - generic [ref=e216]:
+              - generic [ref=e218]:
+                - generic [ref=e219]: Weight
+                - generic [ref=e220]: Define your weight unit of measure
+                - radiogroup "Weight unit of measure" [ref=e223]:
+                  - generic [ref=e224]:
+                    - radio "Kilograms (kg)" [checked] [ref=e225] [cursor=pointer]
+                    - generic [ref=e226] [cursor=pointer]: Kilograms (kg)
+                  - generic [ref=e227]:
+                    - radio "Pounds (lb)" [ref=e228] [cursor=pointer]
+                    - generic [ref=e229] [cursor=pointer]: Pounds (lb)
+              - generic [ref=e231]:
+                - generic [ref=e232]: Volume
+                - generic [ref=e233]: Define your volume unit of measure
+                - radiogroup "Volume unit of measure" [ref=e236]:
+                  - generic [ref=e237]:
+                    - radio "Cubic Meters (m³)" [checked] [ref=e238] [cursor=pointer]
+                    - generic [ref=e239] [cursor=pointer]: Cubic Meters (m³)
+                  - generic [ref=e240]:
+                    - radio "Cubic Feet (ft³)" [ref=e241] [cursor=pointer]
+                    - generic [ref=e242] [cursor=pointer]: Cubic Feet (ft³)
+            - heading "Emails" [level=2] [ref=e243]
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - checkbox "Use Custom Email Servers" [checked] [ref=e249] [cursor=pointer]
+                - generic [ref=e250]:
+                  - generic [ref=e251]: Use Custom Email Servers
+                  - link "" [ref=e252] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/general/email_communication/email_servers.html
+                  - generic [ref=e254]: Configure your own email servers
+                  - generic [ref=e257]:
+                    - button " Incoming Email Servers" [ref=e259] [cursor=pointer]:
+                      - generic [ref=e260]: 
+                      - text: Incoming Email Servers
+                    - button " Outgoing Email Servers" [ref=e262] [cursor=pointer]:
+                      - generic [ref=e263]: 
+                      - text: Outgoing Email Servers
+              - generic [ref=e265]:
+                - generic [ref=e266]: Alias Domain
+                - link "" [ref=e267] [cursor=pointer]:
+                  - /url: https://www.odoo.com/documentation/19.0/applications/general/email_communication/email_domain.html#be-spf-compliant
+                - generic [ref=e269]: Use different domains for your mail aliases
+                - generic [ref=e270]:
+                  - generic [ref=e271]: "@"
+                  - generic [ref=e274]:
+                    - combobox "e.g. mycompany.com" [ref=e277]: sgctech.ai
+                    - button "Internal link" [ref=e278] [cursor=pointer]:
+                      - generic [ref=e279]: 
+              - generic [ref=e280]:
+                - checkbox "Use a Gmail Server" [checked] [ref=e284] [cursor=pointer]
+                - generic [ref=e285]:
+                  - generic [ref=e286]: Use a Gmail Server
+                  - link "" [ref=e287] [cursor=pointer]:
+                    - /url: https://console.developers.google.com/
+                  - generic [ref=e289]: Send and receive emails through your Gmail account.
+                  - generic [ref=e290]:
+                    - generic [ref=e291]:
+                      - generic [ref=e292]: ID
+                      - textbox "ID" [ref=e294]:
+                        - /placeholder: ID of your Google app
+                        - text: 374638770838-b9e52n6dv7cc7bkea9ncivmnogtknu50.apps.googleusercontent.com
+                    - generic [ref=e295]:
+                      - generic [ref=e296]: Secret
+                      - textbox "Secret" [ref=e298]:
+                        - /placeholder: Secret of your Google app
+                        - text: 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
+              - generic [ref=e299]:
+                - checkbox "Use an Outlook Server" [checked] [ref=e303] [cursor=pointer]
+                - generic [ref=e304]:
+                  - generic [ref=e305]: Use an Outlook Server
+                  - link "" [ref=e306] [cursor=pointer]:
+                    - /url: https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app
+                  - generic [ref=e308]: Send and receive emails through your Outlook account.
+                  - generic [ref=e309]:
+                    - generic [ref=e310]:
+                      - generic [ref=e311]: ID
+                      - textbox "ID" [ref=e313]:
+                        - /placeholder: ID of your Outlook app
+                    - generic [ref=e314]:
+                      - generic [ref=e315]: Secret
+                      - textbox "Secret" [ref=e317]:
+                        - /placeholder: Secret of your Outlook app
+              - generic [ref=e318]:
+                - checkbox "Digest Email" [checked] [ref=e322] [cursor=pointer]
+                - generic [ref=e323]:
+                  - generic [ref=e324]: Digest Email
+                  - link "" [ref=e325] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/general/digest_emails.html
+                  - generic [ref=e327]: Add new users as recipient of a periodic email with key metrics
+                  - generic [ref=e329]:
+                    - generic [ref=e330]:
+                      - generic [ref=e331]: Digest Email
+                      - generic [ref=e334]:
+                        - combobox "Digest Email" [ref=e337]: Your Odoo Periodic Digest
+                        - button "Internal link" [ref=e338] [cursor=pointer]:
+                          - generic [ref=e339]: 
+                    - button " Configure Digest Emails" [ref=e341] [cursor=pointer]:
+                      - generic [ref=e342]: 
+                      - text: Configure Digest Emails
+              - generic [ref=e343]:
+                - checkbox "Restrict Template Rendering" [checked] [ref=e347] [cursor=pointer]
+                - generic [ref=e348]:
+                  - generic [ref=e349]: Restrict Template Rendering
+                  - generic [ref=e350]: Restrict mail templates edition and QWEB placeholders usage.
+            - heading "Discuss" [level=2] [ref=e351]
+            - generic [ref=e352]:
+              - generic [ref=e354]:
+                - generic [ref=e355]: Activities
+                - generic [ref=e356]: Configure your activity types
+                - button " Activity Types" [ref=e360] [cursor=pointer]:
+                  - generic [ref=e361]: 
+                  - text: Activity Types
+              - generic [ref=e362]:
+                - checkbox "Custom ICE Server with Twilio" [ref=e366] [cursor=pointer]
+                - generic [ref=e367]:
+                  - generic [ref=e368]: Custom ICE Server with Twilio
+                  - link "" [ref=e369] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/latest/applications/productivity/discuss/ice_servers.html
+                  - generic [ref=e371]: Set up your own server for small group calls using peer-to-peer connections
+              - generic [ref=e372]:
+                - checkbox "Custom SFU Server" [ref=e376] [cursor=pointer]
+                - generic [ref=e377]:
+                  - generic [ref=e378]: Custom SFU Server
+                  - generic [ref=e379]: Set up your own server for large group calls by routing connections centrally
+              - generic [ref=e381]:
+                - generic [ref=e382]: Custom ICE Servers
+                - link "" [ref=e383] [cursor=pointer]:
+                  - /url: https://www.odoo.com/documentation/latest/applications/productivity/discuss/ice_servers.html#define-a-list-of-custom-ice-servers
+                - generic [ref=e385]: Use your own servers for calls to manage heavy traffic and ensure reliability if Twilio is unavailable
+                - button " Configure ICE Servers" [ref=e388] [cursor=pointer]:
+                  - generic [ref=e389]: 
+                  - text: Configure ICE Servers
+              - generic [ref=e391]:
+                - generic [ref=e392]: Tenor GIF API key
+                - link "" [ref=e393] [cursor=pointer]:
+                  - /url: https://developers.google.com/tenor/guides/quickstart#setup
+                - generic [ref=e395]: Add a Tenor GIF API key to enable GIFs support.
+                - textbox "Tenor GIF API key" [ref=e398]:
+                  - /placeholder: Paste your API key
+              - generic [ref=e400]:
+                - generic [ref=e401]: Message Translation
+                - link "" [ref=e402] [cursor=pointer]:
+                  - /url: https://cloud.google.com/translate/docs/setup
+                - generic [ref=e404]: Google Translate Integration
+                - textbox "Message Translation" [ref=e407]:
+                  - /placeholder: Paste your API key
+            - generic [ref=e408]:
+              - heading "Contacts" [level=2] [ref=e409]
+              - generic [ref=e410]:
+                - generic [ref=e412]:
+                  - generic [ref=e413]: Send SMS
+                  - link "" [ref=e414] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/marketing/sms_marketing/pricing/pricing_and_faq.html
+                  - generic [ref=e416]: Send texts to your contacts
+                  - button " Manage Service & Buy Credits" [ref=e421] [cursor=pointer]:
+                    - generic [ref=e422]: 
+                    - text: Manage Service & Buy Credits
+                - generic [ref=e423]:
+                  - checkbox "Partner Autocomplete" [checked] [ref=e427] [cursor=pointer]
+                  - generic [ref=e428]:
+                    - generic [ref=e429]: Partner Autocomplete
+                    - generic [ref=e430]: Automatically enrich your contact base with company data
+                    - button " Manage Service & Buy Credits" [ref=e435] [cursor=pointer]:
+                      - generic [ref=e436]: 
+                      - text: Manage Service & Buy Credits
+              - generic [ref=e440]:
+                - generic [ref=e441]: Odoo IAP
+                - link "" [ref=e442] [cursor=pointer]:
+                  - /url: https://www.odoo.com/documentation/19.0/applications/general/in_app_purchase.html
+                - generic [ref=e444]: View your IAP Services and recharge your credits
+                - button " View My Services" [ref=e446] [cursor=pointer]:
+                  - generic [ref=e447]: 
+                  - text: View My Services
+            - heading "Permissions" [level=2] [ref=e448]
+            - generic [ref=e449]:
+              - generic [ref=e450]:
+                - checkbox "Password Reset" [checked] [ref=e454] [cursor=pointer]
+                - generic [ref=e455]:
+                  - generic [ref=e456]: Password Reset
+                  - generic [ref=e457]: Enable password reset from Login page
+              - generic [ref=e459]:
+                - generic [ref=e460]: Default Access Rights
+                - generic [ref=e461]: Set custom access rights for new users
+                - button " Default Access Rights" [ref=e465] [cursor=pointer]:
+                  - generic [ref=e466]: 
+                  - text: Default Access Rights
+              - generic [ref=e468]:
+                - generic [ref=e469]: API Keys
+                - generic [ref=e470]: API Keys allow your users to access Odoo with external tools when multi-factor authentication is enabled.
+                - button " Manage API Keys" [ref=e472] [cursor=pointer]:
+                  - generic [ref=e473]: 
+                  - text: Manage API Keys
+              - generic [ref=e474]:
+                - checkbox "Enforce two-factor authentication" [ref=e478] [cursor=pointer]
+                - generic [ref=e479]:
+                  - generic [ref=e480]: Enforce two-factor authentication
+                  - generic [ref=e481]: Enforce the two-factor authentication by email for employees or for all users (including portal users) if they didn't enable any other two-factor authentication method.
+            - heading "Integrations" [level=2] [ref=e482]
+            - generic [ref=e483]:
+              - generic [ref=e484]:
+                - checkbox "Mail Plugin" [checked] [ref=e488] [cursor=pointer]
+                - generic [ref=e489]:
+                  - generic [ref=e490]: Mail Plugin
+                  - link "" [ref=e491] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/productivity/mail_plugins.html
+                  - generic [ref=e493]: Integrate with mail client plugins
+              - generic [ref=e494]:
+                - checkbox "OAuth Authentication" [checked] [ref=e498] [cursor=pointer]
+                - generic [ref=e499]:
+                  - generic [ref=e500]: OAuth Authentication
+                  - generic [ref=e501]: Use external accounts to log in (Google, Facebook, etc.)
+                  - button " OAuth Providers" [ref=e505] [cursor=pointer]:
+                    - generic [ref=e506]: 
+                    - text: OAuth Providers
+              - generic [ref=e507]:
+                - checkbox "Google Authentication" [checked] [ref=e511] [cursor=pointer]
+                - generic [ref=e512]:
+                  - generic [ref=e513]: Google Authentication
+                  - link "" [ref=e514] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/general/auth/google.html
+                  - generic [ref=e516]: Allow users to sign in with their Google account
+                  - generic [ref=e518]:
+                    - generic [ref=e519]:
+                      - generic [ref=e520]: "Client ID:"
+                      - textbox "Client ID:" [ref=e522]:
+                        - /placeholder: e.g. 1234-xyz.apps.googleusercontent.com
+                        - text: 374638770838-b9e52n6dv7cc7bkea9ncivmnogtknu50.apps.googleusercontent.com
+                    - link " Tutorial" [ref=e524] [cursor=pointer]:
+                      - /url: https://www.odoo.com/documentation/19.0/applications/general/auth/google.html
+                      - generic [ref=e525]: 
+                      - text: Tutorial
+              - generic [ref=e526]:
+                - checkbox "LDAP Authentication" [ref=e530] [cursor=pointer]
+                - generic [ref=e531]:
+                  - generic [ref=e532]: LDAP Authentication
+                  - link "" [ref=e533] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/general/auth/ldap.html
+                  - generic [ref=e535]: Use LDAP credentials to log in
+              - generic [ref=e536]:
+                - checkbox "Unsplash Image Library" [checked] [ref=e540] [cursor=pointer]
+                - generic [ref=e541]:
+                  - generic [ref=e542]: Unsplash Image Library
+                  - link "" [ref=e543] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/websites/website/optimize/unsplash.html
+                  - generic [ref=e545]: Find free high-resolution images from Unsplash
+                  - generic [ref=e547]:
+                    - generic [ref=e548]:
+                      - generic [ref=e549]: Access Key
+                      - textbox "Access Key" [ref=e551]
+                    - generic [ref=e552]:
+                      - generic [ref=e553]: Application ID
+                      - textbox "Application ID" [ref=e555]
+                    - link " Generate an Access Key" [ref=e558] [cursor=pointer]:
+                      - /url: https://www.odoo.com/documentation/19.0/applications/websites/website/optimize/unsplash.html#generate-an-unsplash-access-key
+                      - generic [ref=e559]: 
+                      - text: Generate an Access Key
+              - generic [ref=e560]:
+                - checkbox "Geolocation" [checked] [ref=e564] [cursor=pointer]
+                - generic [ref=e565]:
+                  - generic [ref=e566]: Geolocation
+                  - link "" [ref=e567] [cursor=pointer]:
+                    - /url: https://www.odoo.com/documentation/19.0/applications/general/integrations/geolocation.html
+                  - generic [ref=e569]: Geolocate your partners
+                  - generic [ref=e571]:
+                    - text: "API:"
+                    - generic [ref=e574]:
+                      - combobox [ref=e577]: Open Street Map
+                      - button "Internal link" [ref=e578] [cursor=pointer]:
+                        - generic [ref=e579]: 
+              - generic [ref=e580]:
+                - checkbox "Enable reCAPTCHA" [checked] [ref=e584] [cursor=pointer]
+                - generic [ref=e585]:
+                  - generic [ref=e586]: Enable reCAPTCHA
+                  - generic [ref=e587]: Protect your forms from spam and abuse. If no keys are provided, no checks will be done.
+                  - generic [ref=e589]:
+                    - generic [ref=e590]:
+                      - generic [ref=e591]: Site Key
+                      - textbox "Site Key" [ref=e593]
+                    - generic [ref=e594]:
+                      - generic [ref=e595]: Secret Key
+                      - textbox "Secret Key" [ref=e597]
+                    - generic [ref=e598]:
+                      - generic [ref=e599]: Minimum score
+                      - textbox "Minimum score" [ref=e601]: "0.70"
+                    - link " Generate reCAPTCHA v3 keys" [ref=e603] [cursor=pointer]:
+                      - /url: https://www.google.com/recaptcha/admin/create
+                      - generic [ref=e604]: 
+                      - text: Generate reCAPTCHA v3 keys
+              - generic [ref=e605]:
+                - checkbox "Cloudflare Turnstile" [ref=e609] [cursor=pointer]
+                - generic [ref=e610]:
+                  - generic [ref=e611]: Cloudflare Turnstile
+                  - generic [ref=e612]: Protect your forms with CF Turnstile.
+              - generic [ref=e613]:
+                - checkbox "Google Address Autocomplete" [checked] [ref=e617] [cursor=pointer]
+                - generic [ref=e618]:
+                  - generic [ref=e619]: Google Address Autocomplete
+                  - generic [ref=e620]: Autocomplete partner addresses with Google Places
+                  - generic [ref=e622]:
+                    - textbox "Paste your API key" [ref=e624]
+                    - generic [ref=e625]:
+                      - link " Create a Google Project and get a key" [ref=e626] [cursor=pointer]:
+                        - /url: https://console.cloud.google.com/getting-started
+                        - generic [ref=e627]: 
+                        - text: Create a Google Project and get a key
+                      - link " Enable billing on your Google Project" [ref=e628] [cursor=pointer]:
+                        - /url: https://console.cloud.google.com/billing
+                        - generic [ref=e629]: 
+                        - text: Enable billing on your Google Project
+            - heading "MCP Server" [level=2] [ref=e630]
+            - generic [ref=e631]:
+              - generic [ref=e634]:
+                - generic [ref=e635]: Session Timeout
+                - generic [ref=e636]: Inactive sessions are cleaned up after this period.
+                - generic [ref=e639]:
+                  - generic [ref=e640]: Timeout
+                  - textbox "Session Timeout Timeout" [ref=e642]: "24"
+                  - generic [ref=e643]: in Hours
+              - generic [ref=e646]:
+                - generic [ref=e647]: Log Retention
+                - generic [ref=e648]: Audit logs older than this period are automatically deleted.
+                - generic [ref=e651]:
+                  - generic [ref=e652]: Retention
+                  - textbox "Log Retention Retention" [ref=e654]: "30"
+                  - generic [ref=e655]: in Days
+              - generic [ref=e658]:
+                - generic [ref=e659]: Rate Limiting
+                - generic [ref=e660]: Default rate limit for new API keys. Set to 0 to disable.
+                - generic [ref=e663]:
+                  - generic [ref=e664]: Max requests
+                  - textbox "Rate Limiting Max requests" [ref=e666]: "60"
+                  - generic [ref=e667]: per Minute
+              - generic [ref=e670]:
+                - generic [ref=e671]: Annotate Messages
+                - generic [ref=e672]: Mark chatter messages originating from MCP.
+                - generic [ref=e675]:
+                  - checkbox "Annotate Messages" [checked] [ref=e678] [cursor=pointer]
+                  - button " Connect AI" [ref=e679] [cursor=pointer]:
+                    - generic [ref=e680]: 
+                    - text: Connect AI
+            - heading "MCP Extensions" [level=2] [ref=e681]
+            - generic [ref=e682]:
+              - generic [ref=e683]:
+                - link "" [ref=e686] [cursor=pointer]:
+                  - /url: https://apps.odoo.com/apps/modules/19.0/muk_mcp_access
+                - generic [ref=e688]:
+                  - generic [ref=e689]: MCP Access
+                  - generic [ref=e690]: Model-level whitelist — restrict which models AI agents can reach.
+              - generic [ref=e691]:
+                - link "" [ref=e694] [cursor=pointer]:
+                  - /url: https://apps.odoo.com/apps/modules/19.0/muk_mcp_oauth
+                - generic [ref=e696]:
+                  - generic [ref=e697]: MCP OAuth
+                  - generic [ref=e698]: OAuth 2.1 for MCP — connect Odoo to ChatGPT, Claude and more.
+              - generic [ref=e699]:
+                - link "" [ref=e702] [cursor=pointer]:
+                  - /url: https://apps.odoo.com/apps/modules/19.0/muk_mcp_enterprise
+                - generic [ref=e704]:
+                  - generic [ref=e705]: MCP Enterprise
+                  - generic [ref=e706]: Enterprise MCP auth via your IdP (ID-JAG / SEP-990).
+              - generic [ref=e707]:
+                - link "" [ref=e710] [cursor=pointer]:
+                  - /url: https://apps.odoo.com/apps/modules/19.0/muk_mcp_apps
+                - generic [ref=e712]:
+                  - generic [ref=e713]: MCP Apps
+                  - generic [ref=e714]: Interactive UI resources rendered inline by AI clients.
+            - generic [ref=e717]:
+              - heading "Developer Tools" [level=2] [ref=e718]
+              - generic [ref=e722]:
+                - link "Activate the developer mode" [ref=e723] [cursor=pointer]:
+                  - /url: "#"
+                - link "Activate the developer mode (with assets)" [ref=e724] [cursor=pointer]:
+                  - /url: "#"
+                - link "Activate the developer mode (with tests assets)" [ref=e725] [cursor=pointer]:
+                  - /url: "#"
+            - generic [ref=e726]:
+              - heading "About" [level=2] [ref=e727]
+              - generic [ref=e733]:
+                - heading "Odoo 19.0-20260513 (Community Edition)" [level=3] [ref=e735]
+                - tabpanel [ref=e738]:
+                  - generic [ref=e739]:
+                    - text: Copyright © 2004
+                    - link "Odoo S.A." [ref=e740] [cursor=pointer]:
+                      - /url: https://www.odoo.com
+                    - link "GNU LGPL Licensed" [ref=e741] [cursor=pointer]:
+                      - /url: http://www.gnu.org/licenses/lgpl.html
+            - heading "SGC User Hygiene" [level=2] [ref=e742]
+            - generic [ref=e744]:
+              - paragraph [ref=e745]:
+                - text: User logins and partner emails are automatically lowercased on save to prevent login-mismatch issues (e.g.
+                - code [ref=e746]: Rajeshwari@sgctech.ai
+                - text: vs
+                - code [ref=e747]: rajeshwari@sgctech.ai
+                - text: ).
+              - paragraph [ref=e748]:
+                - text: "Affected tables:"
+                - code [ref=e749]: res.users.login
+                - text: ","
+                - code [ref=e750]: res.partner.email
+                - text: .
+              - paragraph [ref=e751]: Historical data is not retroactively modified; only new writes are normalized.
+          - generic [ref=e752]:
+            - heading "Payroll" [level=2] [ref=e753]
+            - generic [ref=e756]:
+              - generic [ref=e757]: Payroll Rules
+              - generic [ref=e758]: Payroll rules that apply to your country
+              - button " Choose a Payroll Localization" [ref=e760] [cursor=pointer]:
+                - generic [ref=e761]: 
+                - text: Choose a Payroll Localization
+            - heading "Accounting" [level=2] [ref=e762]
+            - generic [ref=e764]:
+              - checkbox "Payroll Entries Enterprise" [ref=e768] [cursor=pointer]
+              - generic [ref=e769]:
+                - generic [ref=e770]:
+                  - text: Payroll Entries
+                  - generic [ref=e771] [cursor=pointer]: Enterprise
+                - generic [ref=e772]: Post payroll slips in accounting
+  - generic:
+    - dialog [ref=e778]:
+      - generic [ref=e779]:
+        - banner [ref=e780]:
+          - heading "Oops!" [level=4] [ref=e781]
+          - button "Close" [ref=e782] [cursor=pointer]
+        - main [ref=e783]:
+          - alert [ref=e784]:
+            - paragraph [ref=e785]: Something went wrong... If you really are stuck, share the report with your friendly support service
+            - button "Hide technical details" [active] [ref=e789] [cursor=pointer]
+            - generic [ref=e790]:
+              - button "" [ref=e791] [cursor=pointer]
+              - generic [ref=e793]:
+                - paragraph [ref=e794]: Odoo Server Error
+                - code [ref=e795]: RPC_ERROR
+                - paragraph [ref=e796]: Odoo Server Error
+                - paragraph [ref=e797]: Occured on app.sgctech.ai on model base.document.layout on 2026-07-18 15:40:18 GMT
+                - generic [ref=e798]: "Traceback (most recent call last): File \"/usr/lib/python3/dist-packages/odoo/addons/base/models/ir_qweb.py\", line 761, in _render_iterall for item in frame.iterator: File \"<5840>\", line 440, in template_sgc_construction_management_external_layout_sgc_5840 File \"<5840>\", line 28, in template_sgc_construction_management_external_layout_sgc_5840_content KeyError: 'doc' The above exception was the direct cause of the following exception: Traceback (most recent call last): File \"/usr/lib/python3/dist-packages/odoo/http.py\", line 2302, in _serve_db return service_model.retrying(serve_func, env=self.env) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/service/model.py\", line 188, in retrying result = func() ^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/http.py\", line 2357, in _serve_ir_http response = self.dispatcher.dispatch(rule.endpoint, args) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/http.py\", line 2572, in dispatch result = self.request.registry['ir.http']._dispatch(endpoint) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/base/models/ir_http.py\", line 355, in _dispatch result = endpoint(**request.params) ^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/http.py\", line 811, in route_wrapper result = endpoint(self, *args, **params_ok) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/web/controllers/dataset.py\", line 32, in call_kw return call_kw(request.env[model], method, args, kwargs) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/service/model.py\", line 97, in call_kw result = method(recs, *args, **kwargs) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/web/models/models.py\", line 2159, in onchange snapshot1 = RecordSnapshot(record, fields_spec) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/web/models/models.py\", line 2245, in __init__ self.fetch(name) File \"/usr/lib/python3/dist-packages/odoo/addons/web/models/models.py\", line 2260, in fetch self[field_name] = self.record[field_name] ~~~~~~~~~~~^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/orm/models.py\", line 6686, in __getitem__ return self._fields[key].__get__(self) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/orm/fields.py\", line 1746, in __get__ self.compute_value(recs) File \"/usr/lib/python3/dist-packages/odoo/orm/fields.py\", line 1917, in compute_value records._compute_field_value(self) File \"/usr/lib/python3/dist-packages/odoo/orm/models.py\", line 4952, in _compute_field_value determine(field.compute, self) File \"/usr/lib/python3/dist-packages/odoo/orm/fields.py\", line 81, in determine return needle(*args) ^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/account/wizard/base_document_layout.py\", line 63, in _compute_preview super()._compute_preview() File \"/usr/lib/python3/dist-packages/odoo/addons/web/models/base_document_layout.py\", line 124, in _compute_preview wizard.preview = wizard.env['ir.ui.view']._render_template( ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/website/models/ir_ui_view.py\", line 456, in _render_template return super()._render_template(template, values=values) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/base/models/ir_ui_view.py\", line 2543, in _render_template return self.env['ir.qweb']._render(template, values) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/base/models/ir_qweb.py\", line 733, in _render return Markup(''.join(iterator)) ^^^^^^^^^^^^^^^^^ File \"/usr/lib/python3/dist-packages/odoo/addons/base/models/ir_qweb.py\", line 855, in _render_iterall raise QWebError(qweb_error_info) from error odoo.addons.base.models.ir_qweb.QWebError: Error while rendering the template: KeyError: 'doc' Template: sgc_construction_management.external_layout_sgc Reference: 5840 Path: /t/t[3] Element: <t t-set=\"header_shape_height\" t-value=\"\\'60\\'\"/> From: (202, '/t/t', '<t t-call=\"web.html_preview_container\"/>') (201, '/t/t', '<t t-call=\"web.report_preview_layout\"/>') (199, '/t/html/body/div[1]/t', '<t t-out=\"0\"/>') (201, '/t/t', '<t t-call=\"web.report_preview_layout\"/>') (199, '/t/html/body/div[1]/t', '<t t-out=\"0\"/>') (202, '/t/t', '<t t-call=\"web.html_preview_container\"/>') (202, '/t/t/t', '<t t-call=\"web.external_layout\"/>') (212, '/t/t[3]/t', '<t t-call=\"sgc_construction_management.external_layout_sgc\"/>') (5840, '/t/t[3]', '<t t-set=\"header_shape_height\" t-value=\"\\\\\\'60\\\\\\'\"/>') The above server error caused the following client error: OwlError: An error occured in the owl lifecycle (see this Error's \"cause\" property) Error: An error occured in the owl lifecycle (see this Error's \"cause\" property) at handleError (https://app.sgctech.ai/web/assets/ab5f58a/web.assets_web.min.js:762:101) at App.handleError (https://app.sgctech.ai/web/assets/ab5f58a/web.assets_web.min.js:1421:29) at ComponentNode.initiateRender (https://app.sgctech.ai/web/assets/ab5f58a/web.assets_web.min.js:855:19) Caused by: RPC_ERROR: Odoo Server Error RPC_ERROR at makeErrorFromResponse (https://app.sgctech.ai/web/assets/ab5f58a/web.assets_web.min.js:3197:165) at XMLHttpRequest.<anonymous> (https://app.sgctech.ai/web/assets/ab5f58a/web.assets_web.min.js:3204:13)"
+        - contentinfo [ref=e787]:
+          - button "Close" [ref=e788] [cursor=pointer]
+    - generic:
+      - paragraph: Press esc to exit full screen
