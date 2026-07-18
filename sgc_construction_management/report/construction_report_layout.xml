@@ -90,4 +90,17 @@
             </div>
         </div>
     </template>
+
+    <!--
+        External layout alias registered so the report system can resolve
+        sgc_construction_management.external_layout_sgc as a valid document
+        layout. Delegates to construction_external_layout which provides
+        the full branded header/footer.
+    -->
+    <template id="external_layout_sgc">
+        <t t-call="sgc_construction_management.construction_external_layout">
+            <t t-out="0"/>
+        </t>
+    </template>
+
 </odoo>
