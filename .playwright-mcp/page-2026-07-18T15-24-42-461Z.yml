@@ -1,0 +1,115 @@
+- generic [ref=f2e2]:
+  - link "Skip to Content" [ref=f2e3] [cursor=pointer]:
+    - /url: "#wrap"
+  - link "Skip to main content" [ref=f2e4] [cursor=pointer]:
+    - /url: "#wrap"
+  - banner [ref=f2e5]:
+    - text:  
+    - navigation "Mobile" [ref=f2e6]:
+      - generic [ref=f2e7]:
+        - generic [ref=f2e8]:
+          - link [ref=f2e9] [cursor=pointer]:
+            - /url: /
+            - img "Logo of SGC TECH AI" [ref=f2e10]:
+              - img "SGC TECH AI" [ref=f2e11]
+          - list [ref=f2e12]:
+            - listitem [ref=f2e13]:
+              - link "eCommerce cart" [ref=f2e14] [cursor=pointer]:
+                - /url: /shop/cart
+                - generic [ref=f2e15]: 
+            - text: 
+        - button "Toggle navigation" [ref=f2e17] [cursor=pointer]
+  - main [ref=f2e19]:
+    - generic [ref=f2e21]:
+      - text: ✓ ✓ ✓
+      - generic [ref=f2e24]:
+        - generic [ref=f2e25]:
+          - img "SGC Tech AI logo" [ref=f2e26]
+          - paragraph [ref=f2e27]: Access your SGC workspace, website operations, orders, and premium support flows.
+        - form [ref=f2e28]:
+          - generic [ref=f2e29]:
+            - generic [ref=f2e30]: Business Email
+            - textbox "Business Email" [ref=f2e31]:
+              - /placeholder: name@sgctech.ai
+              - text: info@sgctech.ai
+          - generic [ref=f2e32]:
+            - generic [ref=f2e33]:
+              - generic [ref=f2e34]: Password
+              - link "Reset Password" [ref=f2e35] [cursor=pointer]:
+                - /url: /web/reset_password
+            - generic [ref=f2e36]:
+              - textbox "Password" [active] [ref=f2e37]:
+                - /placeholder: Enter your password
+              - button "" [ref=f2e38] [cursor=pointer]
+          - alert [ref=f2e40]: Wrong login/password
+          - generic [ref=f2e41]:
+            - button "Enter Workspace" [ref=f2e42] [cursor=pointer]
+            - link "Don't have an account?" [ref=f2e43] [cursor=pointer]:
+              - /url: /web/signup
+            - generic [ref=f2e44]:
+              - emphasis [ref=f2e45]: "- or -"
+              - generic [ref=f2e46]:
+                - link "Sign in with Google" [ref=f2e47] [cursor=pointer]:
+                  - /url: https://accounts.google.com/o/oauth2/auth?response_type=token&client_id=374638770838-b9e52n6dv7cc7bkea9ncivmnogtknu50.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Fapp.sgctech.ai%2Fauth_oauth%2Fsignin&scope=openid+profile+email&state=%7B%22d%22%3A+%22odoo19-sgc%22%2C+%22p%22%3A+3%2C+%22r%22%3A+%22http%253A%252F%252Fapp.sgctech.ai%252Fweb%22%7D
+                - link "Sign in with Odoo.com" [ref=f2e49] [cursor=pointer]:
+                  - /url: https://accounts.odoo.com/oauth2/auth?response_type=token&client_id=d906f8a2-2e85-11f1-8985-fabb096eaa72&redirect_uri=http%3A%2F%2Fapp.sgctech.ai%2Fauth_oauth%2Fsignin&scope=userinfo&state=%7B%22d%22%3A+%22odoo19-sgc%22%2C+%22p%22%3A+1%2C+%22r%22%3A+%22http%253A%252F%252Fapp.sgctech.ai%252Fweb%22%7D
+                - link " Use a Passkey" [ref=f2e51] [cursor=pointer]:
+                  - /url: "#"
+                  - text: 
+                  - generic [ref=f2e52]: Use a Passkey
+        - generic [ref=f2e53]:
+          - link "Manage Databases" [ref=f2e54] [cursor=pointer]:
+            - /url: /web/database/manager
+          - link "Powered by Scholarix" [ref=f2e55] [cursor=pointer]:
+            - /url: https://scholarixglobal.com
+  - contentinfo [ref=f2e56]:
+    - generic [ref=f2e57]:
+      - generic [ref=f2e58]:
+        - generic [ref=f2e59]:
+          - heading "SGC TECH AI (Scholarix Global Consultant FZE)" [level=5] [ref=f2e60]
+          - paragraph [ref=f2e61]: Maseed Building Office No. 304, 119/12st Al Rigga DUBAI, United Arab Emirates
+        - generic [ref=f2e62]:
+          - heading "Contact" [level=6] [ref=f2e63]
+          - list [ref=f2e64]:
+            - listitem [ref=f2e65]:
+              - link "hello@sgctech.ai" [ref=f2e66] [cursor=pointer]:
+                - /url: mailto:hello@sgctech.ai
+            - listitem [ref=f2e67]:
+              - link "+971 52 198 5231" [ref=f2e68] [cursor=pointer]:
+                - /url: tel:+971 52 198 5231
+        - generic [ref=f2e69]:
+          - heading "Quick Links" [level=6] [ref=f2e70]
+          - list [ref=f2e71]:
+            - listitem [ref=f2e72]:
+              - link "About Us" [ref=f2e73] [cursor=pointer]:
+                - /url: /about-us
+            - listitem [ref=f2e74]:
+              - link "Services" [ref=f2e75] [cursor=pointer]:
+                - /url: /services
+            - listitem [ref=f2e76]:
+              - link "Industries" [ref=f2e77] [cursor=pointer]:
+                - /url: /our-industries
+            - listitem [ref=f2e78]:
+              - link "Contact" [ref=f2e79] [cursor=pointer]:
+                - /url: /contact-us
+        - generic [ref=f2e80]:
+          - heading "Follow Us" [level=6] [ref=f2e81]
+          - generic [ref=f2e82]:
+            - link "LinkedIn" [ref=f2e83] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/sgctechai/
+            - link "Twitter" [ref=f2e86] [cursor=pointer]:
+              - /url: https://x.com/sgctech_ai
+            - link "Facebook" [ref=f2e89] [cursor=pointer]:
+              - /url: https://www.facebook.com/sgctechai
+            - link "Instagram" [ref=f2e92] [cursor=pointer]:
+              - /url: https://www.instagram.com/sgctech.ai/
+            - link "YouTube" [ref=f2e95] [cursor=pointer]:
+              - /url: https://www.youtube.com/@sgctechai
+      - separator [ref=f2e98]
+      - generic [ref=f2e99]:
+        - paragraph [ref=f2e101]: © 2026 SGC TECH AI (Scholarix Global Consultant FZE). All rights reserved.
+        - generic [ref=f2e102]:
+          - link "Privacy Policy" [ref=f2e103] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=f2e104] [cursor=pointer]:
+            - /url: /terms
