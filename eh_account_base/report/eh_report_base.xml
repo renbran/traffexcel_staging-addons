@@ -182,7 +182,7 @@
             }
             .eh_pdf_header {
                 margin: 0 0 18pt 0;
-                padding: 0 0 14pt 0;
+                padding: 12pt 0 14pt 0;
                 border-bottom: 1pt solid #C9A372;
             }
             .eh_pdf_header_brand {
@@ -253,7 +253,11 @@
         and the wkhtmltopdf footer band so page numbers still appear.
     -->
     <template id="eh_clean_layout">
-        <div t-attf-class="footer o_company_#{company.id if company else 'na'}_layout">
+        <div class="article o_report_layout_standard" style="padding-top: 12pt;">
+            <t t-out="0"/>
+        </div>
+        <div t-attf-class="footer o_company_#{company.id if company else 'na'}_layout"
+             style="padding-top: 12pt;">
             <div class="o_footer_content d-flex border-top pt-2"
                  style="font-size: 7.5pt; color: #6c757d; padding-top: 4pt;">
                 <div class="flex-grow-1 text-start me-2">
@@ -264,9 +268,6 @@
                     Page <span class="page"/> / <span class="topage"/>
                 </div>
             </div>
-        </div>
-        <div class="article o_report_layout_standard">
-            <t t-out="0"/>
         </div>
     </template>
 
