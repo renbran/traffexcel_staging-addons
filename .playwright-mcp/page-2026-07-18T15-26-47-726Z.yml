@@ -1,0 +1,85 @@
+- generic [ref=f4e2]:
+  - link "Skip to Content" [ref=f4e3] [cursor=pointer]:
+    - /url: "#wrap"
+  - link "Skip to main content" [ref=f4e4] [cursor=pointer]:
+    - /url: "#wrap"
+  - banner [ref=f4e5]:
+    - text:  
+    - navigation "Mobile" [ref=f4e6]:
+      - generic [ref=f4e7]:
+        - generic [ref=f4e8]:
+          - link [ref=f4e9] [cursor=pointer]:
+            - /url: /
+            - img "Logo of SGC TECH AI" [ref=f4e10]:
+              - img "SGC TECH AI" [ref=f4e11]
+          - list [ref=f4e12]:
+            - listitem [ref=f4e13]:
+              - link "eCommerce cart" [ref=f4e14] [cursor=pointer]:
+                - /url: /shop/cart
+                - generic [ref=f4e15]: 
+            - text: 
+        - button "Toggle navigation" [ref=f4e17] [cursor=pointer]
+  - main [ref=f4e19]:
+    - generic [ref=f4e21]:
+      - text: ✓ ✓ ✓
+      - generic [ref=f4e24]:
+        - generic [ref=f4e25]:
+          - img "SGC Tech AI logo" [ref=f4e26]
+          - paragraph [ref=f4e27]: Access your SGC workspace, website operations, orders, and premium support flows.
+        - text:  
+        - generic [ref=f4e28]:
+          - link "Manage Databases" [ref=f4e29] [cursor=pointer]:
+            - /url: /web/database/manager
+          - link "Powered by Scholarix" [ref=f4e30] [cursor=pointer]:
+            - /url: https://scholarixglobal.com
+  - contentinfo [ref=f4e31]:
+    - generic [ref=f4e32]:
+      - generic [ref=f4e33]:
+        - generic [ref=f4e34]:
+          - heading "SGC TECH AI (Scholarix Global Consultant FZE)" [level=5] [ref=f4e35]
+          - paragraph [ref=f4e36]: Maseed Building Office No. 304, 119/12st Al Rigga DUBAI, United Arab Emirates
+        - generic [ref=f4e37]:
+          - heading "Contact" [level=6] [ref=f4e38]
+          - list [ref=f4e39]:
+            - listitem [ref=f4e40]:
+              - link "hello@sgctech.ai" [ref=f4e41] [cursor=pointer]:
+                - /url: mailto:hello@sgctech.ai
+            - listitem [ref=f4e42]:
+              - link "+971 52 198 5231" [ref=f4e43] [cursor=pointer]:
+                - /url: tel:+971 52 198 5231
+        - generic [ref=f4e44]:
+          - heading "Quick Links" [level=6] [ref=f4e45]
+          - list [ref=f4e46]:
+            - listitem [ref=f4e47]:
+              - link "About Us" [ref=f4e48] [cursor=pointer]:
+                - /url: /about-us
+            - listitem [ref=f4e49]:
+              - link "Services" [ref=f4e50] [cursor=pointer]:
+                - /url: /services
+            - listitem [ref=f4e51]:
+              - link "Industries" [ref=f4e52] [cursor=pointer]:
+                - /url: /our-industries
+            - listitem [ref=f4e53]:
+              - link "Contact" [ref=f4e54] [cursor=pointer]:
+                - /url: /contact-us
+        - generic [ref=f4e55]:
+          - heading "Follow Us" [level=6] [ref=f4e56]
+          - generic [ref=f4e57]:
+            - link "LinkedIn" [ref=f4e58] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/sgctechai/
+            - link "Twitter" [ref=f4e61] [cursor=pointer]:
+              - /url: https://x.com/sgctech_ai
+            - link "Facebook" [ref=f4e64] [cursor=pointer]:
+              - /url: https://www.facebook.com/sgctechai
+            - link "Instagram" [ref=f4e67] [cursor=pointer]:
+              - /url: https://www.instagram.com/sgctech.ai/
+            - link "YouTube" [ref=f4e70] [cursor=pointer]:
+              - /url: https://www.youtube.com/@sgctechai
+      - separator [ref=f4e73]
+      - generic [ref=f4e74]:
+        - paragraph [ref=f4e76]: © 2026 SGC TECH AI (Scholarix Global Consultant FZE). All rights reserved.
+        - generic [ref=f4e77]:
+          - link "Privacy Policy" [ref=f4e78] [cursor=pointer]:
+            - /url: /privacy
+          - link "Terms of Service" [ref=f4e79] [cursor=pointer]:
+            - /url: /terms
