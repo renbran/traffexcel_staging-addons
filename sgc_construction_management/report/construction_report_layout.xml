@@ -94,10 +94,19 @@
     <!--
         External layout alias registered so the report system can resolve
         sgc_construction_management.external_layout_sgc as a valid document
-        layout. Delegates to construction_external_layout which provides
-        the full branded header/footer.
+        layout. Initialises rendering variables then delegates to
+        construction_external_layout which provides the full branded
+        header/footer.
+
+        NOTE: company is already set to a res.company record by the
+        web.external_layout caller — never access company.company_id here
+        (would crash with "'res.company' object has no attribute 'company_id'").
+        Use company.<field> directly or res_company.<field> instead.
     -->
     <template id="external_layout_sgc">
+        <t t-set="header_shape_height" t-value="'60'"/>
+        <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company" t-set="company" t-value="res_company"/>
         <t t-call="sgc_construction_management.construction_external_layout">
             <t t-out="0"/>
         </t>
