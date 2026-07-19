@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import base64
-
 from datetime import datetime
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -45,11 +43,6 @@ class HrWpsWizard(models.TransientModel):
     sif_content = fields.Text(
         string='SIF File Content',
         readonly=True,
-    )
-    sif_file = fields.Binary(
-        string='SIF File',
-        readonly=True,
-        attachment=False,
     )
     employee_count = fields.Integer(
         string='Employees',
@@ -136,7 +129,6 @@ class HrWpsWizard(models.TransientModel):
         self.write({
             'sif_filename': filename,
             'sif_content': content,
-            'sif_file': base64.b64encode(content.encode('utf-8')),
             'employee_count': count,
             'total_amount': total,
         })
@@ -154,7 +146,7 @@ class HrWpsWizard(models.TransientModel):
             self.action_generate()
         return {
             'type': 'ir.actions.act_url',
-            'url': ('/web/content/eh.uae.wps.wizard/%d/sif_file/%s?download=true'
+            'url': ('/web/content/eh.uae.wps.wizard/%d/sif_content/%s?download=true'
                     % (self.id, self.sif_filename or 'wps.sif')),
             'target': 'self',
         }

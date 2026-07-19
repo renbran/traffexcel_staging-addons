@@ -4,7 +4,7 @@ from odoo import models
 
 class WpsBatchXlsxReport(models.AbstractModel):
     _name = 'report.eh_uae_payroll_wps.wps_batch_xlsx'
-    _inherit = 'report.report_xlsx.abstract'
+    _inherit = 'report.xlsx.abstract'
     _description = 'WPS Batch Excel Report'
 
     def generate_xlsx_report(self, workbook, data, wizards):

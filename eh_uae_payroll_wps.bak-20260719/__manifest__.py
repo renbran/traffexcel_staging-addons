@@ -19,7 +19,7 @@ Compliant with UAE MOHRE WPS specification v3.2.
     """,
     'author': 'SGC Construction',
     'license': 'LGPL-3',
-    'depends': ['hr_payroll_community', 'hr', 'report_xlsx'],
+    'depends': ['hr_payroll_community', 'hr'],
     'data': [
         'security/ir.model.access.csv',
         'report/uae_payslip_report.xml',
@@ -29,7 +29,6 @@ Compliant with UAE MOHRE WPS specification v3.2.
         'wizard/hr_wps_wizard_views.xml',
         'data/menu.xml',
     ],
-    'images': ['static/description/icon.png'],
     'installable': True,
     'application': True,
 }
