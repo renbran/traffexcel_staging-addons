@@ -68,52 +68,13 @@
                                 _______________________
                             </div>
                         </div>
-                    </div>
-                </t>
-            </t>
-        </t>
-    </template>
 
-    <template id="report_soa_template">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
-                <t t-call="sgc_construction_management.construction_external_layout">
-                    <div class="page">
-                        <h2 class="text-center">STATEMENT OF ACCOUNT</h2>
-                        <div class="row mt-4">
-                            <div class="col-6">
-                                <strong>Partner:</strong> <span t-field="o.name"/><br/>
-                                <span t-field="o.street"/><br/>
-                                <span t-field="o.city"/>, <span t-field="o.country_id.name"/>
-                            </div>
+                        <div class="mt-5 p-3" style="background-color:#f8f9fa; border: 2px solid #212529; border-radius: 5px;">
+                            <h4 class="text-center text-primary"><strong>PAYMENT REQUEST</strong></h4>
+                            <p class="text-center">We kindly request payment of the net payable amount of <strong><span t-field="o.net_payable" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong> for the work completed during this period as certified above.</p>
+                            <p class="text-center">Please remit payment to the bank account details on file within the agreed payment terms.</p>
+                            <p class="text-center small text-muted">This certificate represents completion of work to date and serves as formal request for payment.</p>
                         </div>
-
-                        <table class="table table-sm mt-4">
-                            <thead>
-                                <tr class="bg-light">
-                                    <th>Date</th>
-                                    <th>Reference</th>
-                                    <th>Description</th>
-                                    <th class="text-end">Amount</th>
-                                    <th class="text-end">Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-set="balance" t-value="0"/>
-                                <t t-set="soa_invoices" t-value="o.invoice_ids.filtered(lambda i: i.state == 'posted' and i.move_type in ('out_invoice', 'out_refund')).sorted(lambda i: (i.invoice_date or i.create_date))"/>
-                                <t t-foreach="soa_invoices" t-as="inv">
-                                    <t t-set="signed_amount" t-value="inv.amount_total if inv.move_type == 'out_invoice' else -inv.amount_total"/>
-                                    <t t-set="balance" t-value="balance + signed_amount"/>
-                                    <tr>
-                                        <td><span t-field="inv.invoice_date"/></td>
-                                        <td><span t-field="inv.name"/></td>
-                                        <td><span t-field="inv.ref"/></td>
-                                        <td class="text-end"><t t-esc="signed_amount" t-options='{"widget": "monetary", "display_currency": inv.currency_id}'/></td>
-                                        <td class="text-end"><t t-esc="balance" t-options='{"widget": "monetary", "display_currency": inv.currency_id}'/></td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
                     </div>
                 </t>
             </t>
@@ -559,78 +520,7 @@
         </t>
     </template>
 
-    <template id="report_ra_billing_template">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
-                <t t-call="sgc_construction_management.construction_external_layout">
-                    <div class="page">
-                        <h2 class="text-center">RA BILLING CERTIFICATE</h2>
-                        <h4 class="text-center">RA No: <span t-field="o.ra_number"/> — <span t-field="o.ref"/></h4>
 
-                        <div class="row mt-4">
-                            <div class="col-6">
-                                <strong>Project:</strong> <span t-field="o.project_id.name"/><br/>
-                                <strong>Client:</strong> <span t-field="o.project_id.client_id.name"/>
-                            </div>
-                            <div class="col-6 text-end">
-                                <strong>Billing Date:</strong> <span t-field="o.billing_date"/><br/>
-                                <strong>Period:</strong> <span t-field="o.billing_period_start"/> to <span t-field="o.billing_period_end"/>
-                            </div>
-                        </div>
-
-                        <table class="table table-sm table-bordered mt-4">
-                            <thead>
-                                <tr class="bg-light">
-                                    <th>Description</th>
-                                    <th>UOM</th>
-                                    <th class="text-end">BOQ Qty</th>
-                                    <th class="text-end">Rate</th>
-                                    <th class="text-end">Prev. Qty</th>
-                                    <th class="text-end">Curr. Qty</th>
-                                    <th class="text-end">Cum. Qty</th>
-                                    <th class="text-end">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="o.line_ids" t-as="line">
-                                    <tr>
-                                        <td><span t-field="line.boq_line_description"/></td>
-                                        <td><span t-field="line.uom_id.name"/></td>
-                                        <td class="text-end"><span t-field="line.boq_qty"/></td>
-                                        <td class="text-end"><span t-field="line.unit_rate" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                        <td class="text-end"><span t-field="line.qty_previous"/></td>
-                                        <td class="text-end"><span t-field="line.qty_current"/></td>
-                                        <td class="text-end"><span t-field="line.qty_cumulative"/></td>
-                                        <td class="text-end"><span t-field="line.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                    </tr>
-                                </t>
-                                <tr class="font-weight-bold">
-                                    <td colspan="7">GROSS AMOUNT TO DATE</td>
-                                    <td class="text-end"><span t-field="o.total_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7">Less: Previous Certified Amount</td>
-                                    <td class="text-end"><span t-field="o.previous_billed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                                <tr class="font-weight-bold">
-                                    <td colspan="7">NET AMOUNT THIS PERIOD</td>
-                                    <td class="text-end"><span t-field="o.net_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7">Less: Retention (<span t-field="o.retention_percent"/>%)</td>
-                                    <td class="text-end"><span t-field="o.retention_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                                <tr class="h5">
-                                    <td colspan="7"><strong>NET PAYABLE THIS PERIOD</strong></td>
-                                    <td class="text-end"><strong><span t-field="o.net_payable" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </t>
-            </t>
-        </t>
-    </template>
 
     <template id="report_progress_billing_template">
         <t t-call="web.html_container">

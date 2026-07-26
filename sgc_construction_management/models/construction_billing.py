@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -90,6 +90,24 @@ class ConstructionRABilling(models.Model):
     def action_approve(self):
         self.state = 'approved'
 
+    def action_print_proforma_invoice(self):
+        self.ensure_one()
+        return self.env.ref('sgc_construction_management.action_report_proforma_invoice').report_action(self)
+
+    def action_send_proforma_email(self):
+        self.ensure_one()
+        template = self.env.ref('sgc_construction_management.email_template_proforma_invoice', raise_if_not_found=False)
+        if not template:
+            return
+        template.send_mail(self.id, force_send=True, raise_exception=True)
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'RA Billing',
+            'res_model': 'construction.ra.billing',
+            'view_mode': 'form',
+            'res_id': self.id,
+        }
+
     def action_create_invoice(self):
         self.ensure_one()
         if self.move_id and self.move_id.state != 'cancel':
@@ -147,28 +165,24 @@ class ConstructionRABilling(models.Model):
             'move_id': move.id,
             'state': 'invoice_created'
         })
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = move.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': move.id,
+            'context': {'default_move_type': 'out_invoice', 'default_project_id': self.project_id.id},
+        }
 
     def action_view_invoice(self):
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = self.move_id.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': self.move_id.id,
+            'context': {'default_project_id': self.project_id.id},
+        }
 
     def action_load_boq(self):
         self.ensure_one()
@@ -257,14 +271,6 @@ class ConstructionRABillingLine(models.Model):
     amount = fields.Monetary(compute='_compute_amount', store=True, currency_field='currency_id')
     currency_id = fields.Many2one('res.currency', index=True, related='billing_id.currency_id')
 
-    def _is_percentage_uom(self):
-        """Check if this line uses a percentage-based unit of measure."""
-        self.ensure_one()
-        if not self.uom_id:
-            return False
-        # Odoo 19 removed uom.category; match by name instead
-        return 'percent' in self.uom_id.name.lower() or '%' in self.uom_id.name
-
     @api.depends('qty_previous', 'qty_current')
     def _compute_cumulative(self):
         for rec in self:
@@ -273,16 +279,10 @@ class ConstructionRABillingLine(models.Model):
     @api.constrains('qty_cumulative', 'boq_qty')
     def _check_qty_limit(self):
         for rec in self:
-            if not rec.boq_line_id:
-                continue
-            if rec._is_percentage_uom():
-                max_qty = 100.0
-            else:
-                max_qty = rec.boq_qty
-            if rec.qty_cumulative > max_qty:
+            if rec.boq_line_id and rec.qty_cumulative > rec.boq_qty:
                 raise ValidationError(
-                    "Cumulative %s (%s) cannot exceed %s for item: %s" %
-                    ("%" if rec._is_percentage_uom() else "quantity", rec.qty_cumulative, max_qty, rec.boq_line_description)
+                    "Cumulative quantity (%s) cannot exceed BOQ quantity (%s) for item: %s" %
+                    (rec.qty_cumulative, rec.boq_qty, rec.boq_line_description)
                 )
 
     @api.onchange('boq_line_id')
@@ -303,14 +303,10 @@ class ConstructionRABillingLine(models.Model):
             ])
             self.qty_previous = sum(prev_lines.mapped('qty_current'))
 
-    @api.depends('qty_current', 'unit_rate', 'uom_id')
+    @api.depends('qty_current', 'unit_rate')
     def _compute_amount(self):
         for rec in self:
-            if rec._is_percentage_uom():
-                # Percentage: qty_current is the % complete, unit_rate is total value
-                rec.amount = (rec.qty_current / 100.0) * rec.unit_rate
-            else:
-                rec.amount = rec.qty_current * rec.unit_rate
+            rec.amount = rec.qty_current * rec.unit_rate
 
 
 class ConstructionProgressBilling(models.Model):
@@ -411,28 +407,24 @@ class ConstructionProgressBilling(models.Model):
             'move_id': move.id,
             'state': 'invoice_created'
         })
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = move.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': move.id,
+            'context': {'default_move_type': 'out_invoice', 'default_project_id': self.project_id.id},
+        }
 
     def action_view_invoice(self):
-        action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-        if 'views' in action:
-            action['views'] = form_view + [
-                (vid, vt) for (vid, vt) in action['views'] if vt != 'form'
-            ]
-        else:
-            action['views'] = form_view
-        action['res_id'] = self.move_id.id
-        return action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Customer Invoice'),
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': self.move_id.id,
+            'context': {'default_project_id': self.project_id.id},
+        }
 
     def action_cancel(self):
         # Reversible cancel: cancel the linked draft invoice; reopen via

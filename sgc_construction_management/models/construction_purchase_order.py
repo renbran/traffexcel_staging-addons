@@ -159,6 +159,56 @@ class ConstructionPurchaseOrder(models.Model):
             'res_id': self.move_id.id,
         }
 
+    def action_view_project(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Project'),
+            'res_model': 'construction.project',
+            'view_mode': 'form',
+            'res_id': self.project_id.id,
+        }
+
+    def action_view_wbs(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('WBS'),
+            'res_model': 'construction.wbs',
+            'view_mode': 'form',
+            'res_id': self.wbs_id.id,
+        }
+
+    def action_view_vendor(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Vendor'),
+            'res_model': 'res.partner',
+            'view_mode': 'form',
+            'res_id': self.vendor_id.id,
+        }
+
+    def action_view_requisition(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Requisition'),
+            'res_model': 'construction.material.requisition',
+            'view_mode': 'form',
+            'res_id': self.requisition_id.id,
+        }
+
+    def action_view_attachments(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Attachments'),
+            'res_model': 'ir.attachment',
+            'view_mode': 'kanban,tree,form',
+            'domain': [('res_model', '=', self._name), ('res_id', '=', self.id)],
+        }
+
     def action_cancel(self):
         # Cancel the PO/LPO itself (used before a bill is posted). Any linked
         # draft bill is cancelled too.

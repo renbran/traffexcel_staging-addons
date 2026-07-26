@@ -16,11 +16,10 @@
                 <field name="planned_end"/>
                 <field name="priority" widget="priority"/>
                 <field name="state" widget="badge"
-                    decoration-success="state == 'done'"
-                    decoration-primary="state == 'in_progress'"
-                    decoration-info="state == 'confirmed'"
+                    decoration-success="state in ('confirmed', 'done')"
+                    decoration-info="state == 'in_progress'"
                     decoration-danger="state == 'cancelled'"
-                    decoration-muted="state == 'draft'"/>
+                    decoration-warning="state == 'draft'"/>
             </list>
         </field>
     </record>
@@ -33,15 +32,17 @@
             <form>
                 <header>
                     <button name="action_confirm" type="object" string="Confirm"
-                        invisible="state != 'draft'" class="btn-primary"/>
+                        invisible="state != 'draft'" class="btn-success"/>
                     <button name="action_start" type="object" string="Start"
                         invisible="state != 'confirmed'" class="btn-primary"/>
                     <button name="action_done" type="object" string="Mark Done"
                         invisible="state != 'in_progress'" class="btn-primary"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                        invisible="state not in ('draft', 'confirmed', 'in_progress')"/>
+                        invisible="state not in ('draft', 'confirmed', 'in_progress')"
+                        class="btn-danger"/>
                     <button name="action_reset" type="object" string="Reset to Draft"
-                        invisible="state != 'cancelled'"/>
+                        invisible="state != 'cancelled'"
+                        class="btn-warning"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,done"/>
                 </header>
                 <sheet>

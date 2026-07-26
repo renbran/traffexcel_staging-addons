@@ -13,3 +13,5 @@ class ConstructionProjectPhoto(models.Model):
     image_128 = fields.Image(string='Thumbnail', related='image_1920', max_width=128, max_height=128, store=True)
     date = fields.Date(string='Date Taken', default=fields.Date.today)
     taken_by_id = fields.Many2one('res.users', string='Taken By', default=lambda self: self.env.user)
+    original_file = fields.Binary(string='Original Photo File (preserved as-is)')
+    original_filename = fields.Char(string='Original Filename')

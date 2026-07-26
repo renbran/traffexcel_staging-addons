@@ -137,3 +137,115 @@ def _wire_demo_integrations(env):
         _bill(ref(exp_xid), exp_xid)
 
     _invoice(ref('demo_progress_billing_alkhail'), 'demo_progress_billing_alkhail', _approve_progress_billing)
+
+
+def _deduplicate_projects_and_analytics(env):
+    """Idempotent data dedup. The DB picked up 23 empty duplicate project rows
+    (id 117-139) and 23 empty duplicate analytic accounts (id 147-169) — all
+    newer mirrors of the canonical rows. They carry no dependents (no WBS, RA,
+    work orders, BOQ, photos, progress billings) so they can be safely
+    removed. FK-blocking tables are cleared first."""
+    close_project_ids = tuple(range(117, 140))
+    close_analytic_ids = tuple(range(147, 170))
+
+    env.cr.execute(
+        "SELECT count(*) FROM construction_project WHERE id IN %s",
+        (close_project_ids,),
+    )
+    proj_count = env.cr.fetchone()[0]
+    env.cr.execute(
+        "SELECT count(*) FROM account_analytic_account WHERE id IN %s",
+        (close_analytic_ids,),
+    )
+    analytic_count = env.cr.fetchone()[0]
+    if proj_count == 0 and analytic_count == 0:
+        _logger.info("dedup: nothing to do (already clean).")
+        return
+
+    # Strip FK blockers on the empty analytics first
+    env.cr.execute(
+        "DELETE FROM mail_followers WHERE res_model='account.analytic.account' AND res_id IN %s",
+        (close_analytic_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM mail_tracking_value WHERE mail_message_id IN "
+        "(SELECT id FROM mail_message WHERE res_model='account.analytic.account' AND res_id IN %s)",
+        (close_analytic_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM mail_message WHERE res_model='account.analytic.account' AND res_id IN %s",
+        (close_analytic_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM ir_attachment WHERE res_model='account.analytic.account' AND res_id IN %s",
+        (close_analytic_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM ir_model_data WHERE model='account.analytic.account' AND res_id IN %s",
+        (close_analytic_ids,),
+    )
+    # Wipe empty analytics (both unlink and soft-deactivate so audit-trail safe)
+    env.cr.execute(
+        "DELETE FROM account_analytic_account WHERE id IN %s", (close_analytic_ids,),
+    )
+
+    # Strip FK blockers on the empty projects
+    env.cr.execute(
+        "DELETE FROM mail_followers WHERE res_model='construction.project' AND res_id IN %s",
+        (close_project_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM mail_tracking_value WHERE mail_message_id IN "
+        "(SELECT id FROM mail_message WHERE res_model='construction.project' AND res_id IN %s)",
+        (close_project_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM mail_message WHERE res_model='construction.project' AND res_id IN %s",
+        (close_project_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM ir_attachment WHERE res_model='construction.project' AND res_id IN %s",
+        (close_project_ids,),
+    )
+    env.cr.execute(
+        "DELETE FROM ir_model_data WHERE model='construction.project' AND res_id IN %s",
+        (close_project_ids,),
+    )
+    # Wipe empty projects (dependents already audited at zero)
+    env.cr.execute(
+        "DELETE FROM construction_project WHERE id IN %s", (close_project_ids,),
+    )
+    env.cr.commit()
+    _logger.info(
+        "dedup: removed %d projects, %d analytic accounts.",
+        proj_count, analytic_count,
+    )
+
+
+def _recompute_project_financials(env):
+    """Stored computed fields on construction.project were last updated before
+    the _compute_financials fix that switches total_billed/total_expenses from
+    net analytic sum to gross amount_total_signed. Invalidate + recompute
+    every row + persist (store=True caches otherwise)."""
+    env.cr.execute("SELECT id FROM construction_project")
+    ids = [r[0] for r in env.cr.fetchall()]
+    if not ids:
+        return
+    projects = env["construction.project"].browse(ids)
+    for p in projects:
+        p.invalidate_recordset()
+        p._compute_financials()
+        env.cr.execute(
+            "UPDATE construction_project SET total_billed=%s, total_expenses=%s, "
+            "total_received=%s, outstanding_balance=%s, profit_margin=%s, "
+            "billing_percent=%s, margin_percent=%s, receipt_percent=%s, "
+            "expense_vs_billed_percent=%s, budget_consumed=%s, "
+            "invoice_count=%s, vendor_bill_count=%s WHERE id=%s",
+            (p.total_billed, p.total_expenses, p.total_received,
+             p.outstanding_balance, p.profit_margin,
+             p.billing_percent, p.margin_percent, p.receipt_percent,
+             p.expense_vs_billed_percent, p.budget_consumed,
+             p.invoice_count, p.vendor_bill_count, p.id),
+        )
+    env.cr.commit()
+    _logger.info("recompute: %d projects refreshed.", len(ids))

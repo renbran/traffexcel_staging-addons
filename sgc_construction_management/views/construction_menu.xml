@@ -160,11 +160,34 @@
         action="action_construction_hse_incident"
         sequence="20"/>
 
+    <!-- Accounting -->
+    <menuitem id="menu_construction_accounting"
+        name="Accounting"
+        parent="menu_construction_root"
+        sequence="75"/>
+
+    <menuitem id="menu_construction_project_pnl"
+        name="Project P&amp;L"
+        parent="menu_construction_accounting"
+        action="action_construction_project_pnl"
+        sequence="10"/>
+
+    <menuitem id="menu_construction_invoice_lines"
+        name="Invoices &amp; Bills"
+        parent="menu_construction_accounting"
+        action="action_construction_project_invoices"
+        sequence="20"/>
+
+    <menuitem id="menu_construction_analytic_lines"
+        name="Analytic Lines"
+        parent="menu_construction_accounting"
+        action="action_construction_project_analytic_lines"
+        sequence="30"/>
+
     <!-- Expenses -->
     <menuitem id="menu_construction_expenses"
         name="Expenses"
         parent="menu_construction_root"
-        action="action_construction_expense"
         sequence="80"/>
 
     <!-- Configuration -->

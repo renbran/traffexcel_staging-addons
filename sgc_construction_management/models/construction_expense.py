@@ -137,3 +137,31 @@ class ConstructionExpense(models.Model):
 
     def action_reset(self):
         self.state = 'draft'
+
+    def action_view_project(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'construction.project',
+            'view_mode': 'form',
+            'res_id': self.project_id.id,
+        }
+
+    def action_view_wbs(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'construction.wbs',
+            'view_mode': 'form',
+            'res_id': self.wbs_id.id,
+        }
+
+    def action_view_attachments(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'ir.attachment',
+            'view_mode': 'list,form',
+            'domain': [('res_model', '=', 'construction.expense'), ('res_id', '=', self.id)],
+            'context': {'default_res_model': 'construction.expense', 'default_res_id': self.id},
+        }

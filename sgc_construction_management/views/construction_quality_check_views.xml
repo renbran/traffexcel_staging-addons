@@ -20,9 +20,9 @@
                     decoration-warning="result == 'conditional'"/>
                 <field name="state" widget="badge"
                     decoration-success="state == 'completed'"
-                    decoration-primary="state == 'in_progress'"
+                    decoration-info="state == 'in_progress'"
                     decoration-danger="state == 'failed'"
-                    decoration-muted="state == 'draft'"/>
+                    decoration-warning="state == 'draft'"/>
             </list>
         </field>
     </record>

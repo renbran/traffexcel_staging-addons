@@ -53,14 +53,18 @@ class ConstructionProject(models.Model):
 
     total_billed = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
     total_expenses = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
-    margin_percent = fields.Float(compute='_compute_financials', string='Margin %', store=True)
-    billing_percent = fields.Float(compute='_compute_financials', string='Billing %', store=True,
+    margin_percent = fields.Float(compute='_compute_financials', string='Margin (%)', store=True)
+    billing_percent = fields.Float(compute='_compute_financials', string='Bill %', store=True,
         help="Percentage of contract value billed to client")
     expense_vs_billed_percent = fields.Float(compute='_compute_financials', string='Expense vs Billed %', store=True,
         help="Percentage of billed amount consumed by expenses")
     total_received = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True)
-    receipt_percent = fields.Float(compute='_compute_financials', string='Receipt %', store=True,
+    receipt_percent = fields.Float(compute='_compute_financials', string='Coll. %', store=True,
         help="Percentage of actual receipt against billed invoices")
+    outstanding_balance = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
+        string='Balance', help="Total invoiced minus the actual amount received against those invoices")
+    profit_margin = fields.Monetary(compute='_compute_financials', currency_field='currency_id', store=True,
+        string='Profit Margin', help="Total invoiced minus total expenses")
     planned_progress = fields.Float(compute='_compute_progress', string='Planned Progress %')
     progress = fields.Float(compute='_compute_progress', string='Actual Progress %')
     budget_consumed = fields.Float(compute='_compute_financials', string='Budget Consumed %', store=True)
@@ -76,6 +80,8 @@ class ConstructionProject(models.Model):
     weather_status = fields.Char(default='Clear', string='Site Weather')
     last_site_diary = fields.Date(string='Last Site Diary')
     photo_ids = fields.One2many('construction.project.photo', 'project_id', string='Site Photos')
+    contract_doc_ids = fields.One2many('construction.document', 'project_id', string='Contract Documents',
+        domain=[('category', '=', 'CON')])
 
     @api.depends('progress', 'planned_progress', 'budget_consumed')
     def _compute_rag_status(self):
@@ -218,6 +224,7 @@ class ConstructionProject(models.Model):
                 rec.total_billed = rec.total_expenses = rec.budget_consumed = rec.margin_percent = 0.0
                 rec.invoice_count = rec.vendor_bill_count = 0
                 rec.total_received = rec.receipt_percent = 0.0
+                rec.outstanding_balance = rec.profit_margin = 0.0
             return
 
         # Fetch all move lines for all projects in one go.
@@ -240,6 +247,7 @@ class ConstructionProject(models.Model):
                 project.total_billed = project.total_expenses = project.budget_consumed = project.margin_percent = 0.0
                 project.invoice_count = project.vendor_bill_count = 0
                 project.total_received = project.receipt_percent = 0.0
+                project.outstanding_balance = project.profit_margin = 0.0
                 continue
 
             # In-memory filtering (faster than database round-trip in loop).
@@ -251,32 +259,50 @@ class ConstructionProject(models.Model):
             out_lines = p_lines.filtered(lambda l: l.move_id.move_type == 'out_invoice')
             in_lines = p_lines.filtered(lambda l: l.move_id.move_type == 'in_invoice')
 
-            project.total_billed = sum(out_lines.mapped('credit')) - sum(out_lines.mapped('debit'))
-            project.total_expenses = sum(in_lines.mapped('debit')) - sum(in_lines.mapped('credit'))
+            # Compute net analytic amount per move first (tax lines have no
+            # analytic_distribution in Odoo core, so they're excluded from the
+            # gross sum). Then read each move's gross tax-inclusive
+            # amount_total_signed to attribute tax back to the analytic share.
+            net_out_by_move = {}
+            for line in out_lines:
+                net_out_by_move[line.move_id] = net_out_by_move.get(line.move_id, 0.0) + line.credit - line.debit
+            net_in_by_move = {}
+            for line in in_lines:
+                net_in_by_move[line.move_id] = net_in_by_move.get(line.move_id, 0.0) + line.debit - line.credit
+
+            project.total_billed = sum((m.amount_total_signed or 0.0) for m in net_out_by_move)
+            project.total_expenses = sum((m.amount_total_signed or 0.0) for m in net_in_by_move)
             project.invoice_count = len(out_lines.mapped('move_id'))
             project.vendor_bill_count = len(in_lines.mapped('move_id'))
 
-            # Actual receipts: prorate each invoice's payment progress (a gross,
-            # tax-inclusive ratio from core's amount_total_signed/amount_residual_signed,
-            # both positive for out_invoice and shrinking toward 0 as payments reconcile)
-            # onto this project's own net/untaxed billed amount for that invoice - matching
-            # total_billed's basis. Without this, a fully-paid invoice would show ~105%
-            # received (the VAT rider) instead of 100%, since tax lines carry no analytic
-            # distribution and are excluded from total_billed.
-            net_billed_by_move = {}
-            for line in out_lines:
-                net_billed_by_move[line.move_id] = net_billed_by_move.get(line.move_id, 0.0) + line.credit - line.debit
-
+            # Actual receipts: prorate each invoice's payment progress
+            # (a gross, tax-inclusive ratio from core's
+            # amount_total_signed/amount_residual_signed) onto this project's
+            # own gross-billed amount for that invoice, so a fully-paid
+            # invoice shows 100% received — matching the now-gross basis of
+            # total_billed above.
             total_received = 0.0
-            for move, move_net_billed in net_billed_by_move.items():
+            for move, move_net_billed in net_out_by_move.items():
                 if move.amount_total_signed:
                     paid_ratio = (move.amount_total_signed - move.amount_residual_signed) / move.amount_total_signed
-                    total_received += move_net_billed * paid_ratio
+                    # gross share for this project = net * (amount_total_signed / sum_analytic_credit)
+                    # BUT: shared analytic doesn't happen for invoices; instead we attribute the
+                    # full amount_total_signed by the project's share of net_billed.
+                    move_total_net = sum(
+                        (l.credit - l.debit)
+                        for l in move.line_ids.filtered(lambda l: l.analytic_distribution and p_id_str in (l.analytic_distribution or {}))
+                    )
+                    if move_total_net:
+                        project_share = move_net_billed / move_total_net
+                    else:
+                        project_share = 1.0
+                    total_received += (move.amount_total_signed * project_share) * paid_ratio
             project.total_received = total_received
 
             # Calculate billing percentages (must be after totals are computed)
             if project.contract_value > 0:
-                project.billing_percent = (project.total_billed / project.contract_value) * 100
+                raw_bill_pct = (project.total_billed / project.contract_value) * 100
+                project.billing_percent = min(raw_bill_pct, 100.0)
             else:
                 project.billing_percent = 0.0
 
@@ -306,9 +332,13 @@ class ConstructionProject(models.Model):
                 project.margin_percent = 0.0
 
             if project.total_billed > 0:
-                project.receipt_percent = (project.total_received / project.total_billed) * 100
+                raw_coll_pct = (project.total_received / project.total_billed) * 100
+                project.receipt_percent = min(raw_coll_pct, 100.0)
             else:
                 project.receipt_percent = 0.0
+
+            project.outstanding_balance = project.total_billed - project.total_received
+            project.profit_margin = project.total_billed - project.total_expenses
 
     def _compute_progress(self):
         wbs_data = self.env['construction.wbs']._read_group(
