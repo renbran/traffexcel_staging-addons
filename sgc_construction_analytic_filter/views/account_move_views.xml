@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- Inherit the standard Invoice tree: add project column         -->
+    <!-- ============================================================ -->
+    <record id="view_move_tree_inherit_construction_project" model="ir.ui.view">
+        <field name="name">account.move.tree.construction.project</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="construction_project_id" optional="show" string="Project"/>
+            </xpath>
+        </field>
+    </record>
+
+    
+
+    <!-- ============================================================ -->
+    <!-- Inherit the standard Invoice form: add project stat button    -->
+    <!-- ============================================================ -->
+    <record id="view_move_form_inherit_construction_project" model="ir.ui.view">
+        <field name="name">account.move.form.construction.project</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_construction_project"
+                        icon="fa-building-o"
+                        invisible="not construction_project_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Construction Project</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Journal Items tree: add project column                       -->
+    <!-- ============================================================ -->
+    <record id="view_account_move_line_tree_inherit_construction_project" model="ir.ui.view">
+        <field name="name">account.move.line.tree.construction.project</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="construction_project_id" optional="show" string="Project"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Action: All Construction Invoices                            -->
+    <!-- ============================================================ -->
+    <record id="action_construction_invoices" model="ir.actions.act_window">
+        <field name="name">Project Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('construction_project_id', '!=', False)]</field>
+        <field name="context">{
+            'default_move_type': 'out_invoice',
+            'search_default_group_by_project': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customer invoices linked to construction projects yet.
+            </p>
+            <p>
+                Customer invoices are automatically linked to projects when
+                invoice lines carry the project's analytic distribution.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Action: All Construction Bills                               -->
+    <!-- ============================================================ -->
+    <record id="action_construction_bills" model="ir.actions.act_window">
+        <field name="name">Project Bills</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="domain">[('move_type', '=', 'in_invoice'), ('construction_project_id', '!=', False)]</field>
+        <field name="context">{
+            'default_move_type': 'in_invoice',
+            'search_default_group_by_project': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No vendor bills linked to construction projects yet.
+            </p>
+            <p>
+                Vendor bills are automatically linked to projects when
+                invoice lines carry the project's analytic distribution.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Action: All Construction Credit Notes                       -->
+    <!-- ============================================================ -->
+    <record id="action_construction_credit_notes" model="ir.actions.act_window">
+        <field name="name">Project Credit Notes</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', 'in', ('out_refund', 'in_refund')), ('construction_project_id', '!=', False)]</field>
+        <field name="context">{
+            'search_default_group_by_project': 1,
+        }</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Action: All Construction Journal Items (analytic lines)      -->
+    <!-- ============================================================ -->
+    <record id="action_construction_journal_items" model="ir.actions.act_window">
+        <field name="name">Project Journal Items</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="domain">[('construction_project_id', '!=', False)]</field>
+        <field name="context">{
+            'search_default_group_by_project': 1,
+        }</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Search view with project filter & group-by                   -->
+    <!-- ============================================================ -->
+    <record id="view_move_search_inherit_construction" model="ir.ui.view">
+        <field name="name">account.move.search.construction.project</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[1]" position="before">
+                <separator/>
+                <filter name="filter_construction_project" string="Has Construction Project"
+                    domain="[('construction_project_id', '!=', False)]"/>
+                <filter name="filter_no_construction_project" string="No Construction Project"
+                    domain="[('construction_project_id', '=', False)]"/>
+                <separator/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter name="group_by_project" string="Project"
+                    context="{'group_by': 'construction_project_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Invoice form button: open linked project                     -->
+    <!-- ============================================================ -->
+    <record id="action_view_construction_project_from_move" model="ir.actions.act_window">
+        <field name="name">Construction Project</field>
+        <field name="res_model">construction.project</field>
+        <field name="view_mode">form</field>
+        <field name="domain">[('id', '=', active_id)]</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- Journal Items search view with project filter & group-by     -->
+    <!-- ============================================================ -->
+    <record id="view_account_move_line_search_inherit_construction" model="ir.ui.view">
+        <field name="name">account.move.line.search.construction.project</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[1]" position="before">
+                <separator/>
+                <filter name="filter_journalline_construction_project" string="Has Construction Project"
+                    domain="[('construction_project_id', '!=', False)]"/>
+                <separator/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter name="group_by_journalline_project" string="Project"
+                    context="{'group_by': 'construction_project_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
